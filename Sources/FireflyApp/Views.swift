@@ -15,7 +15,7 @@ struct FireflyView: View {
                         let pulse = 0.82 + 0.18 * sin(tick.date.timeIntervalSinceReferenceDate * 2)
                         Image(nsImage: image).resizable().scaledToFit().scaleEffect(1.26).frame(width: 70, height: 70)
                             .opacity(!model.live ? 0.45 : (model.observation?.charging == true && !reduceMotion ? pulse : 1))
-                    }.frame(width: 70, height: 70).background(.thinMaterial, in: RoundedRectangle(cornerRadius: 20)).accessibilityHidden(true)
+                    }.frame(width: 70, height: 70).accessibilityHidden(true)
                 }
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Firefly").font(.title2.bold())
