@@ -1,0 +1,36 @@
+# Firefly’ı kullanma
+
+Bu paket Apple Silicon ve macOS 27 için hazırlanmıştır. iPhone okuma araçları uygulamanın içindedir. Homebrew veya iPhone’a ek uygulama kurmak gerekmez.
+
+1. Çalışan Firefly varsa panelin sağ üstündeki güç düğmesiyle çıkın. Firefly-macOS.zip dosyasını açın veya teslim edilen Firefly.app dosyasını kullanın.
+2. Firefly.app’i Uygulamalar klasörüne sürükleyip çift tıklayın. Üst menü çubuğundaki ateş böceği simgesine tıklayın.
+3. İlk eşleştirmede iPhone’u USB ile bağlayın ve kilidini açın. İstenirse Finder’da ve iPhone’da güveni onaylayın. Panelde Yenile’ye basın. Cihaz adı, USB, yüzde ve son başarılı ölçüm zamanı görünmelidir.
+4. Kablosuz kullanım için kablo bağlıyken Finder’da iPhone’u seçin. Genel bölümünde “Wi-Fi ağına bağlıyken bu iPhone’u göster” seçeneğini açıp Uygula’ya basın. Mac ve iPhone aynı yerel ağdayken kabloyu çıkarın. Yenile’den sonra panelde Wi-Fi ve yeni ölçüm zamanını kontrol edin. Bu Mac ve iPhone üzerinde her iki yöntem de denendi.
+
+## Günlük kullanım
+
+Pil sekmesinde en son başarılı ölçümün zamanını ve kaynağını görebilirsiniz. Yeni veri alınamazsa eski değer son bilinen ölçüm olarak ayrılır. Geçmiş sekmesi 24 saatlik ve 7 günlük gerçek ölçümleri gösterir. Noktalar arasındaki boşluklar doldurulmaz. CSV dışa aktarımı seçili cihazın saklanan geçmişini içerir. Şarj tahmini yalnızca aynı cihaza ait yeterli sayıda yakın ve kesintisiz şarj ölçümü olduğunda görünür.
+
+Ayarlar’dan Türkçe veya İngilizceyi, menü çubuğu görünümünü ve bildirimleri seçebilirsiniz. Bildirimleri etkinleştirirken macOS izin isteyebilir. Düşük pil uyarıları eşik geçişlerine dayanır. İlk ölçüm tek başına geçiş sayılmaz. Planlanan kontrolün çalışması için seçilen dakika içinde Mac uyanık, Firefly açık ve iPhone erişilebilir olmalıdır. Uygulama Mac’i uyandırmaz. Bildirim almak için bildirimleri de açın.
+
+## Pil görünmüyorsa
+
+- Yardım sekmesindeki açıklamayı okuyup Yeniden dene’ye basın. Telefonu USB ile bağlayıp kilidini açarak başlayın. Bir güven istemi görürseniz onaylayın.
+- USB çalışıyor, Wi-Fi çalışmıyorsa Finder seçeneğini ve iki cihazın aynı ağda olduğunu kontrol edin. Finder’da görünmesi tek başına pil bilgisinin okunabildiğini göstermez.
+- Cihaz yanıt vermiyorsa Firefly zaman aşımından sonra sorguyu sonlandırır. Geçici hatalarda en fazla altı deneme yapar. Mac’in uyanması, ağ erişiminin geri gelmesi veya Yeniden dene düğmesi yeni bir deneme başlatır.
+- Okuma araçları eksik görünüyorsa dağıtım ZIP’inden uygulamayı bütün olarak yeniden kopyalayın. Araçlar ayrı kurulmuşsa Firefly standart Homebrew yollarını da denetler.
+- Pil uyarısı görünmüyorsa hem Firefly ayarlarını hem macOS Sistem Ayarları → Bildirimler → Firefly iznini kontrol edin.
+
+## Kaynak proje ve dağıtım
+
+Xcode’da Firefly.xcodeproj dosyasını açın. Yerel menü çubuğu uygulaması için Firefly şemasını seçin. Çekirdek testleri proje dizininde `swift test` ile yürütülür. Yerel paket kendi Mac’inizde geliştirme ve kullanım için geçici kod imzası taşır. Developer ID imzası ve Apple noter onayı alınmadı.
+
+Küçük ve orta boy widget için ayrı FireflyWithWidgets şeması vardır. Uygulama ve uzantıda aynı geliştirici takımını ve bu takıma ait App Group yetkisini yapılandırın. Widget yalnızca paylaşılan son ölçümü okur. Bu şemanın derlemesi doğrulandı. İmzalı ortak veri alanı, widget galerisinden ekleme ve masaüstündeki yenileme davranışı bu teslimde sınanmadı. Ana dağıtım paketi menü çubuğu sürümüdür.
+
+Pil geçmişi kullanıcıya ait Application Support/Firefly dizininde, tercihler ise yerel kullanıcı ayarlarında tutulur. Firefly eşleştirme anahtarlarını kopyalamaz. Okuma araçları libimobiledevice 1.4.0 Homebrew dağıtımından alınmıştır. ThirdParty/manifest.json sürümleri, kaynak adreslerini ve sağlama toplamlarını listeler. Üçüncü taraf lisansları ve ilgili kitaplıkların kaynak arşivleri ThirdParty altındadır.
+
+0.1.2 sürümünde Pil sekmesi içeriğe göre kısalır. Menü simgesi güncel bir ölçümde pil %20’nin altındaysa sistem kırmızısına, %20 veya üzerindeyken şarj oluyorsa sistem yeşiline döner. Diğer durumlarda standart menü çubuğu rengini kullanır.
+
+0.1.3 sürümü eşleştirilmiş iPhone ile açık bir oturum üzerinden ölçüm alır. iPhone ağ hizmetini sunuyorsa ekran kilitliyken de çalışabilir. iOS Wi-Fi erişimini tamamen durdurursa canlı ölçüm alınamaz. Telefon ağda yeniden duyurulduğunda Firefly bağlantıyı tekrar dener. İlk bağlantı için kilidi açmak gerekebilir. Panel açıkken başarılı okumalar arasında 1 saniye, kapalıyken 3 saniye, Mac’in düşük güç modunda panel kapalıyken 10 saniye bekler. Cihazın yanıt süresi bu aralığa eklenir. Logo menü çubuğuna sığacak şekilde en fazla 22 puntodur. Renk geçişi 0,24 saniye sürer; Hareketi Azalt ayarı açıksa animasyon kullanılmaz.
+
+0.1.5 ile Wi-Fi'da geciken pil yanıtı için en fazla 15 saniye beklenir. Hızlı denemeler bittikten sonra Firefly eşleştirilmiş cihazın Mac’in USB veya ağ cihazı listesine dönüp dönmediğini yaklaşık dakikada bir kontrol eder. Cihaz listede görünmezken yeni bir oturum açılmaz. Mac uykudayken kontroller durur. Son 40 bağlantı olayı Application Support/Firefly içindeki connection-events.txt dosyasına yalnızca saat, sonuç ve bağlantı türüyle kaydedilir.

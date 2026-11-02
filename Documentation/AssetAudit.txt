@@ -1,0 +1,4 @@
+ZIP CRC: OK
+SHA256: 125 checked; mismatches: []
+PNG signatures/dimensions and catalog JSON: OK
+Embedded bitmap SVG is not resolution-independent. Official PNG/ICNS used.

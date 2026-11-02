@@ -1,0 +1,296 @@
+{
+  "libimobiledevice": {
+    "version": "1.4.0",
+    "license": "LGPL-2.1-or-later",
+    "source": {
+      "url": "https://github.com/libimobiledevice/libimobiledevice/releases/download/1.4.0/libimobiledevice-1.4.0.tar.bz2",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "23cc0077e221c7d991bd0eb02150a0d49199bcca1ddf059edccee9ffd914939d"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice/blobs/sha256:bd24e96b92bdb9ea209c4231630bdbbbd087627555987cdebaf6ccfe8d0aaa3a",
+        "sha256": "bd24e96b92bdb9ea209c4231630bdbbbd087627555987cdebaf6ccfe8d0aaa3a"
+      },
+      "arm64_tahoe": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice/blobs/sha256:967bd0bdccbd984f218e08c60fc3777def033a62252bd2b61ec6a37a77ad25cd",
+        "sha256": "967bd0bdccbd984f218e08c60fc3777def033a62252bd2b61ec6a37a77ad25cd"
+      },
+      "arm64_sequoia": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice/blobs/sha256:7d80544bfe2cc2cc0f34865ffdb19d741b61d5162d520ade2a11e1e3999c630c",
+        "sha256": "7d80544bfe2cc2cc0f34865ffdb19d741b61d5162d520ade2a11e1e3999c630c"
+      },
+      "arm64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice/blobs/sha256:94f1ff2abef7d2a468375c125f2e106b9d24631a1c5226bfff8215372a2c43bb",
+        "sha256": "94f1ff2abef7d2a468375c125f2e106b9d24631a1c5226bfff8215372a2c43bb"
+      },
+      "x86_64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice/blobs/sha256:0cf6b1d55bd0dbb4c1cf7114cac78c0607e53e811e9c693f2ebb51a411bd2a43",
+        "sha256": "0cf6b1d55bd0dbb4c1cf7114cac78c0607e53e811e9c693f2ebb51a411bd2a43"
+      }
+    }
+  },
+  "libimobiledevice-glue": {
+    "version": "1.3.3",
+    "license": "LGPL-2.1-or-later",
+    "source": {
+      "url": "https://github.com/libimobiledevice/libimobiledevice-glue/releases/download/1.3.3/libimobiledevice-glue-1.3.3.tar.bz2",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "920ce01382a32695f49b23292b4979a03f0afd16c58e8755d8b7f41804acc1a9"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice-glue/blobs/sha256:dc5369924a2c6a2a72fa0272ad2e555368d9202b5d277128ec9015ce118a4d38",
+        "sha256": "dc5369924a2c6a2a72fa0272ad2e555368d9202b5d277128ec9015ce118a4d38"
+      },
+      "arm64_tahoe": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice-glue/blobs/sha256:771ea125dd999af5879f39529abd5faa2cb1bff83a52f87c95e842d4c0cba942",
+        "sha256": "771ea125dd999af5879f39529abd5faa2cb1bff83a52f87c95e842d4c0cba942"
+      },
+      "arm64_sequoia": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice-glue/blobs/sha256:8b529b79effd76fac07f8a85e1596a3e7b6b0c18f06f07c1579b5b5c45b0110e",
+        "sha256": "8b529b79effd76fac07f8a85e1596a3e7b6b0c18f06f07c1579b5b5c45b0110e"
+      },
+      "arm64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice-glue/blobs/sha256:09c546bf5ba30af4019a0e43d5bdc2a4e0a8b5f027d51407be7f430c7f380819",
+        "sha256": "09c546bf5ba30af4019a0e43d5bdc2a4e0a8b5f027d51407be7f430c7f380819"
+      },
+      "x86_64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libimobiledevice-glue/blobs/sha256:4ef415035d620334870921e36e0f6d4dd973af3507c9d20d464b3648647f008a",
+        "sha256": "4ef415035d620334870921e36e0f6d4dd973af3507c9d20d464b3648647f008a"
+      }
+    }
+  },
+  "libplist": {
+    "version": "2.8.0",
+    "license": "LGPL-2.1-or-later",
+    "source": {
+      "url": "https://github.com/libimobiledevice/libplist/releases/download/2.8.0/libplist-2.8.0.tar.bz2",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "b1f59f7634c58b2481325a23ff4e3bf51574a42d868cbe466d2b39b04550752a"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libplist/blobs/sha256:321b77f9c5a6a7432162874392635b3a543ca4db397c422a49471d9762af86c9",
+        "sha256": "321b77f9c5a6a7432162874392635b3a543ca4db397c422a49471d9762af86c9"
+      },
+      "arm64_tahoe": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libplist/blobs/sha256:f013f0d6a0440dd4f2236afed2ffd2599f9519081a75a4d4bda8c6de33bb7e86",
+        "sha256": "f013f0d6a0440dd4f2236afed2ffd2599f9519081a75a4d4bda8c6de33bb7e86"
+      },
+      "arm64_sequoia": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libplist/blobs/sha256:a19201d621e6181184e7c77a0ba59ca08f7566b42e168f746509f370ae8dbbc5",
+        "sha256": "a19201d621e6181184e7c77a0ba59ca08f7566b42e168f746509f370ae8dbbc5"
+      },
+      "arm64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libplist/blobs/sha256:3d7d4814dc13e834074d6d36e1ababe85919660c8d0228117270c6cf7ab4f070",
+        "sha256": "3d7d4814dc13e834074d6d36e1ababe85919660c8d0228117270c6cf7ab4f070"
+      },
+      "x86_64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libplist/blobs/sha256:9d284d178d84186d816b342c71f08d88ec9d3d1bf6036cc0faea091c6bda12d9",
+        "sha256": "9d284d178d84186d816b342c71f08d88ec9d3d1bf6036cc0faea091c6bda12d9"
+      }
+    }
+  },
+  "libtasn1": {
+    "version": "4.21.0",
+    "license": "LGPL-2.1-or-later",
+    "source": {
+      "url": "https://ftpmirror.gnu.org/libtasn1/libtasn1-4.21.0.tar.gz",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "1d8a444a223cc5464240777346e125de51d8e6abf0b8bac742ac84609167dc87"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:68d1748171848565af7a083ca92b834ab1fe4ac7832140b1cd22fd1fcb072fd7",
+        "sha256": "68d1748171848565af7a083ca92b834ab1fe4ac7832140b1cd22fd1fcb072fd7"
+      },
+      "arm64_tahoe": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:ae01713eec0bd922b903ed2bf514dc085ec3108636c4ead84614b23a2c33f267",
+        "sha256": "ae01713eec0bd922b903ed2bf514dc085ec3108636c4ead84614b23a2c33f267"
+      },
+      "arm64_sequoia": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:973e0fd7d529808f53fa9ae281020bcbcc750a1dff60e5e5bc37c0da274cca5e",
+        "sha256": "973e0fd7d529808f53fa9ae281020bcbcc750a1dff60e5e5bc37c0da274cca5e"
+      },
+      "arm64_sonoma": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:2dceab4bf93738bd4f3efd9063a5cf60ccd96e5b0e5a3ac9fca508e42b5f3336",
+        "sha256": "2dceab4bf93738bd4f3efd9063a5cf60ccd96e5b0e5a3ac9fca508e42b5f3336"
+      },
+      "sonoma": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:71c5d144fdce79e4cfe7bbd5863da5171a13d892a26475c5ea183e7e3ef21d8f",
+        "sha256": "71c5d144fdce79e4cfe7bbd5863da5171a13d892a26475c5ea183e7e3ef21d8f"
+      },
+      "arm64_linux": {
+        "cellar": ":any_skip_relocation",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:c8b7973e5f6822f25876da6b60138eec386a3d3b9f0a694dff7b5a7073fcf82d",
+        "sha256": "c8b7973e5f6822f25876da6b60138eec386a3d3b9f0a694dff7b5a7073fcf82d"
+      },
+      "x86_64_linux": {
+        "cellar": ":any_skip_relocation",
+        "url": "https://ghcr.io/v2/homebrew/core/libtasn1/blobs/sha256:c0394c5c9c0b278c37eb9f817a282054d64654f7b27eb86100bb5b307a0d72b5",
+        "sha256": "c0394c5c9c0b278c37eb9f817a282054d64654f7b27eb86100bb5b307a0d72b5"
+      }
+    }
+  },
+  "libtatsu": {
+    "version": "1.0.5",
+    "license": "LGPL-2.1-or-later",
+    "source": {
+      "url": "https://github.com/libimobiledevice/libtatsu/releases/download/1.0.5/libtatsu-1.0.5.tar.bz2",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "536fa228b14f156258e801a7f4d25a3a9dd91bb936bf6344e23171403c57e440"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtatsu/blobs/sha256:c1bb7119bc08c23940a1eb05055824915eee5e09f14554722e67750f6b8a8552",
+        "sha256": "c1bb7119bc08c23940a1eb05055824915eee5e09f14554722e67750f6b8a8552"
+      },
+      "arm64_tahoe": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtatsu/blobs/sha256:f672af789246ca901b2feb021d27fb2d3e04c7b53a7f6170797d2fe3eb087e52",
+        "sha256": "f672af789246ca901b2feb021d27fb2d3e04c7b53a7f6170797d2fe3eb087e52"
+      },
+      "arm64_sequoia": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtatsu/blobs/sha256:913371367c79a4288583b15267122b9160e4ef444d6a944b0eaf96758850500a",
+        "sha256": "913371367c79a4288583b15267122b9160e4ef444d6a944b0eaf96758850500a"
+      },
+      "arm64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtatsu/blobs/sha256:8bbd19a01ade741b4d5538812add677315675ae24f5423eeeae9824064dee461",
+        "sha256": "8bbd19a01ade741b4d5538812add677315675ae24f5423eeeae9824064dee461"
+      },
+      "x86_64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libtatsu/blobs/sha256:aeefa1286b99cc1a205bcef00fdd26f60de3b0169d7c31d6b6fbd3e02957935d",
+        "sha256": "aeefa1286b99cc1a205bcef00fdd26f60de3b0169d7c31d6b6fbd3e02957935d"
+      }
+    }
+  },
+  "libusbmuxd": {
+    "version": "2.1.1",
+    "license": "GPL-2.0-or-later AND LGPL-2.1-or-later",
+    "source": {
+      "url": "https://github.com/libimobiledevice/libusbmuxd/releases/download/2.1.1/libusbmuxd-2.1.1.tar.bz2",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "5546f1aba1c3d1812c2b47d976312d00547d1044b84b6a461323c621f396efce"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libusbmuxd/blobs/sha256:2839eb617eca09b376f3ca95de69418a682f9a726fbc99d0b4186ce3449c6434",
+        "sha256": "2839eb617eca09b376f3ca95de69418a682f9a726fbc99d0b4186ce3449c6434"
+      },
+      "arm64_tahoe": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libusbmuxd/blobs/sha256:cd4e39092e81fef19d844c344b4c27f1be39002e4fe9e37a981e1ccb362e3d08",
+        "sha256": "cd4e39092e81fef19d844c344b4c27f1be39002e4fe9e37a981e1ccb362e3d08"
+      },
+      "arm64_sequoia": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libusbmuxd/blobs/sha256:16b44e022f024205a1eb1421829f3f60ed845f6c2c64d6f02eaa2372585abb25",
+        "sha256": "16b44e022f024205a1eb1421829f3f60ed845f6c2c64d6f02eaa2372585abb25"
+      },
+      "arm64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libusbmuxd/blobs/sha256:4f8b3df9782cce8f8ca82a35ad43db8b0a033bafd0b72268b9edcf17d3891e77",
+        "sha256": "4f8b3df9782cce8f8ca82a35ad43db8b0a033bafd0b72268b9edcf17d3891e77"
+      },
+      "x86_64_linux": {
+        "cellar": ":any",
+        "url": "https://ghcr.io/v2/homebrew/core/libusbmuxd/blobs/sha256:abc7d2a5420a7bc40d934cfd30058f3187814b11c5eb8dd955bc3c730ed6a74a",
+        "sha256": "abc7d2a5420a7bc40d934cfd30058f3187814b11c5eb8dd955bc3c730ed6a74a"
+      }
+    }
+  },
+  "openssl@4": {
+    "version": "4.1.0",
+    "license": "Apache-2.0",
+    "source": {
+      "url": "https://github.com/openssl/openssl/releases/download/openssl-4.1.0/openssl-4.1.0.tar.gz",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "50c17baf54cb008f6ce42d50deb4b28050a1aad711636cabd4b241c7e90cc2fd"
+    },
+    "bottles": {
+      "arm64_golden_gate": {
+        "cellar": "/opt/homebrew/Cellar",
+        "url": "https://ghcr.io/v2/homebrew/core/openssl/4/blobs/sha256:d239639f77a275caa217707e126790b3f5f5c86e5bc6e2a996e5df7fdaed44a6",
+        "sha256": "d239639f77a275caa217707e126790b3f5f5c86e5bc6e2a996e5df7fdaed44a6"
+      },
+      "arm64_tahoe": {
+        "cellar": "/opt/homebrew/Cellar",
+        "url": "https://ghcr.io/v2/homebrew/core/openssl/4/blobs/sha256:382f63e829b116d5fb9a2b186147e489631b5bbbb06ac0089f795a3fed1085c4",
+        "sha256": "382f63e829b116d5fb9a2b186147e489631b5bbbb06ac0089f795a3fed1085c4"
+      },
+      "arm64_sequoia": {
+        "cellar": "/opt/homebrew/Cellar",
+        "url": "https://ghcr.io/v2/homebrew/core/openssl/4/blobs/sha256:6fcbad388ef13f6f9481e91676e2ec1b49f0a3dbd473e838297a3c8850283978",
+        "sha256": "6fcbad388ef13f6f9481e91676e2ec1b49f0a3dbd473e838297a3c8850283978"
+      },
+      "arm64_linux": {
+        "cellar": "/home/linuxbrew/.linuxbrew/Cellar",
+        "url": "https://ghcr.io/v2/homebrew/core/openssl/4/blobs/sha256:e76f5b649d8c593a802fc377a52b2d963807b8a1d79e3e256647f35c4fc9088a",
+        "sha256": "e76f5b649d8c593a802fc377a52b2d963807b8a1d79e3e256647f35c4fc9088a"
+      },
+      "x86_64_linux": {
+        "cellar": "/home/linuxbrew/.linuxbrew/Cellar",
+        "url": "https://ghcr.io/v2/homebrew/core/openssl/4/blobs/sha256:4818b19c5662c2ec0c699d5bc8ebddb91f92d799fb91420de26a98fac6ca68c3",
+        "sha256": "4818b19c5662c2ec0c699d5bc8ebddb91f92d799fb91420de26a98fac6ca68c3"
+      }
+    }
+  },
+  "ca-certificates": {
+    "version": "2026-10-20",
+    "license": "MPL-2.0",
+    "source": {
+      "url": "https://curl.se/ca/cacert-2026-10-20.pem",
+      "tag": null,
+      "revision": null,
+      "using": null,
+      "checksum": "796f1389bfea13c0ed78f663b765baaff54a508e5483786bd6ece73c5e3e3cbe"
+    },
+    "bottles": {
+      "all": {
+        "cellar": ":any_skip_relocation",
+        "url": "https://ghcr.io/v2/homebrew/core/ca-certificates/blobs/sha256:8589f4e61b3afcc5ea375aab11af1c891ec4c94421c699c2a5a4765078de4443",
+        "sha256": "8589f4e61b3afcc5ea375aab11af1c891ec4c94421c699c2a5a4765078de4443"
+      }
+    }
+  }
+}
