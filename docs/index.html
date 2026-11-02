@@ -3,7 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#faf9f6">
+  <meta name="theme-color" content="#f5f5f7" id="theme-color">
+  <script>
+  (function(){var p='system';try{p=localStorage.getItem('firefly-appearance')||'system'}catch(e){}
+  if(['light','dark','system'].indexOf(p)===-1)p='system';
+  var d=p==='dark'||(p==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme=d?'dark':'light';})();
+  </script>
   <meta name="description" content="Firefly brings your iPhone's battery to your Mac menu bar. A small, native utility for checking battery level, wireless status and last updates.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Firefly — Your iPhone's battery. Right on your Mac.">
@@ -144,6 +150,79 @@
     }
     @media(max-width:390px){.product-stage{padding:28px 12px}.popover{padding:13px}.tabs{gap:3px}.tabs span{font-size:10px;padding:7px}.mascot{width:57px;height:57px}.popover-title strong{font-size:20px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  
+    /* Semantic colors from native macOS surfaces, with explicit appearance overrides. */
+    :root{
+      --background:#f5f5f7;--paper:#ffffff;--surface:#ececf0;--ink:#202127;--secondary:#68717c;
+      --line:#dedfe5;--accent:#4977c6;--accent-soft:#e7eefc;--muted-label:#858d99;
+      --header:rgba(248,248,251,.86);--stage:radial-gradient(ellipse at 44% 37%,#fbfbfd,#ebedf3);
+      --glass:rgba(255,255,255,.88);--glass-line:rgba(255,255,255,.92);
+      --shadow:0 26px 60px rgba(28,35,48,.11),0 3px 14px rgba(28,35,48,.04);
+      --switch:#e7e7ec;--switch-on:#fff;--pill:#f4f4f6;--progress:#e2e4e9;--fill:#70b68e;
+      --panel:#efeff2;--panel-line:#e1e2e8;--primary:#282e39;--primary-hover:#434b59;--on-primary:#fff;
+      --price:#f8f8fa;--preview-menu:rgba(255,255,255,.76);
+    }
+    html[data-theme=light]{color-scheme:light}
+    html[data-theme=dark]{
+      color-scheme:dark;
+      --background:#111217;--paper:#262730;--surface:#1c1d24;--ink:#f0f1f6;--secondary:#a9acba;
+      --line:#373943;--accent:#a6c1ff;--accent-soft:rgba(145,172,249,.23);--muted-label:#a1a5b2;
+      --header:rgba(22,23,30,.87);--stage:radial-gradient(ellipse at 45% 40%,#383d4b,#22242d);
+      --glass:rgba(43,45,54,.91);--glass-line:rgba(241,243,255,.14);
+      --shadow:0 30px 76px rgba(0,0,0,.36),0 3px 12px rgba(0,0,0,.1);
+      --switch:#2b2d36;--switch-on:#464956;--pill:rgba(255,255,255,.065);--progress:#565967;--fill:#83c9a1;
+      --panel:#1d1f27;--panel-line:#383b44;--primary:#eceef5;--primary-hover:#d5dbe6;--on-primary:#1c1e26;
+      --price:#202129;--preview-menu:rgba(60,63,74,.84);
+    }
+    body{background:var(--background);color:var(--ink);transition:background-color .2s,color .2s}
+    .site-header{background:var(--header);border-color:var(--line)}
+    .nav{gap:14px}.nav-links{gap:22px}
+    .nav-links a{color:var(--secondary)}.nav-links a:hover{color:var(--ink)}
+    .nav-actions{gap:12px;flex-shrink:0}
+    .theme-switch{display:flex;align-items:center;gap:1px;padding:3px;border:1px solid var(--line);background:var(--switch);border-radius:11px}
+    .theme-switch button{display:grid;place-items:center;width:31px;height:31px;padding:0;color:var(--secondary);border:none;background:transparent;cursor:pointer;border-radius:8px;transition:background-color .15s,color .15s}
+    .theme-switch button:hover{color:var(--ink)}
+    .theme-switch button[aria-pressed=true]{background:var(--switch-on);color:var(--ink);box-shadow:0 1px 4px #0002}
+    .button-primary{background:var(--primary);color:var(--on-primary)}.button-primary:hover{background:var(--primary-hover)}
+    .button-secondary{color:var(--ink);background:var(--paper);border-color:var(--line)}.button-secondary:hover{background:var(--surface)}
+    .menu-toggle{color:var(--ink);border-color:var(--line)}
+    .label,.stage-caption{color:var(--muted-label)}
+    .hero h1 span,.hero-text,.section-description,.hero-meta,.feature p,.statement p,.statement-rows p,.step p,.plan p,.pricing-note,.faq details p,.final p,.footer{color:var(--secondary)}
+    .product-stage{background:var(--stage);border:1px solid var(--panel-line);border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px;min-height:493px;padding:37px 18px}
+    .stage-menubar{width:min(100%,365px);display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--preview-menu);border:1px solid var(--glass-line);border-radius:13px;padding:9px 14px}
+    .stage-menubar>span{font-size:10px;letter-spacing:.15em;color:var(--muted-label);font-weight:700}
+    .stage-menubar strong{font-size:13px;display:inline-flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+    .stage-menubar img{width:18px;height:18px;object-fit:contain;opacity:.85}
+    html[data-theme=dark] .stage-menubar img{filter:invert(1)}
+    .popover{background:var(--glass);border-color:var(--glass-line);color:var(--ink);border-radius:19px;box-shadow:var(--shadow);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+    .popover-title strong,.popover-body p.timestamp{color:var(--ink)}
+    .popover-title small,.power,.charging,.popover-body p,.popover-body p.info,.popover-foot{color:var(--secondary)}
+    .tabs{gap:5px}.tabs span{background:var(--pill);border-color:var(--line);color:var(--secondary);font-weight:570;min-height:34px;padding:7px 9px}
+    .tabs .active{background:var(--accent-soft);border-color:transparent;color:var(--accent);font-weight:660}
+    .tabs span i{font-style:normal;font-size:11px;display:inline;margin-right:2px}
+    .percent{font-weight:310;letter-spacing:-.06em}
+    .bar{background:var(--progress)}.bar span{background:var(--fill)}
+    .popover-foot{border-color:var(--line)}.popover-foot span:last-child{color:var(--secondary)}
+    .stage-caption{position:static;line-height:1.55;text-align:center;font-size:10px}
+    .divider,.feature,.step,.statement-rows article,.pricing,.plan+.plan,.faq details,.final,.footer{border-color:var(--line)}
+    .feature-index,.step .number,.statement-rows .symbol{color:var(--accent)}
+    .statement{background:var(--panel);border:1px solid var(--panel-line);border-radius:23px}
+    .pricing{background:var(--paper)}.plan+.plan{background:var(--price)}
+    .tag{color:var(--secondary);border-color:var(--line)}.plan-price small{color:var(--secondary)}
+    .plan li{color:var(--ink)}.faq summary:after{color:var(--secondary)}.footer a:hover{color:var(--ink)}
+    @media(max-width:1050px){.nav-links{gap:12px}.nav-actions .button{padding-inline:11px}}
+    @media(max-width:760px){
+      .nav-links{background:var(--paper);border-color:var(--line)}
+      .nav-actions{margin-left:auto}.theme-switch button{width:30px;height:30px}
+      .product-stage{padding:30px 15px;min-height:475px}
+    }
+    @media(max-width:390px){
+      .nav{gap:9px}.theme-switch{padding:2px}.theme-switch button{width:27px;height:29px}
+      .popover{padding:13px}.tabs span{padding:7px 6px;font-size:10px}
+      .product-stage{padding:27px 10px}
+    }
+    @media(prefers-reduced-motion:reduce){body,.theme-switch button{transition:none!important}}
+
   </style>
 </head>
 <body>
@@ -159,6 +238,11 @@
         <a href="https://github.com/pankuccii/Firefly" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       </div>
       <div class="nav-actions">
+        <div class="theme-switch" role="group" aria-label="Appearance">
+          <button type="button" data-appearance="light" aria-label="Light appearance" title="Light appearance" aria-pressed="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.5 1.5m11.2 11.2 1.5 1.5M2 12h2m16 0h2M4.9 19.1l1.5-1.5M17.6 6.4l1.5-1.5"/></svg></button>
+          <button type="button" data-appearance="dark" aria-label="Dark appearance" title="Dark appearance" aria-pressed="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.4 15.3A8.8 8.8 0 0 1 8.7 3.6a8.8 8.8 0 1 0 11.7 11.7Z"/></svg></button>
+          <button type="button" data-appearance="system" aria-label="Use system appearance" title="Use system appearance" aria-pressed="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8m-4-3v3"/></svg></button>
+        </div>
         <a class="button button-primary button-small download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Get Firefly ↗</a>
         <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="nav-links" aria-expanded="false">☰</button>
       </div>
@@ -178,6 +262,7 @@
           <div class="hero-meta"><span class="dot"></span><span id="release-status">v0.1.7 pre-release</span> &nbsp;·&nbsp; Apple Silicon &nbsp;·&nbsp; macOS 27</div>
         </div>
         <div class="product-stage">
+          <div class="stage-menubar" aria-label="Illustrative Firefly menu bar"><span>MENU BAR</span><strong><img src="assets/firefly-menu-icon.png" alt=""> 71%</strong></div>
           <div class="popover" aria-label="Illustration based on Firefly's SwiftUI panel">
             <div class="popover-top">
               <img class="mascot" src="assets/firefly-mascot.png" alt="Official Firefly mascot">
@@ -185,7 +270,7 @@
               <div class="power" aria-hidden="true">⏻</div>
             </div>
             <div class="tabs" aria-label="Application sections">
-              <span class="active">Battery</span><span>History</span><span>Help</span><span>Settings</span>
+              <span class="active"><i aria-hidden="true">▰</i>Battery</span><span><i aria-hidden="true">⌁</i>History</span><span><i aria-hidden="true">ⓘ</i>Help</span><span><i aria-hidden="true">⚙</i>Settings</span>
             </div>
             <div class="popover-body">
               <div class="percent-row"><div class="percent">71%</div><div class="charging">On battery</div></div>
@@ -345,6 +430,38 @@
           status.textContent=(release.tag_name||'Current release')+(release.prerelease?' pre-release':'');
         }).catch(function(){/* Existing GitHub release page remains as fallback. */});
     }());
+  </script>
+
+  <script>
+    (function () {
+      var key = 'firefly-appearance';
+      var supported=['light','dark','system'];
+      var preference='system';
+      try { preference=localStorage.getItem(key)||'system'; } catch(e){}
+      if (supported.indexOf(preference)===-1) preference='system';
+      var media=window.matchMedia('(prefers-color-scheme: dark)');
+      function update(){
+        var dark=preference==='dark'||(preference==='system'&&media.matches);
+        document.documentElement.dataset.theme=dark?'dark':'light';
+        var meta=document.getElementById('theme-color');
+        if(meta)meta.setAttribute('content',dark?'#111217':'#f5f5f7');
+        document.querySelectorAll('[data-appearance]').forEach(function(b){
+          b.setAttribute('aria-pressed',String(b.getAttribute('data-appearance')===preference));
+        });
+      }
+      document.querySelectorAll('[data-appearance]').forEach(function(b){
+        b.addEventListener('click',function(){
+          var mode=b.getAttribute('data-appearance');
+          if(supported.indexOf(mode)===-1)return;
+          preference=mode;
+          try{localStorage.setItem(key,mode)}catch(e){}
+          update();
+        });
+      });
+      if(media.addEventListener)media.addEventListener('change',function(){if(preference==='system')update();});
+      else if(media.addListener)media.addListener(function(){if(preference==='system')update();});
+      update();
+    })();
   </script>
 </body>
 </html>
