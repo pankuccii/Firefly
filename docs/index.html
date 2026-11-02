@@ -182,6 +182,181 @@
     .foot-row{display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap}
     .footer-links{display:flex;gap:24px;flex-wrap:wrap}
     .text-link{color:var(--sub)}
+
+    /* Scroll-driven Firefly story: sticky, accessible, and framework-free. */
+    .story-section{padding:28px 0 10px;position:relative}
+    .story-heading{text-align:center;margin:0 auto 55px;max-width:680px}
+    .story-heading h2{font-size:clamp(42px,5.7vw,76px);line-height:1.11;font-weight:630;letter-spacing:-.07em;margin:17px 0 15px}
+    .story-heading h2 span{color:var(--faint)}
+    .story-heading p{font-size:15px;color:var(--sub);max-width:440px;margin:0 auto}
+    .story-scroll-hint{display:inline-flex;align-items:center;gap:9px;color:var(--faint);font-size:11px;letter-spacing:.06em;margin-top:28px}
+    .story-scroll-hint span{font-size:18px}
+    .story-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,1fr);gap:clamp(24px,5vw,70px);align-items:stretch}
+    .story-stage{min-width:0;position:relative}
+    .story-sticky{position:sticky;top:clamp(28px,6vh,60px);height:min(78vh,690px);min-height:540px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--stage);padding:24px 27px 0;isolation:isolate}
+    .story-stage-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:2;min-height:52px}
+    .story-stage-top>div{display:flex;flex-direction:column;gap:4px}
+    .story-stage-kicker{color:var(--faint);font-size:9px;letter-spacing:.18em;font-weight:670}
+    .story-stage-top strong{font-size:15px;font-weight:610;letter-spacing:-.025em}
+    .story-stage-number{font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums}
+    .story-devices{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,26px);flex:1;min-height:0;padding-top:15px}
+    .story-phone-wrap{width:clamp(146px,17vw,201px);height:clamp(313px,35vw,392px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;padding-bottom:25px}
+    .story-phone{width:clamp(146px,17vw,189px);height:clamp(289px,30vw,357px);border-radius:31px;background:#1f2228;border:5px solid #474a52;padding:4px;box-shadow:inset 0 0 0 1px #7e8189,0 19px 38px rgba(15,18,24,.22);position:relative;z-index:2;transform:rotate(-5deg);transition:transform .58s cubic-bezier(.2,.8,.2,1)}
+    .story-phone-glass{width:100%;height:100%;border-radius:24px;background:radial-gradient(ellipse at 53% 38%,#34465e,#151c2a 72%);overflow:hidden;position:relative;color:#eff2f6}
+    .story-island{position:absolute;z-index:1;width:31%;height:16px;left:34.5%;top:7px;border-radius:20px;background:#06070a}
+    .story-phone-top{display:flex;justify-content:space-between;padding:16px 16px 0;font-size:10px;color:#e4e9f1;font-weight:620}
+    .story-phone-display{display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100% - 29px);padding-bottom:5px}
+    .story-phone-caption{font-size:12px;color:#bec8d3;margin-bottom:24px}
+    .story-battery-icon{width:82px;height:39px;border:2.5px solid #e8ecf1;border-radius:9px;position:relative;padding:4px}
+    .story-battery-icon:after{content:"";width:5px;height:15px;border-radius:0 3px 3px 0;position:absolute;right:-7px;top:9px;background:#e8ecf1}
+    .story-battery-fill{width:42%;height:100%;border-radius:4px;background:#95bba1;transition:background-color .4s}
+    .story-battery-bolt{position:absolute;inset:0;display:grid;place-items:center;font-size:28px;font-weight:bold;color:#fff;opacity:0;transform:scale(.8);transition:opacity .3s,transform .3s;text-shadow:0 1px 4px #0006}
+    .story-phone-value{font-size:46px;line-height:1.1;letter-spacing:-.06em;font-variant-numeric:tabular-nums;font-weight:300;margin-top:16px}
+    .story-phone-state{font-size:12px;color:#c4ccd7;margin-top:5px}
+    .story-cable{position:absolute;width:40px;height:200px;left:calc(50% - 19px);bottom:-146px;transform:translateY(125px) rotate(-5deg);opacity:0;z-index:3;transition:transform .65s cubic-bezier(.2,.8,.25,1),opacity .3s}
+    .story-connector{height:35px;width:20px;border-radius:6px 6px 4px 4px;margin:0 auto;background:linear-gradient(90deg,#bbc1cb,#f0f3f8,#a6afbb);position:relative;box-shadow:0 2px 8px #0003}
+    .story-connector:before{content:"";position:absolute;width:10px;height:9px;top:-7px;left:5px;border-radius:3px 3px 0 0;background:#d7dee8}
+    .story-wire{height:160px;width:8px;margin:-1px auto;background:linear-gradient(90deg,#bfc6d0,#f5f5f9,#c1c9d1);border-radius:7px}
+    .story-phone-shadow{position:absolute;bottom:3px;width:130px;height:14px;background:#0002;filter:blur(12px);border-radius:50%}
+    .story-desktop{flex:1;min-width:0;max-width:335px;position:relative;z-index:4}
+    .story-menu-pill{height:35px;margin-bottom:11px;background:var(--pane);border:1px solid var(--pane-line);border-radius:11px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px;box-shadow:0 5px 10px #00000005}
+    .story-menu-pill>span{color:var(--sub);font-size:10px;white-space:nowrap}
+    .story-menu-pill strong{display:inline-flex;align-items:center;gap:4px;font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:630}
+    .story-menu-pill img{width:18px;height:18px;object-fit:contain}
+    html[data-theme="dark"] .story-menu-pill img{filter:invert(1)}
+    .story-panel{background:var(--pane);border:1px solid var(--pane-line);border-radius:17px;padding:14px;box-shadow:var(--card-shadow);overflow:hidden}
+    .story-panel-head{display:flex;align-items:center;gap:9px;min-height:54px}
+    .story-panel-head img{width:54px;height:54px;object-fit:contain;flex-shrink:0}
+    .story-panel-head>div{display:flex;flex-direction:column;line-height:1.3;gap:2px}
+    .story-panel-head strong{font-size:17px;letter-spacing:-.04em}
+    .story-panel-head small{font-size:10px;color:var(--sub)}
+    .story-panel-power{margin-left:auto;font-size:16px;color:var(--sub)}
+    .story-panel-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:11px 0 19px}
+    .story-panel-tabs span{min-width:0;text-align:center;font-size:9px;line-height:1;white-space:nowrap;padding:8px 2px;border-radius:100px;background:var(--pill);color:var(--sub)}
+    .story-panel-tabs span.chosen{color:var(--pill-accent);background:var(--pill-active);font-weight:680}
+    .story-panel-reading{display:flex;align-items:baseline;justify-content:space-between;gap:8px;min-height:52px}
+    .story-panel-reading strong{font-weight:320;font-size:42px;letter-spacing:-.06em;line-height:1.15;font-variant-numeric:tabular-nums}
+    .story-panel-reading span{color:var(--sub);font-size:10px;white-space:nowrap}
+    .story-panel-track{height:5px;border-radius:10px;background:var(--battery-track);overflow:hidden;margin:9px 0 14px}
+    .story-panel-track div{height:100%;width:42%;border-radius:10px;background:var(--battery);transition:background-color .4s}
+    .story-panel-details{display:flex;flex-direction:column;gap:4px;font-size:12px;line-height:1.4}
+    .story-panel-details small{font-size:10px;color:var(--sub)}
+    .story-panel-footer{border-top:1px solid var(--line);margin-top:13px;padding-top:10px;display:flex;justify-content:space-between;gap:9px;align-items:center;color:var(--sub);font-size:10px}
+    .story-panel-footer>span:last-child{font-size:17px}
+    .story-toast{position:absolute;bottom:-47px;right:-4px;min-width:225px;max-width:310px;display:flex;align-items:center;gap:12px;background:var(--pane);color:var(--fg);border:1px solid var(--line);border-radius:13px;padding:11px 13px;box-shadow:var(--card-shadow);opacity:0;transform:translateY(12px) scale(.97);pointer-events:none;transition:opacity .4s,transform .4s}
+    .story-toast-symbol{display:grid;place-items:center;font-weight:700;width:28px;height:28px;border-radius:8px;background:#f3dbd5;color:#ad4e37;flex-shrink:0}
+    .story-toast div{display:flex;flex-direction:column;gap:2px}
+    .story-toast strong{font-size:11px;font-weight:710}
+    .story-toast small{font-size:10px;color:var(--sub);line-height:1.4}
+    .story-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:48px;padding:8px 0;z-index:5}
+    .story-demo-note{font-size:10px;color:var(--faint);line-height:1.5}
+    .story-buttons{display:flex;gap:8px}
+    .story-buttons button{height:30px;width:35px;border-radius:9px;background:var(--pane);border:1px solid var(--line);color:var(--fg);cursor:pointer}
+    .story-buttons button:disabled{opacity:.3;cursor:default}
+    .story-progress{height:2px;width:calc(100% + 54px);margin-left:-27px;background:var(--line)}
+    .story-progress span{display:block;width:16.67%;height:100%;background:var(--fg);transition:width .25s}
+    .story-steps{min-width:0}
+    .story-beat{min-height:83vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:20px 0;border-bottom:1px solid var(--line);opacity:.35;transition:opacity .36s}
+    .story-beat:first-child{margin-top:0}
+    .story-beat:last-child{border-bottom:0}
+    .story-beat.active{opacity:1}
+    .story-step-index{font-size:10px;font-weight:650;color:var(--faint);letter-spacing:.15em}
+    .story-beat h3{font-size:clamp(30px,3vw,42px);line-height:1.14;letter-spacing:-.055em;font-weight:630;margin:16px 0}
+    .story-beat p{font-size:15px;line-height:1.8;color:var(--sub);max-width:305px;margin:0}
+    .story-sticky[data-scene="1"] .story-battery-fill,
+    .story-sticky[data-scene="1"] .story-panel-track div{background:#df796a}
+    .story-sticky[data-scene="1"] .story-phone-value{color:#fac8c0}
+    .story-sticky[data-scene="2"] .story-battery-fill,
+    .story-sticky[data-scene="3"] .story-battery-fill,
+    .story-sticky[data-scene="2"] .story-panel-track div,
+    .story-sticky[data-scene="3"] .story-panel-track div{background:#90d69e}
+    .story-sticky[data-scene="2"] .story-cable,
+    .story-sticky[data-scene="3"] .story-cable{opacity:1;transform:translateY(-9px) rotate(-5deg)}
+    .story-sticky[data-scene="2"] .story-phone,
+    .story-sticky[data-scene="3"] .story-phone{transform:rotate(0deg)}
+    .story-sticky[data-scene="2"] .story-battery-bolt,
+    .story-sticky[data-scene="3"] .story-battery-bolt{opacity:1;transform:scale(1)}
+    .story-sticky[data-scene="1"] .story-toast,
+    .story-sticky[data-scene="3"] .story-toast,
+    .story-sticky[data-scene="4"] .story-toast,
+    .story-sticky[data-scene="5"] .story-toast{opacity:1;transform:translateY(0) scale(1)}
+    .story-sticky[data-scene="4"] .story-panel,
+    .story-sticky[data-scene="4"] .story-menu-pill{opacity:.75}
+    .story-sticky[data-scene="5"] .story-phone{transform:rotate(0deg)}
+    @media(max-width:1020px){
+      .story-layout{grid-template-columns:minmax(0,1.55fr) minmax(210px,.8fr);gap:30px}
+      .story-sticky{padding:20px 16px 0;min-height:510px}
+      .story-devices{gap:10px}
+      .story-phone-wrap{width:128px;height:315px}
+      .story-phone{width:127px;height:275px;border-radius:27px}
+      .story-phone-glass{border-radius:21px}
+      .story-phone-value{font-size:36px}
+      .story-battery-icon{transform:scale(.8)}
+      .story-panel{padding:10px}
+      .story-panel-head img{width:43px;height:43px}
+      .story-panel-reading strong{font-size:36px}
+      .story-panel-tabs span{font-size:8px}
+      .story-progress{width:calc(100% + 32px);margin-left:-16px}
+      .story-toast{right:0;min-width:205px}
+    }
+    @media(max-width:730px){
+      .story-section{padding-top:15px}
+      .story-heading{margin-bottom:29px}
+      .story-heading h2{font-size:clamp(39px,9.5vw,59px)}
+      .story-layout{display:flex;flex-direction:column;gap:0}
+      .story-stage{position:sticky;top:0;z-index:3}
+      .story-sticky{position:relative;top:auto;width:100%;height:56vh;min-height:420px;max-height:530px;border-radius:0 0 19px 19px;padding:17px 18px 0}
+      .story-stage-top strong{font-size:13px}
+      .story-devices{gap:clamp(8px,3vw,20px);padding-top:0}
+      .story-phone-wrap{width:clamp(112px,31vw,148px);height:290px}
+      .story-phone{width:clamp(108px,28vw,133px);height:260px}
+      .story-phone-glass{border-radius:19px}
+      .story-phone-caption{font-size:10px;margin-bottom:12px}
+      .story-phone-top{font-size:9px;padding-inline:10px}
+      .story-phone-value{font-size:34px}
+      .story-phone-state{font-size:10px}
+      .story-phone-shadow{width:100px}
+      .story-desktop{max-width:285px}
+      .story-panel{padding:10px}
+      .story-panel-head{min-height:41px;gap:5px}
+      .story-panel-head img{width:40px;height:40px}
+      .story-panel-head strong{font-size:15px}
+      .story-panel-head small{font-size:9px}
+      .story-panel-tabs{gap:2px;margin:8px 0 12px}
+      .story-panel-tabs span{font-size:8px;padding:7px 1px}
+      .story-panel-reading strong{font-size:33px}
+      .story-panel-reading span{font-size:9px}
+      .story-panel-details{gap:2px;font-size:10px}
+      .story-panel-details small{font-size:9px}
+      .story-toast{min-width:180px;max-width:230px;bottom:-12px;right:-3px;padding:8px}
+      .story-controls{min-height:40px}
+      .story-demo-note{font-size:9px}
+      .story-progress{width:calc(100% + 36px);margin-left:-18px}
+      .story-steps{margin-top:0}
+      .story-beat{min-height:70vh;text-align:center;align-items:center;justify-content:flex-end;padding:0 12px 14vh;opacity:.35}
+      .story-beat h3{font-size:31px}
+      .story-beat p{font-size:14px;max-width:330px}
+    }
+    @media(max-width:395px){
+      .story-sticky{padding:13px 11px 0;min-height:395px}
+      .story-devices{gap:5px}
+      .story-phone-wrap{width:105px;height:257px}
+      .story-phone{width:99px;height:236px;border-width:4px}
+      .story-phone-caption{margin-bottom:7px}
+      .story-battery-icon{transform:scale(.72)}
+      .story-phone-value{margin-top:4px}
+      .story-desktop{max-width:219px}
+      .story-menu-pill{padding:0 7px}
+      .story-menu-pill>span{font-size:9px}
+      .story-panel-reading strong{font-size:31px}
+      .story-panel-tabs span{font-size:7px}
+      .story-toast{bottom:-14px}
+      .story-progress{width:calc(100% + 22px);margin-left:-11px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .story-sticky *, .story-beat{transition:none!important;animation:none!important}
+    }
+
     @media (max-width:950px){
       .container{width:calc(100% - 44px)}
       .nav-links{gap:15px}
@@ -248,25 +423,107 @@
       <div class="hero-actions"><a class="btn btn-primary download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Download for macOS <span aria-hidden="true">↗</span></a><a class="btn btn-outline" href="https://github.com/pankuccii/Firefly" target="_blank" rel="noopener noreferrer">View on GitHub</a></div>
       <div class="hero-note"><span id="release-status">v0.1.7 pre-release</span> &nbsp;·&nbsp; Apple Silicon &nbsp;·&nbsp; macOS 27</div>
     </section>
-    <section class="showcase container" aria-label="Firefly app preview">
-      <div class="showcase-inner">
-        <div class="mock">
-          <div class="mock-menubar"><span>Mac menu bar</span><strong><img src="assets/firefly-menu-icon.png" alt="">71%</strong></div>
-          <div class="popover">
-            <div class="p-head">
-              <img class="p-mascot" src="assets/firefly-mascot.png" alt="Official Firefly mascot">
-              <div class="p-name"><strong>Firefly</strong><small>iPhone 15</small></div>
-              <div class="p-exit" aria-hidden="true">⏻</div>
-            </div>
-            <div class="p-tabs"><span class="active"><span class="symbol" aria-hidden="true">▰</span>Battery</span><span><span class="symbol" aria-hidden="true">⌁</span>History</span><span><span class="symbol" aria-hidden="true">ⓘ</span>Help</span><span><span class="symbol" aria-hidden="true">⚙</span>Settings</span></div>
-            <div class="p-level"><span class="p-value">71%</span><span class="p-state">On battery</span></div>
-            <div class="p-track" role="img" aria-label="Illustrative battery reading of 71 percent"><span></span></div>
-            <div class="p-details"><div>⌁ &nbsp;Wi-Fi</div><div class="secondary">Last successful reading</div><div>9:27:36 PM</div><div class="secondary">Fresh reading</div></div>
-            <div class="p-footer"><span>✓ &nbsp;Connected via Wi-Fi</span><span class="refresh" aria-hidden="true">↻</span></div>
-          </div>
-          <div class="mock-caption">Illustrative UI · Example data</div>
+    <section class="story-section" id="demo" aria-labelledby="story-title">
+      <div class="container">
+        <div class="story-heading">
+          <div class="eyebrow">See Firefly in action</div>
+          <h2 id="story-title">A small app.<br><span>A whole lot of moments.</span></h2>
+          <p>Follow an iPhone through its day. Scroll to see Firefly respond.</p>
+          <span class="story-scroll-hint" aria-hidden="true">Scroll to explore <span>↓</span></span>
         </div>
-        <div class="showcase-label">01 — YOUR BATTERY, AT A GLANCE</div>
+        <div class="story-layout" id="story-layout">
+          <div class="story-stage">
+            <div class="story-sticky" id="story-demo" data-scene="0" style="--level:.42">
+              <div class="story-stage-top">
+                <div><span class="story-stage-kicker">FIREFLY IN ACTION</span><strong id="story-stage-title">Battery at a glance</strong></div>
+                <span class="story-stage-number" id="story-stage-number">01 / 06</span>
+              </div>
+              <div class="story-devices">
+                <div class="story-phone-wrap" aria-label="Illustrated iPhone showing battery and cable connection">
+                  <div class="story-phone">
+                    <div class="story-phone-glass">
+                      <div class="story-island"></div>
+                      <div class="story-phone-top"><span>9:41</span><span aria-hidden="true">▰ &nbsp;⌁</span></div>
+                      <div class="story-phone-display">
+                        <span class="story-phone-caption">iPhone</span>
+                        <div class="story-battery-icon">
+                          <div class="story-battery-fill" id="phone-battery-fill"></div>
+                          <div class="story-battery-bolt" id="story-bolt" aria-hidden="true">ϟ</div>
+                        </div>
+                        <div class="story-phone-value" id="story-phone-value">42%</div>
+                        <div class="story-phone-state" id="story-phone-state">On battery</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="story-cable" aria-hidden="true">
+                    <div class="story-connector"></div>
+                    <div class="story-wire"></div>
+                  </div>
+                  <div class="story-phone-shadow"></div>
+                </div>
+                <div class="story-desktop">
+                  <div class="story-menu-pill"><span>macOS menu bar</span><strong><img src="assets/firefly-menu-icon.png" alt=""> <span id="story-menu-value">42%</span></strong></div>
+                  <div class="story-panel">
+                    <div class="story-panel-head">
+                      <img src="assets/firefly-mascot.png" alt="Official Firefly mascot">
+                      <div><strong>Firefly</strong><small>iPhone 15</small></div>
+                      <span class="story-panel-power" aria-hidden="true">⏻</span>
+                    </div>
+                    <div class="story-panel-tabs"><span class="chosen">Battery</span><span>History</span><span>Help</span><span>Settings</span></div>
+                    <div class="story-panel-reading">
+                      <strong id="story-panel-percent">42%</strong>
+                      <span id="story-panel-state">On battery</span>
+                    </div>
+                    <div class="story-panel-track"><div id="story-panel-fill"></div></div>
+                    <div class="story-panel-details"><span id="story-panel-transport">⌁ &nbsp;Wi-Fi</span><small>Last successful reading</small><span id="story-panel-time">Just now</span><small id="story-panel-freshness">Fresh reading</small></div>
+                    <div class="story-panel-footer"><span id="story-panel-status">✓ &nbsp;Connected via Wi-Fi</span><span aria-hidden="true">↻</span></div>
+                  </div>
+                  <div class="story-toast" id="story-toast" role="status" aria-live="polite">
+                    <span class="story-toast-symbol" id="story-toast-symbol">!</span>
+                    <div><strong id="story-toast-title">Low battery</strong><small id="story-toast-description">iPhone battery has reached 18%.</small></div>
+                  </div>
+                </div>
+              </div>
+              <div class="story-controls">
+                <span class="story-demo-note">Interactive product illustration · Simulated values</span>
+                <div class="story-buttons"><button type="button" id="story-prev" aria-label="Previous scenario">←</button><button type="button" id="story-next" aria-label="Next scenario">→</button></div>
+              </div>
+              <div class="story-progress" aria-hidden="true"><span id="story-progress-fill"></span></div>
+            </div>
+          </div>
+          <div class="story-steps" aria-label="Scroll through Firefly scenarios">
+            <article class="story-beat active" data-scene="0">
+              <span class="story-step-index">01 / ALWAYS THERE</span>
+              <h3>Just a glance.</h3>
+              <p>See your iPhone's current battery level in the menu bar, without picking it up.</p>
+            </article>
+            <article class="story-beat" data-scene="1">
+              <span class="story-step-index">02 / LOW BATTERY</span>
+              <h3>A little heads-up.</h3>
+              <p>As the battery runs low, Firefly can alert you before you run out of power.</p>
+            </article>
+            <article class="story-beat" data-scene="2">
+              <span class="story-step-index">03 / PLUG IN</span>
+              <h3>Time to recharge.</h3>
+              <p>Plug in your iPhone. Watch its charging state and battery reading update.</p>
+            </article>
+            <article class="story-beat" data-scene="3">
+              <span class="story-step-index">04 / CHARGE ALERT</span>
+              <h3>Right on time.</h3>
+              <p>At 80%, a configured charging alert tells you it's time to unplug.</p>
+            </article>
+            <article class="story-beat" data-scene="4">
+              <span class="story-step-index">05 / LOST CONNECTION</span>
+              <h3>Out of range?</h3>
+              <p>Firefly makes it clear when the iPhone is no longer reachable. No pretending old values are live.</p>
+            </article>
+            <article class="story-beat" data-scene="5">
+              <span class="story-step-index">06 / BACK AGAIN</span>
+              <h3>Back together.</h3>
+              <p>Once a supported wireless connection returns, Firefly attempts to pick up where it left off.</p>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
     <section class="section container" id="features">
@@ -373,6 +630,94 @@
           if (url) document.querySelectorAll('.download-link').forEach(function (a) { a.href = url; });
           document.getElementById('release-status').textContent = (release.tag_name || 'Latest release') + (release.prerelease ? ' pre-release' : '');
         }).catch(function () { /* Keep the official GitHub release link as fallback. */ });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var root=document.getElementById('story-demo');
+      var beats=Array.prototype.slice.call(document.querySelectorAll('.story-beat'));
+      if(!root||beats.length!==6)return;
+      var stageTitles=['Battery at a glance','Low battery alert','Charging over USB','Charge target reached','Connection unavailable','Wireless restored'];
+      var range=[[42,42],[22,18],[18,39],[39,80],[80,80],[80,80]];
+      var lowAlert={title:'Low battery',description:'iPhone battery is below 20%.',symbol:'!'};
+      var chargeAlert={title:'Charging alert',description:'Your iPhone has reached 80%.',symbol:'ϟ'};
+      var connectionAlert={title:'Connection lost',description:'Showing the last known reading.',symbol:'⌁'};
+      var reconnectAlert={title:'Connected again',description:'A new battery reading is available.',symbol:'✓'};
+      var lastScene=-1;
+      var currentScene=0;
+      var tracking=true;
+      var reduceMotion=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var $=function(id){return document.getElementById(id)};
+      var setText=function(id,value){var el=$(id);if(el&&el.textContent!==value)el.textContent=value};
+      var setAlert=function(alert){
+        if(!alert)return;
+        setText('story-toast-title',alert.title);
+        setText('story-toast-description',alert.description);
+        setText('story-toast-symbol',alert.symbol);
+        var symbol=$('story-toast-symbol');
+        symbol.style.background=alert===reconnectAlert?'#daf2e3':alert===chargeAlert?'#e8efe1':alert===connectionAlert?'#e7e8ec':'#f3dbd5';
+        symbol.style.color=alert===reconnectAlert?'#277e4f':alert===chargeAlert?'#567c3e':alert===connectionAlert?'#66697c':'#ad4e37';
+      };
+      function paint(scene,progress){
+        var state=range[scene];
+        var level=Math.round(state[0]+(state[1]-state[0])*progress);
+        var charging=(scene===2||scene===3);
+        var disconnected=scene===4;
+        var value=(disconnected?'—':level+'%');
+        root.setAttribute('data-scene',String(scene));
+        root.style.setProperty('--level',(level/100).toFixed(3));
+        $('phone-battery-fill').style.width=level+'%';
+        $('story-panel-fill').style.width=(disconnected?0:level)+'%';
+        setText('story-phone-value',level+'%');
+        setText('story-panel-percent',value);
+        setText('story-menu-value',value);
+        setText('story-phone-state',charging?'Charging':scene===1?'Low battery':'On battery');
+        setText('story-panel-state',charging?'ϟ Charging':disconnected?'Unavailable':scene===1?'Low battery':'On battery');
+        setText('story-panel-transport',charging?'⌁  USB':disconnected?'⌁  Unavailable':'⌁  Wi-Fi');
+        setText('story-panel-time',disconnected?'Last seen earlier':'Just now');
+        setText('story-panel-freshness',disconnected?'Stale reading — not live data':scene===5?'Recently updated':'Fresh reading');
+        setText('story-panel-status',disconnected?'ⓘ  iPhone not reachable':charging?'✓  Connected via USB':'✓  Connected via Wi-Fi');
+        setText('story-stage-title',stageTitles[scene]);
+        setText('story-stage-number',String(scene+1).padStart(2,'0')+' / 06');
+        $('story-prev').disabled=(scene===0);
+        $('story-next').disabled=(scene===5);
+        $('story-progress-fill').style.width=(((scene+progress)/6)*100).toFixed(2)+'%';
+        beats.forEach(function(b,i){b.classList.toggle('active',i===scene);});
+        if(lastScene!==scene){
+          setAlert(scene===1?lowAlert:scene===3?chargeAlert:scene===4?connectionAlert:scene===5?reconnectAlert:null);
+          lastScene=scene;
+        }
+      }
+      function findScene(){
+        var threshold=window.innerHeight*(window.innerWidth<=730?.71:.54);
+        var active=0;
+        for(var i=0;i<beats.length;i++){
+          if(beats[i].getBoundingClientRect().top<=threshold)active=i;
+        }
+        var rect=beats[active].getBoundingClientRect();
+        var progress=Math.max(0,Math.min(1,(threshold-rect.top)/Math.max(rect.height,1)));
+        currentScene=active;
+        paint(active,progress);
+      }
+      var pending=false;
+      function onScroll(){
+        if(pending)return;
+        pending=true;
+        requestAnimationFrame(function(){pending=false;findScene();});
+      }
+      window.addEventListener('scroll',onScroll,{passive:true});
+      window.addEventListener('resize',onScroll,{passive:true});
+      function go(delta){
+        var next=Math.max(0,Math.min(beats.length-1,currentScene+delta));
+        beats[next].scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});
+        // Keep clicks responsive even if smooth scrolling is unavailable.
+        currentScene=next;
+        paint(next,.5);
+      }
+      $('story-prev').addEventListener('click',function(){go(-1);});
+      $('story-next').addEventListener('click',function(){go(1);});
+      findScene();
     })();
   </script>
 </body>
