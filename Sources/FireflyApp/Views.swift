@@ -9,13 +9,13 @@ struct FireflyView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     var body: some View {
         VStack(spacing: 12) {
-            HStack(spacing: 12) {
+            HStack(spacing: 14) {
                 if let url = Bundle.main.url(forResource: "Mascot", withExtension: "png"), let image = NSImage(contentsOf: url) {
                     TimelineView(.animation(minimumInterval: 0.12, paused: reduceMotion || !model.panelVisible || !model.live || model.observation?.charging != true)) { tick in
                         let pulse = 0.82 + 0.18 * sin(tick.date.timeIntervalSinceReferenceDate * 2)
-                        Image(nsImage: image).resizable().scaledToFit().frame(width: 48, height: 48)
+                        Image(nsImage: image).resizable().scaledToFit().scaleEffect(1.26).frame(width: 70, height: 70)
                             .opacity(!model.live ? 0.45 : (model.observation?.charging == true && !reduceMotion ? pulse : 1))
-                    }.accessibilityHidden(true)
+                    }.frame(width: 70, height: 70).background(.thinMaterial, in: RoundedRectangle(cornerRadius: 20)).accessibilityHidden(true)
                 }
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Firefly").font(.title2.bold())
@@ -26,12 +26,8 @@ struct FireflyView: View {
                     .buttonStyle(.plain).help(model.t("Firefly’dan çık", "Quit Firefly"))
                     .accessibilityLabel(model.t("Firefly’dan çık", "Quit Firefly"))
             }
-            Picker("", selection: $model.page) {
-                Text(model.t("Pil", "Battery")).tag(0)
-                Text(model.t("Geçmiş", "History")).tag(1)
-                Text(model.t("Yardım", "Help")).tag(2)
-                Text(model.t("Ayarlar", "Settings")).tag(3)
-            }.pickerStyle(.segmented).labelsHidden()
+            navigation
+            Group {
             if model.page == 0 {
                 battery.frame(maxWidth: .infinity, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
@@ -46,6 +42,12 @@ struct FireflyView: View {
                     }.frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 4)
                 }.frame(height: 370)
             }
+            }
+            .simultaneousGesture(DragGesture(minimumDistance: 35).onEnded { drag in
+                let dx = drag.translation.width
+                guard abs(dx) > 55, abs(dx) > 2 * abs(drag.translation.height) else { return }
+                selectPage(model.page + (dx < 0 ? 1 : -1))
+            })
             Divider()
             HStack {
                 Label(model.status, systemImage: model.state.connected ? "checkmark.circle" : "info.circle")
@@ -58,9 +60,41 @@ struct FireflyView: View {
         }.padding(16).frame(width: 370).fixedSize(horizontal: false, vertical: true)
             .environment(\.locale, Locale(identifier: model.preferences.language))
     }
+    private func selectPage(_ page: Int) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { model.page = min(3, max(0, page)) }
+    }
+    private var navigation: some View {
+        let names = [model.t("Pil", "Battery"), model.t("Geçmiş", "History"), model.t("Yardım", "Help"), model.t("Ayarlar", "Settings")]
+        let icons = ["battery.75percent", "chart.xyaxis.line", "questionmark.circle", "gearshape"]
+        return ScrollViewReader { proxy in
+            ScrollView(.horizontal) {
+                HStack(spacing: 6) {
+                    ForEach(0..<4) { index in
+                        Button { selectPage(index) } label: {
+                            Label(names[index], systemImage: icons[index])
+                                .font(.callout.weight(.semibold)).lineLimit(1).fixedSize()
+                                .padding(.horizontal, 13).frame(minHeight: 34)
+                                .foregroundStyle(model.page == index ? Color.accentColor : .primary)
+                                .glassEffect(model.page == index ? .regular.tint(.accentColor.opacity(0.22)).interactive() : .regular.interactive(), in: .capsule)
+                        }.buttonStyle(.plain).id(index)
+                            .accessibilityAddTraits(model.page == index ? .isSelected : [])
+                    }
+                }.padding(3)
+            }.scrollIndicators(.hidden)
+            .onChange(of: model.page) { _, value in
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { proxy.scrollTo(value, anchor: .center) }
+            }
+        }
+    }
     private var battery: some View {
         VStack(alignment: .leading, spacing: 9) {
-            if let value = model.observation {
+            if let snapshot = model.displayedRemote {
+                Label(model.t("iPhone’dan son bildirim", "Last report from iPhone"), systemImage: "icloud")
+                Text("\(snapshot.percent)%").font(.system(size: 52, weight: .light, design: .rounded)).monospacedDigit()
+                ProgressView(value: Double(snapshot.percent), total: 100).tint(snapshot.percent < 20 ? Color.red : .secondary)
+                Text(snapshot.date, format: .dateTime.year().month().day().hour().minute()).font(.callout)
+                Text(model.t("iCloud üzerinden · Kestirme çalıştığında güncellenir.", "Via iCloud · Updates when the shortcut runs.")).font(.caption).foregroundStyle(.secondary)
+            } else if let value = model.observation {
                 HStack(alignment: .firstTextBaseline) {
                     Text(model.live ? "\(value.percent)%" : "—").font(.system(size: 52, weight: .light, design: .rounded)).monospacedDigit()
                         .accessibilityLabel(model.live ? model.t("Pil yüzde \(value.percent)", "Battery \(value.percent) percent") : model.t("Güncel pil verisi yok", "No current battery reading"))
@@ -138,6 +172,20 @@ struct FireflyView: View {
     }
     private var settings: some View {
         VStack(alignment: .leading, spacing: 14) {
+            DisclosureGroup(model.t("Mobil veriden pil bildirimi", "Battery reports over cellular")) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(model.t("iPhone’daki kestirme pil yüzdesini ve ölçüm saatini iCloud Drive’a yazar. Yerel bağlantı yokken en son bildirimi görürsün.", "Your iPhone shortcut saves its battery level and measurement time to iCloud Drive. The last report appears when the local connection is unavailable.")).font(.caption)
+                    Button(model.t("Kurulum kılavuzu", "Setup guide")) {
+                        if let url = Bundle.main.url(forResource: "MobileSetup", withExtension: "html", subdirectory: "DeviceTools") { NSWorkspace.shared.open(url) }
+                    }
+                    Button(model.t("Bildirim dosyasını seç…", "Select report file…")) { model.chooseRemoteFile() }
+                    if let path = model.preferences.remoteFile {
+                        Text(URL(fileURLWithPath: path).lastPathComponent).font(.caption)
+                        if model.remoteFailed { Text(model.t("Dosyadan geçerli ölçüm okunamadı.", "No valid reading could be read from the file.")).font(.caption) }
+                        Button(model.t("Bağlantıyı kaldır", "Remove file")) { model.clearRemote() }
+                    }
+                }.padding(.top, 6)
+            }
             Picker(model.t("Dil", "Language"), selection: $model.preferences.language) { Text("Türkçe").tag("tr"); Text("English").tag("en") }
             Picker(model.t("Menü çubuğu", "Menu bar"), selection: $model.preferences.appearance) {
                 Text(model.t("Yalnız simge", "Icon only")).tag(0)
@@ -178,7 +226,7 @@ struct FireflyView: View {
             if !model.scheduleMessage.isEmpty { Text(model.scheduleMessage).font(.caption) }
             Divider()
             Button(model.t("Başka bir iPhone bul", "Find another iPhone")) { model.forgetDevice() }
-            Text(model.t("Veriler yalnızca bu Mac’te tutulur. Hesap veya bulut gerekmez.", "Data stays on this Mac. No account or cloud required.")).font(.caption).foregroundStyle(.secondary)
+            Text(model.t("Ölçüm geçmişi bu Mac’te tutulur. İsteğe bağlı mobil bildirimler seçtiğiniz iCloud dosyasından okunur.", "History stays on this Mac. Optional cellular reports are read from the iCloud file you select.")).font(.caption).foregroundStyle(.secondary)
         }
     }
     private func dayLabel(_ day: Int) -> String { (model.preferences.language == "tr" ? ["Pz", "Pt", "Sa", "Ça", "Pe", "Cu", "Ct"] : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"])[day - 1] }

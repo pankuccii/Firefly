@@ -207,3 +207,16 @@ extension CoreTests {
         XCTAssertFalse(absent); XCTAssertTrue(present)
     }
 }
+
+extension CoreTests {
+    func testRemoteReportUsesPhoneTimeAndRejectsInvalidReports() throws {
+        let instant = ISO8601DateFormatter().date(from: "2026-11-02T10:00:00Z")!
+        let reading = try RemoteBatteryReading.parse(Data("67\r\n2026-11-02T13:00:00+03:00\r\n".utf8), now: instant)
+        XCTAssertEqual(reading.percent, 67)
+        XCTAssertEqual(reading.date, instant)
+        XCTAssertFalse(reading.recent(at: instant.addingTimeInterval(301)))
+        for payload in ["101\n2026-11-02T10:00:00Z", "50\n2026-11-02T10:01:00Z", "50\nyesterday", "50", String(repeating: "7", count: 257)] {
+            XCTAssertThrowsError(try RemoteBatteryReading.parse(Data(payload.utf8), now: instant))
+        }
+    }
+}

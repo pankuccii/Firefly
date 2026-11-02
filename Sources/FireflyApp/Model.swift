@@ -20,6 +20,7 @@ struct Preferences: Codable {
     var unavailableAlert = false
     var schedule = ScheduleRule()
     var selectedID: String?
+    var remoteFile: String?
 }
 @MainActor final class AppModel: ObservableObject {
     @Published var preferences: Preferences { didSet { savePreferences(); changed?() } }
@@ -80,7 +81,47 @@ struct Preferences: Codable {
         if sample.percent < 20 { return .systemRed }
         return sample.charging == true ? .systemGreen : nil
     }
+    @Published private(set) var remote: RemoteBatteryReading?
+    @Published private(set) var remoteFailed = false
+    private var remoteTask: Task<Void, Never>?
+    var displayedRemote: RemoteBatteryReading? {
+        guard !live, preferences.remoteFile != nil, let remote,
+              remote.date >= (observation?.timestamp ?? .distantPast) else { return nil }
+        return remote
+    }
+    func chooseRemoteFile() {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.message = t("iPhone kestirmenizin yazdığı Firefly.txt dosyasını seçin.", "Select the Firefly.txt file written by your iPhone shortcut.")
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        clearRemote()
+        preferences.remoteFile = url.path
+        loadRemote()
+    }
+    func clearRemote() {
+        remoteTask?.cancel(); remoteTask = nil
+        preferences.remoteFile = nil; remote = nil; remoteFailed = false; changed?()
+    }
+    private func loadRemote() {
+        guard remoteTask == nil, let path = preferences.remoteFile else { return }
+        remoteTask = Task {
+            let result = await Task.detached(priority: .utility) { () -> RemoteBatteryReading? in
+                let url = URL(fileURLWithPath: path)
+                if FileManager.default.isUbiquitousItem(at: url) { try? FileManager.default.startDownloadingUbiquitousItem(at: url) }
+                guard let h = try? FileHandle(forReadingFrom: url) else { return nil }
+                defer { try? h.close() }
+                guard let bytes = try? h.read(upToCount: 257) else { return nil }
+                return try? RemoteBatteryReading.parse(bytes)
+            }.value
+            guard !Task.isCancelled, preferences.remoteFile == path else { return }
+            if let result, result.date >= (remote?.date ?? .distantPast) { remote = result }
+            remoteFailed = result == nil
+            remoteTask = nil; changed?()
+        }
+    }
     var status: String {
+        if displayedRemote != nil { return t("Son iCloud bildirimi", "Last iCloud report") }
         switch state {
         case .idle: return t("Bağlantı bekleniyor", "Waiting for connection")
         case .discovering: return t("iPhone aranıyor…", "Looking for iPhone…")
@@ -111,6 +152,7 @@ struct Preferences: Codable {
         }
     }
     func start() {
+        loadRemote()
         let center = NSWorkspace.shared.notificationCenter
         observers.append(center.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in Task { @MainActor in self?.sleep() } })
         observers.append(center.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in Task { @MainActor in self?.wake() } })
@@ -140,7 +182,7 @@ struct Preferences: Codable {
     func wake() { asleep = false; refresh(reset: true) }
     func setPanelVisible(_ visible: Bool) {
         panelVisible = visible
-        if visible { refresh() }
+        if visible { loadRemote(); refresh() }
         else if state.connected && !busy { scheduleSample() }
     }
     private func scheduleSample() {
@@ -165,6 +207,7 @@ struct Preferences: Codable {
         return try await service.read(preferredID: selected)
     }
     private func tick() {
+        if !asleep { loadRemote() }
         now = Date(); changed?()
         guard !asleep else { return }
         let dateKey = Calendar.current.startOfDay(for: now).description

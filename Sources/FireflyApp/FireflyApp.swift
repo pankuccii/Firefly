@@ -53,6 +53,11 @@ import SwiftUI
         button.imagePosition = .imageLeading
         button.title = model.preferences.appearance == 0 ? "" : (model.live ? " \(model.observation!.percent)%" : " —")
         button.toolTip = "Firefly · " + (charging ? model.t("Şarj oluyor", "Charging") : model.status)
+        if let report = model.displayedRemote {
+            let recent = report.recent(at: Date())
+            if model.preferences.appearance != 0 { button.title = recent ? " ☁︎ \(report.percent)%" : " —" }
+            button.toolTip = model.t("iCloud son bildirimi", "Last iCloud report") + " · \(report.percent)% · " + report.date.formatted()
+        }
         button.setAccessibilityLabel((button.toolTip ?? "Firefly") + button.title)
     }
     private func render(_ source: NSImage, color: NSColor?, on button: NSStatusBarButton, animate: Bool) {

@@ -101,3 +101,25 @@ public struct History: Codable, Sendable {
         }.joined(separator: "\n")
     }
 }
+
+// Shortcuts writes two lines: a whole percentage and the phone's ISO 8601 date.
+public struct RemoteBatteryReading: Equatable, Sendable {
+    public let percent: Int
+    public let date: Date
+
+    public static func parse(_ data: Data, now: Date = Date()) throws -> Self {
+        guard data.count <= 256, let text = String(data: data, encoding: .utf8) else { throw AcquisitionError.invalidPayload }
+        let lines = text.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: "\n")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+        guard lines.count == 2, let percent = Int(lines[0]), (0...100).contains(percent) else { throw AcquisitionError.invalidPayload }
+        let iso = ISO8601DateFormatter()
+        var date = iso.date(from: lines[1])
+        if date == nil {
+            iso.formatOptions.insert(.withFractionalSeconds)
+            date = iso.date(from: lines[1])
+        }
+        guard let date, date <= now.addingTimeInterval(30) else { throw AcquisitionError.invalidPayload }
+        return Self(percent: percent, date: date)
+    }
+    public func recent(at now: Date) -> Bool { (-30...300).contains(now.timeIntervalSince(date)) }
+}
