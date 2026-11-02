@@ -104,8 +104,8 @@
     .hero-actions{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
     .hero-note{margin-top:17px;font-size:11px;color:var(--faint)}
     .showcase{padding:0 0 76px}
-    .showcase-inner{background:var(--stage);min-height:560px;border:1px solid var(--line);border-radius:19px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:65px 26px 63px}
-    .showcase-inner:before{content:"";position:absolute;inset:auto auto 0 50%;width:600px;height:360px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(137,143,155,.055),transparent 72%);pointer-events:none}
+    .showcase-inner{max-width:630px;margin:0 auto;background:var(--stage);border:1px solid var(--line);border-radius:22px;position:relative;display:flex;align-items:center;justify-content:center;overflow:visible;padding:38px 36px 42px}
+    .showcase-inner:before{display:none}
     .mock{width:min(100%,385px);position:relative}
     .mock-menubar{width:100%;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--sub);font-size:11px;letter-spacing:.015em;padding:9px 12px;background:var(--pane);border:1px solid var(--pane-line);border-radius:12px}
     .mock-menubar strong{display:inline-flex;align-items:center;gap:6px;color:var(--fg);font-size:13px;font-weight:620}
@@ -118,8 +118,8 @@
     .p-name strong{font-size:22px;line-height:1.2;letter-spacing:-.045em}
     .p-name small{font-size:12px;color:var(--sub)}
     .p-exit{font-size:20px;color:var(--sub);margin-left:auto;align-self:center}
-    .p-tabs{display:flex;align-items:center;gap:5px;margin:13px 0 20px}
-    .p-tabs span{font-size:11px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:100px;background:var(--pill);border:1px solid var(--pane-line);white-space:nowrap;line-height:1.1;min-height:33px;color:var(--sub)}
+    .p-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;gap:5px;margin:13px 0 20px;width:100%}
+    .p-tabs>span{font-size:10px;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:8px 3px;border-radius:100px;background:var(--pill);border:1px solid var(--pane-line);white-space:nowrap;line-height:1.1;min-height:33px;color:var(--sub)}
     .p-tabs span.active{background:var(--pill-active);color:var(--pill-accent);font-weight:650}
     .p-tabs .symbol{font-size:11px}
     .p-level{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
@@ -131,8 +131,8 @@
     .p-details .secondary{color:var(--sub);font-size:11px}
     .p-footer{border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding-top:13px;font-size:12px;color:var(--sub)}
     .p-footer .refresh{font-size:20px;line-height:1.1}
-    .mock-caption{position:absolute;left:0;right:0;bottom:-32px;text-align:center;color:var(--faint);font-size:10px}
-    .showcase-label{position:absolute;left:30px;bottom:22px;font-size:11px;color:var(--faint)}
+    .mock-caption{text-align:center;color:var(--faint);font-size:10px;margin-top:18px}
+    .showcase-label{display:none}
     .section{padding:110px 0}
     .section-head{display:grid;grid-template-columns:.85fr 1fr;gap:58px;align-items:start;margin-bottom:65px}
     .section-title{font-size:clamp(40px,5vw,65px);line-height:1.11;letter-spacing:-.068em;font-weight:640;margin:13px 0 0}
@@ -198,7 +198,7 @@
       .hero h1{font-size:clamp(52px,9.7vw,73px)}
       .hero .intro{font-size:15px}
       .showcase{padding-bottom:52px}
-      .showcase-inner{min-height:527px;padding:62px 21px 77px}
+      .showcase-inner{padding:30px 21px 32px}
       .showcase-label{left:18px;bottom:15px}
       .section{padding:80px 0}
       .section-head,.why-grid,.two-cols{grid-template-columns:1fr}
@@ -220,9 +220,9 @@
       .nav-right .btn{padding:8px 11px;font-size:11px}
       .appearance select{font-size:11px;padding-left:0}
       .hero h1{font-size:49px}
-      .showcase-inner{padding:55px 12px 82px}
+      .showcase-inner{padding:26px 12px 30px}
       .popover{padding:13px}
-      .p-tabs{gap:4px}.p-tabs span{font-size:10px;padding:7px 6px}
+      .p-tabs{gap:3px}.p-tabs>span{font-size:9.5px;padding:7px 2px;gap:2px}.p-tabs .symbol{font-size:9px}
       .p-mascot{height:62px;width:62px}
     }
     @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
