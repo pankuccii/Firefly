@@ -3,184 +3,164 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a101d">
-  <meta name="description" content="Firefly brings your iPhone's battery to the Mac menu bar. Wireless monitoring, useful alerts, and a beautifully simple native macOS experience.">
+  <meta name="theme-color" content="#faf9f6">
+  <meta name="description" content="Firefly brings your iPhone's battery to your Mac menu bar. A small, native utility for checking battery level, wireless status and last updates.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Firefly — A little light for your Mac.">
-  <meta property="og:description" content="Your iPhone's battery, beautifully in sight. Discover Firefly for macOS.">
+  <meta property="og:title" content="Firefly — Your iPhone's battery. Right on your Mac.">
+  <meta property="og:description" content="A simpler way to keep an eye on your iPhone's battery. Made for Mac.">
   <meta property="og:image" content="https://pankuccii.github.io/Firefly/assets/firefly-icon.png">
   <meta property="og:url" content="https://pankuccii.github.io/Firefly/">
-  <meta name="color-scheme" content="dark">
-  <link rel="icon" href="assets/firefly-icon.png" type="image/png">
+  <link rel="icon" type="image/png" href="assets/firefly-icon.png">
   <link rel="apple-touch-icon" href="assets/firefly-icon.png">
-  <title>Firefly — Your iPhone's battery, beautifully in sight.</title>
+  <title>Firefly — Your iPhone's battery. Right on your Mac.</title>
   <style>
-    :root{--bg:#0a101d;--bg2:#101a2a;--card:#131f30;--card2:#19273a;--line:rgba(196,211,232,.11);--ink:#f5f6fb;--muted:#9daabd;--gold:#ffc873;--gold2:#ffe9b8;--green:#a8e2bc;--radius:22px;--max:1150px}
-    *,*::before,*::after{box-sizing:border-box}
-    html{scroll-behavior:smooth;scroll-padding-top:88px}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55;overflow-x:hidden}
+    :root{
+      color-scheme:light;
+      --background:#faf9f6; --paper:#ffffff; --surface:#f1f0ec;
+      --ink:#1d2229; --secondary:#69717c; --line:#e5e4df;
+      --amber:#e7bb70; --navy:#202b40;
+      --width:1080px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:84px}
+    body{margin:0;background:var(--background);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
     a{color:inherit;text-decoration:none}
     button{font:inherit}
-    a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:7px}
-    .skip{position:absolute;left:-9999px;top:10px;z-index:99;padding:10px 16px;color:#131820;background:var(--gold);border-radius:12px}
-    .skip:focus{left:12px}
-    .container{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
-    .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:11px;font-weight:750;color:var(--gold)}
-    .muted{color:var(--muted)}
-    .topbar{position:sticky;top:0;z-index:30;background:rgba(10,16,29,.79);border-bottom:1px solid rgba(255,255,255,.065);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
-    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px}
-    .brand{display:inline-flex;align-items:center;gap:10px;font-size:22px;font-weight:760;letter-spacing:-.055em;white-space:nowrap}
-    .brand img{width:35px;height:35px;object-fit:contain;border-radius:10px}
-    .brand .dot{color:var(--gold)}
-    .navlinks{display:flex;align-items:center;gap:30px}
-    .navlinks a{font-size:13px;color:#b8c5d5;transition:color .2s}
-    .navlinks a:hover{color:white}
-    .nav-right{display:flex;align-items:center;gap:15px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 21px;border-radius:999px;font-weight:660;font-size:14px;border:1px solid transparent;white-space:nowrap;transition:transform .2s,background .2s,border-color .2s}
-    .btn:hover{transform:translateY(-2px)}
-    .btn-gold{background:linear-gradient(140deg,#ffe4a9,#ffc46a);color:#201a13;box-shadow:0 6px 34px rgba(254,184,93,.13)}
-    .btn-gold:hover{background:linear-gradient(140deg,#fff0d0,#ffd38b)}
-    .btn-quiet{background:rgba(255,255,255,.045);border-color:var(--line);color:var(--ink)}
-    .btn-quiet:hover{background:rgba(255,255,255,.09)}
-    .btn.small{padding:10px 17px;font-size:12px}
-    .menu-btn{display:none;background:transparent;border:1px solid var(--line);border-radius:12px;padding:10px;color:var(--ink)}
-    .menu-btn svg{display:block}
-    .hero{position:relative;padding:107px 0 95px;isolation:isolate}
-    .hero:before{content:"";z-index:-1;position:absolute;inset:-110px -15% 0;background:radial-gradient(ellipse 44% 45% at 75% 41%,rgba(243,176,85,.15),transparent 85%),radial-gradient(ellipse 42% 55% at 42% 5%,rgba(79,109,183,.09),transparent 80%)}
-    .hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:34px;align-items:center}
-    .hero h1{font-size:clamp(56px,6vw,86px);line-height:1.035;letter-spacing:-.071em;margin:21px 0 25px;font-weight:740;max-width:660px}
-    .hero h1 em{font-style:normal;background:linear-gradient(120deg,#ffdfab,#fcbf61);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .hero-copy{font-size:18px;line-height:1.8;color:#aebacc;max-width:470px;margin:0 0 34px}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-    .hero-note{margin-top:20px;font-size:12px;color:#8e9cad;display:flex;align-items:center;gap:9px}
-    .hero-note .pin{width:6px;height:6px;border-radius:100%;background:var(--green);box-shadow:0 0 14px var(--green)}
-    .hero-visual{position:relative;min-height:460px;display:flex;align-items:center;justify-content:center}
-    .hero-orb{position:absolute;width:520px;height:520px;max-width:98%;background:radial-gradient(circle at 50% 50%,rgba(239,179,91,.19),rgba(233,175,83,.047) 45%,transparent 71%);filter:blur(20px);pointer-events:none}
-    .device-card{position:relative;width:min(100%,492px);padding:22px 22px 28px;border-radius:27px;background:linear-gradient(155deg,rgba(37,52,73,.95),rgba(15,25,41,.98));border:1px solid rgba(236,223,193,.13);box-shadow:0 42px 90px rgba(0,0,0,.33),0 2px 0 rgba(255,255,255,.04) inset;transform:rotate(-2.5deg)}
-    .window-head{display:flex;align-items:center;justify-content:space-between;color:#9aa8b7;font-size:12px;margin:0 2px 24px}
-    .traffic{display:flex;gap:7px}.traffic i{width:9px;height:9px;border-radius:50%;background:#fc7774}.traffic i:nth-child(2){background:#f7c763}.traffic i:nth-child(3){background:#6fcf92}
-    .phone-panel{border:1px solid rgba(255,255,255,.085);background:rgba(13,22,36,.68);padding:26px;border-radius:22px}
-    .device-label{font-size:12px;color:#91a4b5;display:flex;align-items:center;gap:7px}
-    .device-label:before{content:"";display:inline-block;width:7px;height:7px;border-radius:100%;background:#94e6b8}
-    .phone-row{display:flex;align-items:center;gap:19px;margin-top:22px}
-    .phone-shape{width:72px;height:120px;border:3px solid #657084;border-radius:17px;background:linear-gradient(135deg,#1e3653,#405672 52%,#1b2947);position:relative;box-shadow:inset 0 0 20px rgba(0,0,0,.2)}
-    .phone-shape:before{content:"";position:absolute;width:28px;height:7px;background:#182132;border-radius:0 0 7px 7px;left:50%;top:2px;transform:translateX(-50%)}
-    .phone-shape:after{content:"";position:absolute;inset:30px 14px 20px;border-radius:50%;background:radial-gradient(circle,#c9a37e55,transparent 70%)}
-    .battery-info{flex:1;min-width:0}.device-name{font-size:17px;font-weight:650;margin-bottom:4px}.battery-value{font-size:61px;font-weight:700;line-height:1.12;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
-    .battery-sub{font-size:12px;color:#abbdcc;margin:5px 0 16px}
-    .progress{height:8px;border-radius:20px;overflow:hidden;background:#2a3545}.progress span{display:block;width:71%;height:100%;background:linear-gradient(90deg,#efb866,#ffdb8d);border-radius:20px}
-    .panel-foot{display:flex;align-items:center;justify-content:space-between;color:#879aac;font-size:11px;margin:20px 0 0}
-    .connection{padding:6px 9px;background:#22364a;border-radius:100px;color:#b8e4d4}
-    .menubar-bubble{position:absolute;right:-4%;top:13px;padding:11px 16px;border-radius:15px;border:1px solid rgba(255,255,255,.19);display:flex;gap:10px;align-items:center;background:rgba(28,37,54,.94);box-shadow:0 14px 35px #0005;font-weight:670;transform:rotate(2.5deg);font-size:14px}
-    .menubar-bubble img{width:27px;height:27px;border-radius:7px}
-    .preview-label{text-align:center;margin-top:27px;font-size:11px;letter-spacing:.04em;color:#8694a6}
-    .trust-row{border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;justify-content:center;gap:clamp(22px,5vw,72px);flex-wrap:wrap;padding:24px 0;color:#9baaBC;font-size:12px}
-    .trust-row span{display:flex;align-items:center;gap:10px}
-    .trust-row svg{color:var(--gold)}
-    .section{padding:112px 0}.section-intro{max-width:680px;margin-bottom:45px}
-    .section h2{font-size:clamp(34px,4vw,53px);line-height:1.15;letter-spacing:-.055em;margin:13px 0 15px}
-    .section-intro p{font-size:16px;line-height:1.75;color:var(--muted);margin:0}
-    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-    .feature{padding:30px;background:linear-gradient(150deg,rgba(27,42,61,.7),rgba(17,28,44,.78));border:1px solid var(--line);border-radius:21px;transition:transform .2s,border-color .2s;min-height:232px}
-    .feature:hover{transform:translateY(-4px);border-color:rgba(251,205,132,.27)}
-    .feature-icon{width:43px;height:43px;background:rgba(255,196,100,.09);border:1px solid rgba(254,209,140,.19);color:var(--gold);border-radius:13px;display:grid;place-items:center;margin-bottom:24px}
-    .feature h3{margin:0 0 9px;font-size:17px;letter-spacing:-.02em}
-    .feature p{margin:0;font-size:13px;line-height:1.8;color:#9faebf}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-    .detail-box{padding:35px;border:1px solid var(--line);border-radius:28px;background:radial-gradient(circle at 65% 15%,#263650bb,transparent 55%),#142032}
-    .detail-box .statusline{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#abbacd;margin-bottom:18px}.statusline b{color:#9ce1b9}
-    .sample-card{background:#0c1423;border:1px solid rgba(255,255,255,.07);border-radius:17px;padding:19px;margin-top:12px;display:flex;gap:17px;align-items:center}
-    .sample-symbol{width:43px;height:43px;border-radius:13px;background:#25374b;display:grid;place-items:center;color:var(--gold)}
-    .sample-card strong{font-size:14px}.sample-card p{color:#93a5b7;font-size:12px;margin:4px 0 0}.subscript{margin-top:18px;color:#93a5b7;font-size:12px}
-    .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
-    .how-step{border-top:1px solid rgba(246,197,114,.35);padding-top:22px}
-    .step-no{font-size:12px;color:var(--gold);letter-spacing:.1em}
-    .how-step h3{font-size:21px;letter-spacing:-.025em;margin:14px 0 9px}
-    .how-step p{font-size:14px;color:var(--muted);line-height:1.75;margin:0}
-    .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:19px;max-width:860px;margin:0 auto}
-    .price-card{border-radius:26px;border:1px solid var(--line);padding:31px;background:#111b2b;position:relative;overflow:hidden}
-    .price-card.pro{border-color:rgba(255,200,115,.36);background:linear-gradient(160deg,#19243a,#151c2b 80%)}
-    .price-label{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700}
-    .pill{font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border:1px solid rgba(255,200,115,.3);border-radius:100px;color:var(--gold)}
-    .price{margin:25px 0 6px;font-size:46px;letter-spacing:-.055em;font-weight:720}
-    .price small{font-size:13px;letter-spacing:0;color:var(--muted);font-weight:450}
-    .price-desc{color:#a7b7c6;font-size:13px;min-height:52px;line-height:1.7}
-    .price-card ul{padding:0;list-style:none;display:grid;gap:14px;margin:27px 0 30px}
-    .price-card li{font-size:13px;display:flex;align-items:flex-start;gap:11px;color:#c7d2dd}
-    .price-card li:before{content:"✓";font-weight:700;color:var(--gold)}
-    .price-card .btn{width:100%}
-    .small-print{font-size:12px;line-height:1.7;color:#8799ac;text-align:center;max-width:720px;margin:23px auto 0}
-    .faq{max-width:840px;margin:0 auto;display:grid;gap:10px}
-    .faq details{border:1px solid var(--line);background:#111c2c;border-radius:15px;padding:18px 22px}
-    .faq summary{cursor:pointer;font-weight:660;font-size:15px;display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none}
+    a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #b9893f;outline-offset:4px}
+    .skip{position:absolute;left:-10000px;top:10px;background:#fff;padding:12px 16px;z-index:100}
+    .skip:focus{left:10px}
+    .container{width:min(var(--width),calc(100% - 56px));margin-inline:auto}
+    .site-header{border-bottom:1px solid var(--line);background:rgba(250,249,246,.95);position:sticky;top:0;z-index:10;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+    .brand{display:inline-flex;align-items:center;gap:11px;font-weight:750;font-size:21px;letter-spacing:-.055em}
+    .brand img{width:36px;height:36px;object-fit:contain;border-radius:9px}
+    .nav-links{display:flex;align-items:center;gap:29px}
+    .nav-links a{font-size:13px;color:#515862;transition:color .2s}
+    .nav-links a:hover{color:#0c1118}
+    .nav-actions{display:flex;align-items:center;gap:12px}
+    .button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 21px;border:1px solid transparent;border-radius:11px;font-weight:660;font-size:14px;transition:background .2s,transform .2s}
+    .button:hover{transform:translateY(-1px)}
+    .button-primary{background:#222935;color:white}
+    .button-primary:hover{background:#384150}
+    .button-secondary{background:white;border-color:#deded9;color:#222831}
+    .button-secondary:hover{background:#f1f0ec}
+    .button-small{min-height:39px;padding:8px 16px;font-size:12px;border-radius:9px}
+    .menu-toggle{display:none;background:none;border:1px solid var(--line);border-radius:8px;color:var(--ink);width:40px;height:40px;font-size:21px}
+    .label{font-size:11px;font-weight:730;letter-spacing:.16em;text-transform:uppercase;color:#737985}
+    .hero{padding:124px 0 106px}
+    .hero-grid{display:grid;grid-template-columns:1fr .95fr;gap:70px;align-items:center}
+    .hero h1{margin:20px 0 23px;font-size:clamp(51px,5.8vw,79px);line-height:1.07;letter-spacing:-.075em;font-weight:730;max-width:645px}
+    .hero h1 span{color:#85888d}
+    .hero-text{font-size:18px;line-height:1.75;color:#626a76;max-width:435px;margin:0 0 35px}
+    .hero-actions{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+    .hero-meta{font-size:12px;color:#7a8089;margin-top:20px}
+    .hero-meta .dot{display:inline-block;width:6px;height:6px;background:#5d967a;border-radius:50%;margin-right:6px;vertical-align:middle}
+    .product-stage{background:#efeee9;border-radius:22px;min-height:450px;display:grid;place-items:center;padding:35px 22px;position:relative}
+    .popover{width:min(100%,365px);border:1px solid #e5e5e5;background:#fff;color:#20252c;border-radius:15px;padding:17px;box-shadow:0 16px 45px rgba(37,47,56,.075);font-size:13px}
+    .popover-top{display:flex;align-items:center;gap:13px}
+    .mascot{width:66px;height:66px;object-fit:contain}
+    .popover-title{min-width:0;display:flex;flex-direction:column;gap:1px}
+    .popover-title strong{font-size:22px;letter-spacing:-.06em;line-height:1.2}
+    .popover-title small{font-size:12px;color:#818792}
+    .power{margin-left:auto;color:#9199a1;font-size:19px;align-self:center}
+    .tabs{display:flex;gap:5px;margin:13px 0 22px;flex-wrap:nowrap}
+    .tabs span{display:flex;justify-content:center;align-items:center;gap:5px;background:#f5f5f5;border:1px solid #ededed;border-radius:999px;font-size:11px;padding:7px 10px;white-space:nowrap;color:#59616b}
+    .tabs .active{background:#e9edf5;border-color:#dce3ef;color:#354a72;font-weight:650}
+    .percent-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+    .percent{font-size:54px;font-weight:310;letter-spacing:-.06em;line-height:1.1}
+    .charging{font-size:12px;color:#68717a}
+    .bar{height:6px;background:#e8ebed;border-radius:30px;overflow:hidden;margin:13px 0 18px}
+    .bar span{display:block;width:71%;background:#6fb488;height:100%;border-radius:30px}
+    .popover-body p{margin:0 0 8px;color:#626b75}
+    .popover-body p.info{color:#858c95;font-size:11px;margin:0 0 3px}
+    .popover-body p.timestamp{color:#333b46;font-size:13px;margin:0 0 7px}
+    .popover-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e8e8e8;margin-top:18px;padding-top:12px;font-size:11px;color:#56616c;gap:10px}
+    .popover-foot span:last-child{font-size:20px;color:#626a76}
+    .stage-caption{font-size:10px;color:#777d84;position:absolute;bottom:10px;left:12px;right:12px;text-align:center}
+    .section{padding:100px 0}
+    .section-header{margin-bottom:44px;max-width:680px}
+    .section h2{font-size:clamp(37px,4.3vw,55px);line-height:1.13;letter-spacing:-.065em;margin:16px 0 13px;font-weight:700}
+    .section-description{font-size:16px;color:#69707a;line-height:1.7;margin:0}
+    .divider{border:0;border-top:1px solid var(--line);margin:0}
+    .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+    .feature{border-top:1px solid #dadcd9;padding:24px 26px 28px 0;margin-right:34px}
+    .feature-index{font-size:11px;color:#9b907b;font-weight:730;letter-spacing:.09em}
+    .feature h3{font-size:19px;letter-spacing:-.035em;font-weight:660;margin:23px 0 9px}
+    .feature p{font-size:14px;color:#6c747e;line-height:1.75;margin:0}
+    .statement{background:#f0efec;border-radius:20px;padding:58px;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+    .statement h2{font-size:clamp(32px,3.6vw,48px);margin:12px 0}
+    .statement p{color:#666e78;line-height:1.85;margin:0}
+    .statement-rows{display:grid;gap:0}
+    .statement-rows article{border-bottom:1px solid #d9dad8;padding:20px 0;display:flex;gap:17px}
+    .statement-rows article:first-child{border-top:1px solid #d9dad8}
+    .statement-rows .symbol{font-size:22px;line-height:1.2;color:#8b724d;width:26px;flex-shrink:0}
+    .statement-rows strong{display:block;font-size:14px;margin-bottom:3px}
+    .statement-rows p{font-size:13px;line-height:1.65}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+    .step{border-top:1px solid #d6d9d7;padding-top:24px}
+    .step .number{font-size:12px;color:#9e7c49;font-weight:700}
+    .step h3{font-size:20px;letter-spacing:-.035em;margin:18px 0 10px}
+    .step p{font-size:14px;line-height:1.8;color:#69717b;margin:0}
+    .pricing{display:grid;grid-template-columns:1fr 1fr;border:1px solid #dedfdd;border-radius:17px;overflow:hidden;background:white;max-width:950px}
+    .plan{padding:36px}
+    .plan+.plan{border-left:1px solid #dedfdd;background:#f6f5f2}
+    .plan-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:720;font-size:17px}
+    .tag{font-size:10px;letter-spacing:.09em;text-transform:uppercase;border:1px solid #d5d6d4;border-radius:100px;padding:5px 9px;color:#6b7279;font-weight:650}
+    .plan-price{font-size:47px;line-height:1.1;font-weight:710;letter-spacing:-.06em;margin:25px 0 9px}
+    .plan-price small{font-weight:450;letter-spacing:0;font-size:12px;color:#7a8087}
+    .plan p{color:#747b83;font-size:14px;line-height:1.75;margin:0;min-height:75px}
+    .plan ul{list-style:none;margin:14px 0 30px;padding:0;display:grid;gap:12px}
+    .plan li{font-size:13px;color:#3f464e;padding-left:20px;position:relative}
+    .plan li:before{content:"✓";position:absolute;left:0;color:#678773;font-weight:750}
+    .pricing-note{font-size:12px;color:#7a818a;margin-top:22px;max-width:900px}
+    .faq{max-width:900px}
+    .faq details{border-bottom:1px solid #d9dbda;padding:22px 0}
+    .faq details:first-child{border-top:1px solid #d9dbda}
+    .faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;font-size:16px;font-weight:640}
     .faq summary::-webkit-details-marker{display:none}
-    .faq summary:after{content:"+";font-size:24px;font-weight:300;color:var(--gold)}
+    .faq summary:after{content:"+";font-size:24px;color:#9b8d78;font-weight:300}
     .faq details[open] summary:after{content:"−"}
-    .faq p{margin:13px 0 4px;color:#a9b8c8;font-size:14px;line-height:1.7}
-    .final-cta{background:radial-gradient(ellipse at 50% 110%,rgba(252,193,97,.16),transparent 60%),#111c2c;border:1px solid rgba(255,205,130,.17);border-radius:31px;padding:70px 25px;text-align:center}
-    .final-cta img{width:68px;height:68px;border-radius:19px;box-shadow:0 0 60px rgba(255,190,102,.15)}
-    .final-cta h2{font-size:clamp(37px,5vw,58px);margin:22px auto 16px;max-width:600px}
-    .final-cta p{color:#aeb9ca;margin:0 0 27px}
-    .foot{padding:52px 0 33px;color:#8f9eb1;font-size:12px}
-    .foot-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:24px}
-    .foot-links{display:flex;flex-wrap:wrap;gap:22px}
-    .foot-links a:hover{color:var(--gold)}
-    .foot .brand{font-size:19px;color:#fff}.foot .brand img{width:30px;height:30px}
-    .footnote{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-    .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-
-    /* Marketing preview follows the shipped FireflyView's 370pt macOS popover layout. */
-    .firefly-stage{position:relative;width:min(100%,460px);margin:auto;padding:0 28px}
-    .firefly-top-menu{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 13px;padding:8px 14px;border-radius:12px;background:rgba(207,221,239,.085);border:1px solid rgba(255,255,255,.11);font-size:11px;letter-spacing:.02em}
-    .firefly-top-menu .menu-label{color:#91a6bc}
-    .firefly-menu-reading{display:inline-flex;gap:7px;align-items:center;color:#e3eaf2;font-weight:700;font-size:14px}
-    .firefly-menu-reading img{height:20px;width:20px;object-fit:contain;filter:brightness(0) invert(1)}
-    .native-popover{width:370px;max-width:100%;margin:auto;border-radius:19px;padding:16px;color:#edf2f7;background:linear-gradient(156deg,rgba(43,49,61,.98),rgba(27,32,41,.985));border:1px solid rgba(236,240,250,.24);box-shadow:0 38px 85px rgba(0,0,0,.48),0 1px 0 #ffffff18 inset;text-align:left}
-    .native-top{display:flex;align-items:center;gap:14px;margin-bottom:12px;min-height:70px}
-    .native-mascot{width:70px;height:70px;object-fit:contain;flex-shrink:0}
-    .native-identity{display:flex;flex-direction:column;gap:2px;min-width:0}
-    .native-identity strong{font-size:22px;font-weight:700;line-height:1.2;letter-spacing:-.045em}
-    .native-identity span{font-size:12px;color:#b0b8c4}
-    .native-power{margin-left:auto;align-self:center;font-size:21px;line-height:1;color:#c9d1dd}
-    .native-tabs{display:flex;gap:5px;overflow:hidden;align-items:center;margin-bottom:14px}
-    .native-tabs>span{display:flex;align-items:center;gap:4px;justify-content:center;white-space:nowrap;padding:8px 9px;line-height:1.1;font-size:11px;font-weight:590;border-radius:100px;background:rgba(235,243,255,.07);border:1px solid rgba(240,245,255,.105);color:#d5dce5}
-    .native-tabs>span.active{background:rgba(169,191,247,.21);color:#deebff;border-color:rgba(188,207,248,.25)}
-    .native-tabs>span span{font-size:12px;color:inherit}
-    .native-body{display:flex;flex-direction:column;align-items:flex-start;gap:0}
-    .native-battery-row{width:100%;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
-    .native-number{font-weight:320;letter-spacing:-.07em;font-size:52px;line-height:1.16;font-variant-numeric:tabular-nums}
-    .native-charging{font-size:12px;white-space:nowrap;color:#e4e8ef}
-    .native-charging span{color:#d6dde7;margin-right:4px}
-    .native-progress{background:rgba(248,250,254,.21);width:100%;height:5px;border-radius:10px;overflow:hidden;margin:10px 0 12px}
-    .native-progress span{background:#76cf8e;width:71%;display:block;height:100%;border-radius:10px}
-    .native-transport{font-size:14px;margin-bottom:9px;color:#ebedf2}
-    .native-transport span{font-size:18px;margin-right:4px}
-    .native-datelabel{font-size:12px;color:#b3bbc5;margin-bottom:3px}
-    .native-date{font-size:13px;color:#ecf0f5;margin-bottom:9px}
-    .native-freshness{font-size:12px;color:#b1bbc5;margin-bottom:4px}
-    .native-footer{border-top:1px solid rgba(235,242,251,.17);padding:13px 0 0;margin-top:12px;display:flex;align-items:center;justify-content:space-between;color:#e4e9ef;font-size:12px;gap:12px}
-    .native-footer>span:first-child{display:flex;align-items:center;gap:5px}
-    .native-check{color:#98e9b1;font-weight:700}
-    .native-refresh{font-size:23px;line-height:1;color:#e6edf7}
-    .firefly-stage .preview-label{margin-top:18px;font-size:11px;line-height:1.5;text-align:center;color:#8899ad}
-    @media(max-width:440px){.firefly-stage{padding:0 8px}.native-popover{padding:13px}.native-tabs{gap:3px}.native-tabs>span{font-size:10px;padding:8px 7px}.native-mascot{width:62px;height:62px}.native-identity strong{font-size:20px}.native-number{font-size:48px}}
-    @media(max-width:990px){.navlinks{gap:18px}.hero{padding:75px 0}.hero-grid{grid-template-columns:1fr}.hero h1{max-width:700px}.hero-copy{max-width:650px}.hero-visual{min-height:450px}.device-card{margin:0 auto}.features{grid-template-columns:repeat(2,1fr)}.split{gap:35px}}
-    @media(max-width:720px){.container{width:min(var(--max),calc(100% - 34px))}.nav{height:66px}.navlinks{display:none;position:absolute;top:66px;left:0;right:0;background:#111b2a;padding:20px 24px;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:20px}.navlinks.open{display:flex}.nav-right>.btn{display:none}.menu-btn{display:block}.hero{padding:68px 0 62px}.hero h1{font-size:clamp(47px,12vw,66px)}.hero-copy{font-size:16px}.hero-visual{min-height:395px}.device-card{transform:none;padding:15px 15px 20px}.menubar-bubble{top:-19px;right:0;transform:none}.phone-panel{padding:17px}.battery-value{font-size:53px}.trust-row{justify-content:flex-start;gap:14px 24px}.section{padding:78px 0}.features,.split,.pricing-grid,.how-grid{grid-template-columns:1fr}.feature{min-height:0}.split{gap:28px}.detail-box{padding:20px}.price-card{padding:26px}.final-cta{padding:54px 20px}.foot-row{align-items:flex-start;flex-direction:column}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+    .faq details p{color:#66707a;font-size:14px;margin:14px 30px 0 0;max-width:780px}
+    .final{margin:36px auto 0;text-align:center;padding:80px 24px 90px;border-top:1px solid #dcdedb}
+    .final img{width:70px;height:70px;border-radius:16px}
+    .final h2{font-size:clamp(39px,4.6vw,57px);max-width:700px;margin:21px auto 12px;letter-spacing:-.065em}
+    .final p{color:#747a83;margin:0 auto 27px;max-width:550px}
+    .footer{border-top:1px solid #dedfdd;padding:35px 0 27px;font-size:12px;color:#787f86}
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+    .footer-nav{display:flex;gap:20px;flex-wrap:wrap}
+    .footer a:hover{color:#1d2229}
+    @media(max-width:940px){
+      .hero-grid{gap:35px}.hero{padding:86px 0}.hero h1{font-size:clamp(47px,6vw,66px)}
+      .nav-links{gap:17px}.statement{gap:36px;padding:40px}
+    }
+    @media(max-width:760px){
+      .container{width:min(var(--width),calc(100% - 34px))}
+      .nav{height:65px}.nav-links{display:none;position:absolute;top:65px;left:0;right:0;background:var(--background);border-bottom:1px solid var(--line);padding:19px 25px;flex-direction:column;align-items:stretch;gap:18px}
+      .nav-links.open{display:flex}.nav-actions .button{display:none}.menu-toggle{display:block}
+      .hero{padding:69px 0 55px}.hero-grid{grid-template-columns:1fr;gap:49px}.hero h1{font-size:clamp(48px,11vw,67px)}.hero-text{font-size:16px}
+      .product-stage{min-height:415px}.section{padding:72px 0}.features-grid,.steps,.statement,.pricing{grid-template-columns:1fr}
+      .feature{margin-right:0}.statement{padding:30px 25px;gap:27px}.steps{gap:26px}.plan+.plan{border-left:none;border-top:1px solid #dedfdd}.plan{padding:28px}.plan p{min-height:0}
+      .final{padding:65px 15px}.footer-inner{align-items:flex-start;flex-direction:column}
+    }
+    @media(max-width:390px){.product-stage{padding:28px 12px}.popover{padding:13px}.tabs{gap:3px}.tabs span{font-size:10px;padding:7px}.mascot{width:57px;height:57px}.popover-title strong{font-size:20px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
   </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="topbar">
-    <nav class="container nav" aria-label="Main navigation">
-      <a class="brand" href="#home" aria-label="Firefly home"><img src="assets/firefly-icon.png" alt=""><span>firefly<span class="dot">.</span></span></a>
-      <div class="navlinks" id="nav-links">
-        <a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="https://github.com/pankuccii/Firefly" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#home"><img src="assets/firefly-icon.png" alt="" width="36" height="36">firefly.</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/pankuccii/Firefly" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       </div>
-      <div class="nav-right">
-        <a class="btn btn-gold small download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Download beta <span aria-hidden="true">↗</span></a>
-        <button class="menu-btn" id="menu-toggle" aria-label="Toggle menu" aria-controls="nav-links" aria-expanded="false"><svg width="22" height="20" viewBox="0 0 22 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 5h18M2 10h18M2 15h18"/></svg></button>
+      <div class="nav-actions">
+        <a class="button button-primary button-small download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Get Firefly ↗</a>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="nav-links" aria-expanded="false">☰</button>
       </div>
     </nav>
   </header>
@@ -188,164 +168,182 @@
     <section class="hero" id="home">
       <div class="container hero-grid">
         <div>
-          <div class="eyebrow">Meet your tiny Mac companion <span aria-hidden="true">✦</span></div>
-          <h1>A little <em>light</em> for your Mac.</h1>
-          <p class="hero-copy">Your iPhone's battery, beautifully in sight. Firefly brings the essentials to your menu bar, without the noise.</p>
+          <div class="label">A small companion for your Mac</div>
+          <h1>Your iPhone's battery.<br><span>Right on your Mac.</span></h1>
+          <p class="hero-text">An effortless way to keep an eye on your iPhone's battery. One glance at your menu bar, and you're good to go.</p>
           <div class="hero-actions">
-            <a class="btn btn-gold download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">↓ &nbsp;Download for Mac</a>
-            <a class="btn btn-quiet" href="#features">Explore Firefly <span aria-hidden="true">↗</span></a>
+            <a class="button button-primary download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Download beta <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="#features">See how it works <span aria-hidden="true">↗</span></a>
           </div>
-          <div class="hero-note"><span class="pin" aria-hidden="true"></span><span><strong id="release-status">v0.1.7 beta</strong> · Apple Silicon · macOS 27</span></div>
+          <div class="hero-meta"><span class="dot"></span><span id="release-status">v0.1.7 pre-release</span> &nbsp;·&nbsp; Apple Silicon &nbsp;·&nbsp; macOS 27</div>
         </div>
-        <div class="hero-visual" aria-label="Illustration based on the actual Firefly macOS SwiftUI popover">
-          <div class="hero-orb"></div>
-          <div class="firefly-stage">
-            <div class="firefly-top-menu">
-              <span class="menu-label">macOS menu bar</span>
-              <span class="firefly-menu-reading"><img src="assets/firefly-menu-icon.png" alt=""> 71%</span>
+        <div class="product-stage">
+          <div class="popover" aria-label="Illustration based on Firefly's SwiftUI panel">
+            <div class="popover-top">
+              <img class="mascot" src="assets/firefly-mascot.png" alt="Official Firefly mascot">
+              <div class="popover-title"><strong>Firefly</strong><small>iPhone 15</small></div>
+              <div class="power" aria-hidden="true">⏻</div>
             </div>
-            <div class="native-popover">
-              <div class="native-top">
-                <img class="native-mascot" src="assets/firefly-mascot.png" alt="Official Firefly mascot">
-                <div class="native-identity"><strong>Firefly</strong><span>iPhone 15</span></div>
-                <span class="native-power" aria-label="Quit button representation">⏻</span>
-              </div>
-              <div class="native-tabs" aria-label="Application tabs">
-                <span class="active"><span aria-hidden="true">▰</span> Battery</span>
-                <span><span aria-hidden="true">⌁</span> History</span>
-                <span><span aria-hidden="true">ⓘ</span> Help</span>
-                <span><span aria-hidden="true">⚙</span> Settings</span>
-              </div>
-              <div class="native-body">
-                <div class="native-battery-row"><span class="native-number">71%</span><span class="native-charging"><span aria-hidden="true">▰</span> On battery</span></div>
-                <div class="native-progress" role="img" aria-label="Sample battery level: 71 percent"><span></span></div>
-                <div class="native-transport"><span aria-hidden="true">⌁</span> Wi-Fi</div>
-                <div class="native-datelabel">Last successful reading</div>
-                <div class="native-date">Nov 2, 9:27:36 PM</div>
-                <div class="native-freshness">Fresh reading</div>
-              </div>
-              <div class="native-footer"><span><span class="native-check" aria-hidden="true">✓</span> Connected via Wi-Fi</span><span class="native-refresh" aria-label="Refresh button representation">↻</span></div>
+            <div class="tabs" aria-label="Application sections">
+              <span class="active">Battery</span><span>History</span><span>Help</span><span>Settings</span>
             </div>
-            <div class="preview-label">Faithful UI illustration based on Firefly's SwiftUI source · Sample data</div>
+            <div class="popover-body">
+              <div class="percent-row"><div class="percent">71%</div><div class="charging">On battery</div></div>
+              <div class="bar" role="img" aria-label="Illustrative battery level: 71 percent"><span></span></div>
+              <p>⌁ &nbsp;Wi-Fi</p>
+              <p class="info">Last successful reading</p>
+              <p class="timestamp">Nov 2, 9:27 PM</p>
+              <p class="info">Fresh reading</p>
+            </div>
+            <div class="popover-foot"><span>✓ &nbsp;Connected via Wi-Fi</span><span aria-hidden="true">↻</span></div>
           </div>
+          <div class="stage-caption">Interface illustration based on the macOS app · Sample data</div>
         </div>
       </div>
     </section>
-    <div class="container"><div class="trust-row" aria-label="Product qualities">
-      <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12a10 10 0 0 1 14 0M8 15a6 6 0 0 1 8 0M12 18h.01"/></svg>Wireless when available</span>
-      <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18" rx="3"/><path d="M10 6h4"/></svg>Native for macOS</span>
-      <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>Local-first by design</span>
-      <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M12 3v18"/></svg>No account required</span>
-    </div></div>
+    <div class="container"><hr class="divider"></div>
     <section class="section" id="features">
       <div class="container">
-        <div class="section-intro reveal"><div class="eyebrow">Small app. Thoughtful details.</div><h2>Everything you need.<br>Nothing you don't.</h2><p>Made for the moments when you just want to know your phone's charge—without reaching for your phone.</p></div>
-        <div class="features">
-          <article class="feature reveal"><div class="feature-icon" aria-hidden="true">◉</div><h3>Always in sight</h3><p>See your paired iPhone's battery percentage right in the Mac menu bar.</p></article>
-          <article class="feature reveal"><div class="feature-icon" aria-hidden="true">⌁</div><h3>Wireless convenience</h3><p>Monitor over Wi-Fi after pairing and enabling supported Finder wireless connectivity.</p></article>
-          <article class="feature reveal"><div class="feature-icon" aria-hidden="true">↻</div><h3>Connection recovery</h3><p>Firefly attempts to reconnect after temporary interruptions, without constant manual intervention.</p></article>
-          <article class="feature reveal"><div class="feature-icon" aria-hidden="true">◷</div><h3>Know what's current</h3><p>When a fresh reading isn't available, the last successful update remains visible.</p></article>
-          <article class="feature reveal"><div class="feature-icon" aria-hidden="true">♧</div><h3>Useful alerts</h3><p>Battery notifications help you stay aware of important charge thresholds.</p></article>
-          <article class="feature reveal"><div class="feature-icon" aria-hidden="true">▣</div><h3>Feels at home on Mac</h3><p>Built with Swift and native macOS frameworks, with a simple menu bar experience.</p></article>
+        <div class="section-header">
+          <div class="label">The essentials, beautifully simple</div>
+          <h2>Just the things you need.</h2>
+          <p class="section-description">No complicated dashboard. No unnecessary noise. Firefly makes battery monitoring feel effortless.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature"><div class="feature-index">01 / MONITOR</div><h3>Battery at a glance</h3><p>Your iPhone's battery level is always a click away in the Mac menu bar.</p></article>
+          <article class="feature"><div class="feature-index">02 / CONNECT</div><h3>Wireless when available</h3><p>Pair your iPhone and use supported Finder Wi-Fi connectivity to check its battery without a cable.</p></article>
+          <article class="feature"><div class="feature-index">03 / RECOVER</div><h3>Reconnect gracefully</h3><p>Firefly retries after temporary connection interruptions and shows clear connection information.</p></article>
+          <article class="feature"><div class="feature-index">04 / UNDERSTAND</div><h3>Know when it updated</h3><p>See the last successful reading, so an old battery value isn't mistaken for live data.</p></article>
+          <article class="feature"><div class="feature-index">05 / STAY AWARE</div><h3>Thoughtful alerts</h3><p>Get useful battery notifications without constantly checking your phone.</p></article>
+          <article class="feature"><div class="feature-index">06 / FEEL AT HOME</div><h3>Made for macOS</h3><p>A lightweight native utility built with Swift and Apple platform frameworks.</p></article>
         </div>
       </div>
     </section>
-    <section class="section" style="padding-top:36px" id="trust">
-      <div class="container split">
-        <div class="detail-box reveal">
-          <div class="statusline"><span>Firefly connection</span><b>● &nbsp; Live reading</b></div>
-          <div class="sample-card"><div class="sample-symbol" aria-hidden="true">⌁</div><div><strong>Connected over Wi-Fi</strong><p>Battery information from a paired device.</p></div></div>
-          <div class="sample-card"><div class="sample-symbol" aria-hidden="true">◷</div><div><strong>Last known battery level</strong><p>Shown with its timestamp if the device is unavailable.</p></div></div>
-          <div class="sample-card"><div class="sample-symbol" aria-hidden="true">↻</div><div><strong>Reconnect automatically</strong><p>Recovery attempts after temporary disconnections.</p></div></div>
-          <div class="subscript">Conceptual example of connection status presentation.</div>
+    <section class="container">
+      <div class="statement">
+        <div>
+          <div class="label">Clear by design</div>
+          <h2>Small details.<br>Real peace of mind.</h2>
+          <p>Wireless availability can change when your iPhone locks, sleeps or leaves the network. Firefly keeps the status of your battery reading easy to understand.</p>
         </div>
-        <div class="reveal"><div class="eyebrow">Designed for real life</div><h2>A little more certainty. A lot less checking.</h2><p class="muted" style="line-height:1.9;font-size:16px">Wireless readings can be affected by pairing, network conditions, and iOS behavior. Firefly is designed to show you when your battery data was last updated, so an old reading doesn't masquerade as a new one.</p><a class="btn btn-quiet" href="#faq" style="margin-top:16px">Connection questions ↗</a></div>
+        <div class="statement-rows">
+          <article><span class="symbol" aria-hidden="true">◷</span><div><strong>Last updated, always clear</strong><p>Know whether the value you're seeing is fresh or from an earlier reading.</p></div></article>
+          <article><span class="symbol" aria-hidden="true">↻</span><div><strong>Tries to reconnect</strong><p>Automatic retry behavior helps with temporary connection loss.</p></div></article>
+          <article><span class="symbol" aria-hidden="true">⌁</span><div><strong>Connected on your terms</strong><p>USB pairing first, then supported Wi-Fi monitoring when available.</p></div></article>
+        </div>
       </div>
     </section>
     <section class="section" id="how">
       <div class="container">
-        <div class="section-intro reveal"><div class="eyebrow">Up and running</div><h2>Three steps. One less thing to think about.</h2><p>Pair once, keep an eye on your battery from your Mac, and get back to what matters.</p></div>
-        <div class="how-grid">
-          <div class="how-step reveal"><span class="step-no">01 / INSTALL</span><h3>Bring Firefly home</h3><p>Download the current beta from GitHub and move the app to Applications.</p></div>
-          <div class="how-step reveal"><span class="step-no">02 / CONNECT</span><h3>Pair your iPhone</h3><p>Connect via USB and trust your Mac. Enable Wi-Fi synchronization in Finder for wireless access.</p></div>
-          <div class="how-step reveal"><span class="step-no">03 / ENJOY</span><h3>Just glance up</h3><p>See battery information and connection status straight from the menu bar.</p></div>
+        <div class="section-header">
+          <div class="label">Get started</div>
+          <h2>Three easy steps.</h2>
+        </div>
+        <div class="steps">
+          <article class="step"><div class="number">01</div><h3>Download</h3><p>Get the current Firefly beta from the project's official GitHub release.</p></article>
+          <article class="step"><div class="number">02</div><h3>Pair</h3><p>Connect your iPhone by USB, trust your Mac and enable Finder's Wi-Fi synchronization if desired.</p></article>
+          <article class="step"><div class="number">03</div><h3>Glance</h3><p>Check your battery status, connection and last update from the Mac menu bar.</p></article>
         </div>
       </div>
     </section>
-    <section class="section" id="pricing" style="background:linear-gradient(180deg,transparent,rgba(30,42,59,.28),transparent)">
+    <div class="container"><hr class="divider"></div>
+    <section class="section" id="pricing">
       <div class="container">
-        <div class="section-intro reveal" style="margin-inline:auto;text-align:center"><div class="eyebrow">Simple by design</div><h2>Start free. Stay bright.</h2><p>The beta is free to try. We're exploring optional Pro features for the future—not charging for them today.</p></div>
-        <div class="pricing-grid">
-          <article class="price-card reveal"><div class="price-label">Firefly Beta <span class="pill" style="color:#b5e6c7;border-color:#b5e6c755">Available</span></div><div class="price">Free <small>/ beta</small></div><div class="price-desc">Everything you need to get started with your iPhone's battery on Mac.</div><ul><li>iPhone battery in menu bar</li><li>Supported USB and Wi-Fi monitoring</li><li>Connection status and last update</li><li>Battery alerts</li></ul><a class="btn btn-quiet download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Download beta ↗</a></article>
-          <article class="price-card pro reveal"><div class="price-label">Firefly Pro <span class="pill">Coming soon</span></div><div class="price">₺149 <small>/ one-time · proposed</small></div><div class="price-desc">More ways to make battery monitoring yours. Features and pricing are subject to change.</div><ul><li>Advanced battery history & insights</li><li>Custom alerts and schedules</li><li>Multiple device monitoring</li><li>More widget options and automations</li></ul><a class="btn btn-quiet" href="https://github.com/pankuccii/Firefly" target="_blank" rel="noopener noreferrer">Follow development ↗</a></article>
+        <div class="section-header">
+          <div class="label">Simple pricing</div>
+          <h2>Start free. Stay bright.</h2>
+          <p class="section-description">Firefly is free during beta. An optional Pro upgrade is planned for later.</p>
         </div>
-        <p class="small-print">Pro is not available for purchase. Planned features are not a promise of current functionality. Prices, availability, and final feature scope may change.</p>
+        <div class="pricing">
+          <div class="plan">
+            <div class="plan-head">Firefly Beta <span class="tag">Available</span></div>
+            <div class="plan-price">Free</div>
+            <p>All the essentials for keeping track of your iPhone's battery on Mac.</p>
+            <ul>
+              <li>Mac menu bar battery status</li>
+              <li>Supported USB and Wi-Fi monitoring</li>
+              <li>Last updated information</li>
+              <li>Battery alerts</li>
+            </ul>
+            <a class="button button-primary download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Download beta ↗</a>
+          </div>
+          <div class="plan">
+            <div class="plan-head">Firefly Pro <span class="tag">Planned</span></div>
+            <div class="plan-price">₺149 <small>/ one-time · proposed</small></div>
+            <p>More flexibility for people who want deeper insights and personal controls.</p>
+            <ul>
+              <li>Advanced battery history</li>
+              <li>Custom alerts and scheduled checks</li>
+              <li>Multiple-device support</li>
+              <li>Additional widget options</li>
+            </ul>
+            <a class="button button-secondary" href="https://github.com/pankuccii/Firefly" target="_blank" rel="noopener noreferrer">Follow development ↗</a>
+          </div>
+        </div>
+        <div class="pricing-note">Pro isn't available for purchase. Its features and proposed pricing may change. The current release is a free beta.</div>
       </div>
     </section>
+    <div class="container"><hr class="divider"></div>
     <section class="section" id="faq">
       <div class="container">
-        <div class="section-intro reveal" style="text-align:center;margin-inline:auto"><div class="eyebrow">Good to know</div><h2>A few quick answers.</h2></div>
+        <div class="section-header"><div class="label">Frequently asked</div><h2>Good to know.</h2></div>
         <div class="faq">
-          <details><summary>Can Firefly work without a cable?</summary><p>Yes, on supported configurations. First pair and trust the iPhone using USB, then enable “Show this iPhone when on Wi-Fi” in Finder. Wireless availability can vary depending on iOS behavior, network conditions, and pairing.</p></details>
-          <details><summary>Which Mac do I need?</summary><p>The current project documents Apple Silicon and macOS 27 as its target. Check the release notes for the exact requirements of each build.</p></details>
-          <details><summary>Why does the battery sometimes stop updating?</summary><p>Wireless availability can change when the iPhone locks, sleeps, or leaves the network. Firefly displays the most recent successful update so you know how fresh the reading is.</p></details>
-          <details><summary>Is the beta notarized by Apple?</summary><p>Not yet. The currently published v0.1.7 beta is locally signed and has no Apple notarization. Only download from the project's official GitHub releases and evaluate macOS security warnings carefully.</p></details>
-          <details><summary>Do I need an account or cloud subscription?</summary><p>No. Firefly's core battery monitoring is designed to work locally without a mandatory account or cloud service.</p></details>
-          <details><summary>Can I buy Firefly Pro now?</summary><p>Not yet. Firefly Pro and its pricing are proposals for future development. The currently available release is a free beta.</p></details>
+          <details><summary>Does Firefly work without a cable?</summary><p>On supported configurations, yes. First pair your iPhone by USB, then enable Finder's “Show this iPhone when on Wi-Fi” option. Connectivity and refresh timing vary with your network and iOS behavior.</p></details>
+          <details><summary>What Mac do I need?</summary><p>The current project targets Apple Silicon and macOS 27. Check each release for its exact system requirements.</p></details>
+          <details><summary>Is Firefly notarized by Apple?</summary><p>The current v0.1.7 beta is locally signed and has not been notarized. Only download from the official GitHub release and don't disable macOS security protections.</p></details>
+          <details><summary>Do I need an account?</summary><p>No mandatory account or cloud service is required for Firefly's core local battery monitoring.</p></details>
+          <details><summary>Can I buy Firefly Pro?</summary><p>Not yet. Firefly Pro is a possible future upgrade. The beta is available free of charge.</p></details>
         </div>
       </div>
     </section>
-    <section class="container" id="download">
-      <div class="final-cta reveal"><img src="assets/firefly-icon.png" alt="Firefly official app icon"><h2>Make room for a little light.</h2><p>Try Firefly on your Mac. Your iPhone's battery is just a glance away.</p><a class="btn btn-gold download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">↓ &nbsp;Download Firefly beta</a><div class="hero-note" style="justify-content:center">Apple Silicon · macOS 27 · Pre-release</div></div>
+    <section class="container final" id="download">
+      <img src="assets/firefly-icon.png" alt="Official Firefly app icon" width="70" height="70">
+      <h2>A little light for your Mac.</h2>
+      <p>Your iPhone's battery is just a glance away.</p>
+      <a class="button button-primary download-link" href="https://github.com/pankuccii/Firefly/releases/tag/v0.1.7">Download Firefly beta ↗</a>
+      <div class="hero-meta">Apple Silicon &nbsp;·&nbsp; macOS 27 &nbsp;·&nbsp; Pre-release</div>
     </section>
   </main>
-  <footer class="foot"><div class="container"><div class="foot-row">
-    <a class="brand" href="#home"><img src="assets/firefly-icon.png" alt=""><span>firefly<span class="dot">.</span></span></a>
-    <div class="foot-links"><a href="https://github.com/pankuccii/Firefly">GitHub</a><a href="https://github.com/pankuccii/Firefly/releases">Releases</a><a href="https://github.com/pankuccii/Firefly/issues">Report an issue</a><a href="https://github.com/pankuccii/Firefly/blob/main/KURULUM.md">Setup guide</a></div>
-  </div><div class="footnote"><span>© <span id="year">2026</span> Firefly. Made with care for macOS.</span><span>Independent macOS utility. Not affiliated with Apple Inc.</span></div></div></footer>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year">2026</span> Firefly · Made for Mac</span>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="https://github.com/pankuccii/Firefly">GitHub</a>
+        <a href="https://github.com/pankuccii/Firefly/releases">Releases</a>
+        <a href="https://github.com/pankuccii/Firefly/issues">Support</a>
+        <a href="https://github.com/pankuccii/Firefly/blob/main/KURULUM.md">Installation guide</a>
+      </nav>
+      <span>Not affiliated with Apple Inc.</span>
+    </div>
+  </footer>
   <script>
-    (function () {
+    (function(){
       document.getElementById('year').textContent = String(new Date().getFullYear());
-      const toggle = document.getElementById('menu-toggle');
-      const links = document.getElementById('nav-links');
-      toggle.addEventListener('click', function () {
-        const isOpen = links.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', String(isOpen));
+      var toggle=document.getElementById('menu-toggle');
+      var nav=document.getElementById('nav-links');
+      toggle.addEventListener('click',function(){
+        var open=nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded',String(open));
       });
-      links.querySelectorAll('a').forEach(function (link) {
-        link.addEventListener('click', function () {
-          links.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        });
+      nav.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click',function(){nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');});
       });
-      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const observer = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {entry.target.classList.add('visible'); observer.unobserve(entry.target);}
-          });
-        }, {threshold:0.08});
-        document.querySelectorAll('.reveal').forEach(function (element) {observer.observe(element);});
-      } else {
-        document.querySelectorAll('.reveal').forEach(function (el) {el.classList.add('visible');});
-      }
-      // GitHub's "latest" endpoint excludes prereleases; inspect the releases list instead.
+      // The "latest" GitHub releases API excludes prereleases; use the releases list.
       fetch('https://api.github.com/repos/pankuccii/Firefly/releases?per_page=15')
-        .then(function (response) {if (!response.ok) throw new Error('GitHub API unavailable');return response.json();})
-        .then(function (items) {
-          if (!Array.isArray(items)) return;
-          const release = items.find(function (x) {return x && !x.draft;});
-          if (!release) return;
-          const assets = release.assets || [];
-          const dmg = assets.find(function (x) {return /\.dmg$/i.test(x.name);});
-          const zip = assets.find(function (x) {return /\.zip$/i.test(x.name);});
-          const asset = dmg || zip;
-          const url = asset ? asset.browser_download_url : release.html_url;
-          if (!url) return;
-          document.querySelectorAll('.download-link').forEach(function (link) {link.href=url;});
-          const status = document.getElementById('release-status');
-          status.textContent=(release.tag_name || 'Current release') + (release.prerelease ? ' beta' : '');
-        })
-        .catch(function () { /* Keep a valid release-page fallback. */ });
+        .then(function(res){if(!res.ok)throw new Error('Unavailable');return res.json();})
+        .then(function(releases){
+          if(!Array.isArray(releases))return;
+          var release=releases.find(function(x){return x && !x.draft;});
+          if(!release)return;
+          var assets=release.assets||[];
+          var dmg=assets.find(function(x){return /\.dmg$/i.test(x.name);});
+          var zip=assets.find(function(x){return /\.zip$/i.test(x.name);});
+          var asset=dmg||zip;
+          var url=asset?asset.browser_download_url:release.html_url;
+          if(url)document.querySelectorAll('.download-link').forEach(function(a){a.href=url;});
+          var status=document.getElementById('release-status');
+          status.textContent=(release.tag_name||'Current release')+(release.prerelease?' pre-release':'');
+        }).catch(function(){/* Existing GitHub release page remains as fallback. */});
     }());
   </script>
 </body>
