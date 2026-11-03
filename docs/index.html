@@ -542,6 +542,22 @@
  .experience-art .story-panel-reading strong{font-size:30px}
 }
 
+  
+/* Progressive WebGL enhancement: preserve the original CSS iPhone as an offline fallback. */
+#firefly-phone-wrap{isolation:isolate}
+.firefly-three-mount{position:absolute;inset:-24px -20px -41px;z-index:6;pointer-events:auto;touch-action:pan-y}
+.firefly-three-mount canvas{display:block;width:100%;height:100%;opacity:0;transition:opacity .4s ease}
+#firefly-phone-wrap.three-ready .firefly-three-mount canvas{opacity:1}
+#firefly-phone-wrap.three-ready > .story-phone,
+#firefly-phone-wrap.three-ready > .story-cable,
+#firefly-phone-wrap.three-ready > .story-phone-shadow{visibility:hidden;opacity:0;pointer-events:none}
+@media(max-width:730px){
+  .firefly-three-mount{inset:-18px -8px -30px}
+}
+@media(prefers-reduced-motion:reduce){
+  .firefly-three-mount canvas{transition:none}
+}
+
   </style>
 </head>
 <body>
@@ -576,7 +592,10 @@
             <div class="experience-indicators" aria-label="Select scenario"><button type="button" data-scene-select="0" aria-label="Scenario 1" aria-current="step"></button><button type="button" data-scene-select="1" aria-label="Scenario 2" ></button><button type="button" data-scene-select="2" aria-label="Scenario 3" ></button><button type="button" data-scene-select="3" aria-label="Scenario 4" ></button><button type="button" data-scene-select="4" aria-label="Scenario 5" ></button><button type="button" data-scene-select="5" aria-label="Scenario 6" ></button></div>
           </div>
           <div class="experience-art" id="story-demo" data-scene="0">              <div class="story-devices">
-                <div class="story-phone-wrap" aria-label="Illustrated iPhone showing battery and cable connection">
+                <div class="story-phone-wrap" id="firefly-phone-wrap" aria-label="3D iPhone that turns and charges as you scroll">
+                  <div class="firefly-three-mount" id="firefly-three-mount">
+                    <canvas id="firefly-three-canvas" aria-hidden="true"></canvas>
+                  </div>
                   <div class="story-phone">
                     <div class="story-phone-glass">
                       <div class="story-island"></div>
@@ -774,6 +793,9 @@
         dots.forEach(function(d,i){if(i===index)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current');});
         el('story-progress-fill').style.width=(overall*100).toFixed(2)+'%';
         active=index;
+        var threeState={scene:index,phase:t,level:level,charging:charge,offline:offline};
+        window.__firefly3DState=threeState;
+        window.dispatchEvent(new CustomEvent('firefly:3d-state',{detail:threeState}));
       }
       function scroll(){
         var rect=track.getBoundingClientRect(),len=Math.max(1,rect.height-window.innerHeight);
@@ -795,5 +817,6 @@
       scroll();
     })();
   </script>
+<script type="module" src="firefly-3d.js"></script>
 </body>
 </html>
