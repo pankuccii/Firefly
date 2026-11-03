@@ -36,3 +36,17 @@ Pil geçmişi kullanıcıya ait Application Support/Firefly dizininde, tercihler
 0.1.5 ile Wi-Fi'da geciken pil yanıtı için en fazla 15 saniye beklenir. Hızlı denemeler bittikten sonra Firefly eşleştirilmiş cihazın Mac’in USB veya ağ cihazı listesine dönüp dönmediğini yaklaşık dakikada bir kontrol eder. Cihaz listede görünmezken yeni bir oturum açılmaz. Mac uykudayken kontroller durur. Son 40 bağlantı olayı Application Support/Firefly içindeki connection-events.txt dosyasına yalnızca saat, sonuç ve bağlantı türüyle kaydedilir.
 
 0.1.6 — Sekme şeridini yatay kaydırabilir veya panel içeriğinde sağa/sola sürükleyerek sekme değiştirebilirsiniz. Mobil verideki bir iPhone için Ayarlar → Mobil veriden pil bildirimi bölümünden isteğe bağlı iCloud dosyasını seçin. [Kestirme kurulum adımları](Resources/DeviceTools/MobileSetup.html). Yüzde yalnızca iPhone’daki kestirme çalışıp eşitleme tamamlandığında güncellenir.
+
+## Sürükleyerek kurulum ve yeni sürüm paketleme
+
+GitHub Releases’tan Mac’inize uygun DMG dosyasını indirin ve açın. Penceredeki Firefly uygulamasını sağdaki Applications klasörüne sürükleyin. Kopyalama tamamlandıktan sonra Firefly diskini çıkarın ve uygulamayı Uygulamalar’dan açın.
+
+Yerel sürüm hazırlamak için macOS üzerinde proje kökünden çalıştırın:
+
+```sh
+Scripts/build-dmg.sh /path/to/Firefly.app ./dist
+```
+
+İlk girdi resmî sürüm ZIP’i de olabilir. Betik ikonları doğrudan uygulamadan alır. Uygulamanın imzasını doğrular; kaynak uygulamayı değiştirmeden sürüm ve mimariye göre DMG adını üretir. 800 × 500 Finder penceresi ve Retina görseli her derlemede aynı tasarım tarifinden hazırlanır. Python paketleri sürüm ve SHA-256 özetiyle sabitlenmiştir.
+
+Yeni GitHub sürümünde önce imzalı uygulamayı içeren `Firefly-VERSION-macOS-arm64.zip` dosyasını sürüm taslağına ekleyin, sonra `vVERSION` etiketiyle yayımlayın. **Package Firefly installer** iş akışı DMG’yi oluşturur, bağlayarak kontrol eder ve aynı sürüme ekler. ZIP sonradan eklendiyse Actions bölümünden aynı iş akışını ilgili etiketle çalıştırabilirsiniz. Paketleyici Developer ID imzası ya da Apple noter onayı üretmez.

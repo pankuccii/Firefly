@@ -1,0 +1,47 @@
+name: Package Firefly installer
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag, for example v0.1.7
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  installer:
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Package the signed application from the release
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+([.][0-9]+){1,3}$ ]]
+          version="${RELEASE_TAG#v}"
+          input="$RUNNER_TEMP/input"
+          output="$RUNNER_TEMP/output"
+          mkdir -p "$input" "$output"
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern "Firefly-$version-macOS-arm64.zip" --dir "$input"
+          Scripts/build-dmg.sh "$input/Firefly-$version-macOS-arm64.zip" "$output"
+          dmg="$output/Firefly-$version-macOS-arm64.dmg"
+          test -f "$dmg"
+          mount="$RUNNER_TEMP/FireflyMount"
+          mkdir "$mount"
+          hdiutil attach -readonly -nobrowse -mountpoint "$mount" "$dmg"
+          trap 'hdiutil detach "$mount"' EXIT
+          codesign --verify --deep --strict "$mount/Firefly.app"
+          test "$(readlink "$mount/Applications")" = "/Applications"
+          cmp "$mount/.VolumeIcon.icns" "$mount/Firefly.app/Contents/Resources/Firefly.icns"
+          test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$mount/Firefly.app/Contents/Info.plist")" = "$version"
+          gh release upload "$RELEASE_TAG" "$dmg" --repo "$GITHUB_REPOSITORY" --clobber
