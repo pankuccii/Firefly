@@ -492,6 +492,46 @@
 }
 @media(prefers-reduced-motion:reduce){.experience-art *, .experience-copy{transition:none!important;animation:none!important}}
 
+  
+/* Final positioning and macOS-style notification polish, keeping Firefly branding. */
+.experience-grid{max-width:1100px;margin-inline:auto;grid-template-columns:minmax(260px,.82fr) minmax(0,1.5fr);gap:clamp(25px,4vw,62px)}
+.experience-art{margin-inline:auto;transform:translateY(-12px)}
+.experience-art .story-desktop{overflow:visible}
+.experience-art .story-toast{
+  left:auto;right:6px;top:-74px;bottom:auto;z-index:20;
+  width:min(305px,100%);max-width:none;min-width:0;
+  display:flex;align-items:center;justify-content:flex-start;gap:11px;
+  padding:11px 13px;border-radius:14px;
+  background:var(--pane);border:1px solid var(--pane-line);
+  box-shadow:0 15px 38px rgba(0,0,0,.17),0 2px 8px rgba(0,0,0,.07);
+  overflow:hidden;
+}
+.experience-art .story-toast .story-toast-symbol{
+  display:block;width:34px;height:34px;flex:0 0 34px;object-fit:contain;
+  background:none;border:none;color:inherit;border-radius:9px;padding:0;
+  box-shadow:none;
+}
+.experience-art .story-toast div{min-width:0;flex:1;align-items:flex-start}
+.experience-art .story-toast strong{font-size:12px;line-height:1.25;letter-spacing:-.01em}
+.experience-art .story-toast small{font-size:11px;line-height:1.35;overflow-wrap:anywhere}
+.experience-art .story-toast:not(.visible){opacity:0!important;transform:translateY(10px) scale(.98)!important;pointer-events:none}
+.experience-art .story-toast.visible{opacity:1!important;transform:translateY(0) scale(1)!important;pointer-events:none}
+@media(max-width:1050px){
+ .experience-grid{grid-template-columns:minmax(220px,.8fr) minmax(0,1.4fr);gap:18px}
+ .experience-art .story-toast{top:-68px;width:min(265px,100%)}
+}
+@media(max-width:730px){
+ .experience-grid{display:flex;flex-direction:column;gap:5px;max-width:none}
+ .experience-art{transform:none}
+ .experience-art .story-toast{top:-43px;right:0;width:min(200px,100%);padding:8px 9px;gap:6px;border-radius:11px}
+ .experience-art .story-toast .story-toast-symbol{width:26px;height:26px;flex-basis:26px;border-radius:7px}
+ .experience-art .story-toast strong{font-size:10px}
+ .experience-art .story-toast small{font-size:9px}
+}
+@media(max-width:395px){
+ .experience-art .story-toast{top:-34px;width:min(176px,100%)}
+}
+
   </style>
 </head>
 <body>
@@ -566,7 +606,7 @@
                     <div class="story-panel-footer"><span id="story-panel-status">✓ &nbsp;Connected via Wi-Fi</span><span aria-hidden="true">↻</span></div>
                   </div>
                   <div class="story-toast" id="story-toast" role="status" aria-live="polite">
-                    <span class="story-toast-symbol" id="story-toast-symbol">!</span>
+                    <img class="story-toast-symbol" src="assets/firefly-icon.png" alt="" width="34" height="34">
                     <div><strong id="story-toast-title">Low battery</strong><small id="story-toast-description">iPhone battery has reached 18%.</small></div>
                   </div>
                 </div>
@@ -721,7 +761,7 @@
         var alert=index===1&&level<=20?'low':index===3&&level>=79?'charged':index===4?'lost':index===5?'back':'';
         el('story-toast').classList.toggle('visible',!!alert);
         var message=alert==='low'?['Low battery','Your iPhone is below 20%.','!']:alert==='charged'?['Charging alert','Your iPhone has reached 80%.','ϟ']:alert==='lost'?['Connection lost','Last reading saved.','⌁']:['Connected again','Wireless monitoring resumed.','✓'];
-        text('story-toast-title',message[0]);text('story-toast-description',message[1]);text('story-toast-symbol',message[2]);
+        text('story-toast-title',message[0]);text('story-toast-description',message[1]);
         el('story-prev').disabled=index===0;el('story-next').disabled=index===5;
         dots.forEach(function(d,i){if(i===index)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current');});
         el('story-progress-fill').style.width=(overall*100).toFixed(2)+'%';
