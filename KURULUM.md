@@ -50,3 +50,9 @@ Scripts/build-dmg.sh /path/to/Firefly.app ./dist
 İlk girdi resmî sürüm ZIP’i de olabilir. Betik ikonları doğrudan uygulamadan alır. Uygulamanın imzasını doğrular; kaynak uygulamayı değiştirmeden sürüm ve mimariye göre DMG adını üretir. 800 × 500 Finder penceresi ve Retina görseli her derlemede aynı tasarım tarifinden hazırlanır. Python paketleri sürüm ve SHA-256 özetiyle sabitlenmiştir.
 
 Yeni GitHub sürümünde önce imzalı uygulamayı içeren `Firefly-VERSION-macOS-arm64.zip` dosyasını sürüm taslağına ekleyin, sonra `vVERSION` etiketiyle yayımlayın. **Package Firefly installer** iş akışı DMG’yi oluşturur, bağlayarak kontrol eder ve aynı sürüme ekler. ZIP sonradan eklendiyse Actions bölümünden aynı iş akışını ilgili etiketle çalıştırabilirsiniz. Paketleyici Developer ID imzası ya da Apple noter onayı üretmez.
+
+## Uygulama içinden güncelleme
+
+Güncelleyiciyi içeren ilk sürümü Uygulamalar’a kopyalayıp oradan açın. Firefly ilk açılışta, sonra en fazla saatte bir Pages üzerindeki appcast.xml dosyasına bakar. Daha yeni, uyumlu bir sürüm varsa bağlantı durumunun yanında Güncelleme var / Update available düğmesi görünür. Düğme Sparkle’ın indirme, doğrulama ve yeniden başlatma penceresini açar. Yazmaya izin verilmeyen bir konumda macOS onay isteyebilir.
+
+Sürüm hazırlayan kişi yeni CFBundleVersion değeriyle uygulamayı derleyip imzalar. Firefly-VERSION-macOS-arm64.zip arşivini vVERSION GitHub sürümüne ekler. Sparkle dağıtımındaki bin klasörünü SPARKLE_TOOLS ile belirtip Scripts/prepare-update.sh komutuna bu ZIP’i verir. Betik doğru açık anahtarı ve imzayı doğrulamadan beslemeyi değiştirmez. Üretilen docs/updates/appcast.xml dosyasını Pages’a yayımlayın. Kullanıcı yalnızca imzalanmış ZIP güncellemesini indirir. DMG ilk kurulum için kalır.

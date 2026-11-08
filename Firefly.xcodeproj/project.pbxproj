@@ -271,6 +271,7 @@
 				<string>00000000000000000000001A</string>
 				<string>000000000000000000000028</string>
 				<string>000000000000000000000029</string>
+				<string>0E6FC5317B9F4B50849F46A1</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -318,7 +319,9 @@
 			<key>buildActionMask</key>
 			<integer>2147483647</integer>
 			<key>files</key>
-			<array/>
+			<array>
+				<string>2E93B44EAA84430792D5DDD6</string>
+			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
 			<key>runOnlyForDeploymentPostprocessing</key>
@@ -394,8 +397,18 @@
 				<string>NO</string>
 				<key>ENABLE_HARDENED_RUNTIME</key>
 				<string>YES</string>
+				<key>FRAMEWORK_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>$(PROJECT_DIR)/Vendor/Sparkle</string>
+				</array>
 				<key>INFOPLIST_FILE</key>
 				<string>Resources/Info.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+				</array>
 				<key>MACOSX_DEPLOYMENT_TARGET</key>
 				<string>27.0</string>
 				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
@@ -428,8 +441,18 @@
 				<string>NO</string>
 				<key>ENABLE_HARDENED_RUNTIME</key>
 				<string>YES</string>
+				<key>FRAMEWORK_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>$(PROJECT_DIR)/Vendor/Sparkle</string>
+				</array>
 				<key>INFOPLIST_FILE</key>
 				<string>Resources/Info.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+				</array>
 				<key>MACOSX_DEPLOYMENT_TARGET</key>
 				<string>27.0</string>
 				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
@@ -469,6 +492,7 @@
 				<string>00000000000000000000001C</string>
 				<string>00000000000000000000001E</string>
 				<string>00000000000000000000001D</string>
+				<string>F459D4C7CB834F9B83A4B48D</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -919,8 +943,18 @@
 				<string>YES</string>
 				<key>FIRE_FLY_GROUP</key>
 				<string>$(DEVELOPMENT_TEAM).com.firefly.battery.shared</string>
+				<key>FRAMEWORK_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>$(PROJECT_DIR)/Vendor/Sparkle</string>
+				</array>
 				<key>INFOPLIST_FILE</key>
 				<string>Widget/HostInfo.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+				</array>
 				<key>MACOSX_DEPLOYMENT_TARGET</key>
 				<string>27.0</string>
 				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
@@ -959,8 +993,18 @@
 				<string>YES</string>
 				<key>FIRE_FLY_GROUP</key>
 				<string>$(DEVELOPMENT_TEAM).com.firefly.battery.shared</string>
+				<key>FRAMEWORK_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>$(PROJECT_DIR)/Vendor/Sparkle</string>
+				</array>
 				<key>INFOPLIST_FILE</key>
 				<string>Widget/HostInfo.plist</string>
+				<key>LD_RUNPATH_SEARCH_PATHS</key>
+				<array>
+					<string>$(inherited)</string>
+					<string>@executable_path/../Frameworks</string>
+				</array>
 				<key>MACOSX_DEPLOYMENT_TARGET</key>
 				<string>27.0</string>
 				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
@@ -1000,6 +1044,8 @@
 				<string>00000000000000000000003F</string>
 				<string>000000000000000000000045</string>
 				<string>000000000000000000000036</string>
+				<string>68D45B929C754F009FE26CC8</string>
+				<string>B73C50E3A51742A0AB0998D2</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -1017,6 +1063,112 @@
 			<string>000000000000000000000037</string>
 			<key>productType</key>
 			<string>com.apple.product-type.application</string>
+		</dict>
+		<key>0E6FC5317B9F4B50849F46A1</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>path</key>
+			<string>Vendor/Sparkle/Sparkle.framework</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>2E93B44EAA84430792D5DDD6</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0E6FC5317B9F4B50849F46A1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>68D45B929C754F009FE26CC8</key>
+		<dict>
+			<key>buildActionMask</key>
+			<integer>2147483647</integer>
+			<key>files</key>
+			<array>
+				<string>993EB49C1FB74020ACAE84F0</string>
+			</array>
+			<key>isa</key>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<integer>0</integer>
+		</dict>
+		<key>993EB49C1FB74020ACAE84F0</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0E6FC5317B9F4B50849F46A1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>B73C50E3A51742A0AB0998D2</key>
+		<dict>
+			<key>buildActionMask</key>
+			<integer>2147483647</integer>
+			<key>dstPath</key>
+			<string></string>
+			<key>dstSubfolderSpec</key>
+			<integer>10</integer>
+			<key>files</key>
+			<array>
+				<string>D62934C6133148548E3AE36B</string>
+			</array>
+			<key>isa</key>
+			<string>PBXCopyFilesBuildPhase</string>
+			<key>name</key>
+			<string>Embed Sparkle</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<integer>0</integer>
+		</dict>
+		<key>C69CF94ED97A4C7FB0DEB031</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0E6FC5317B9F4B50849F46A1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>CodeSignOnCopy</string>
+					<string>RemoveHeadersOnCopy</string>
+				</array>
+			</dict>
+		</dict>
+		<key>D62934C6133148548E3AE36B</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0E6FC5317B9F4B50849F46A1</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>CodeSignOnCopy</string>
+					<string>RemoveHeadersOnCopy</string>
+				</array>
+			</dict>
+		</dict>
+		<key>F459D4C7CB834F9B83A4B48D</key>
+		<dict>
+			<key>buildActionMask</key>
+			<integer>2147483647</integer>
+			<key>dstPath</key>
+			<string></string>
+			<key>dstSubfolderSpec</key>
+			<integer>10</integer>
+			<key>files</key>
+			<array>
+				<string>C69CF94ED97A4C7FB0DEB031</string>
+			</array>
+			<key>isa</key>
+			<string>PBXCopyFilesBuildPhase</string>
+			<key>name</key>
+			<string>Embed Sparkle</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>rootObject</key>

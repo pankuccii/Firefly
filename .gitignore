@@ -16,3 +16,5 @@ Documentation/WirelessTest.json
 Documentation/Dogrulama.md
 history.json
 connection-events.txt
+# Sparkle's upstream installer helper is part of the pinned framework.
+!Vendor/Sparkle/Sparkle.framework/Versions/B/Updater.app/

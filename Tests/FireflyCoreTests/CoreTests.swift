@@ -220,3 +220,17 @@ extension CoreTests {
         }
     }
 }
+
+extension CoreTests {
+    func testFirstReadingAfterReconnectCanUseActualPriorSession() throws {
+        let now = Date()
+        let history = try (0...6).map { try observation(50 + $0, date: now.addingTimeInterval(Double($0 - 20) * 60), charging: true) }
+        let current = try observation(28, date: now, charging: true)
+        let disconnected = try observation(28, date: now.addingTimeInterval(-10), charging: false)
+        let estimate = InsightsEngine.completionEstimate(history + [disconnected], current: current, now: now)
+        XCTAssertEqual(estimate?.minutes, 72)
+        XCTAssertEqual(estimate?.fromHistory, true)
+        XCTAssertNil(InsightsEngine.completionEstimate([], current: current, now: now))
+        XCTAssertNil(InsightsEngine.completionEstimate(history, current: try observation(28, date: now, charging: false), now: now))
+    }
+}

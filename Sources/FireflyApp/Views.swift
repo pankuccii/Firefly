@@ -52,6 +52,14 @@ struct FireflyView: View {
             HStack {
                 Label(model.status, systemImage: model.state.connected ? "checkmark.circle" : "info.circle")
                     .font(.caption).lineLimit(2)
+                if let version = model.updateVersion {
+                    Button { model.installUpdate?() } label: {
+                        Label(model.t("Güncelleme var", "Update available"), systemImage: "arrow.down.circle")
+                            .font(.caption.weight(.semibold)).fixedSize()
+                            .padding(.horizontal, 9).frame(minHeight: 26)
+                            .glassEffect(.regular.tint(.accentColor.opacity(0.2)).interactive(), in: .capsule)
+                    }.buttonStyle(.plain).help(model.t("Firefly \(version) sürümüne güncelle", "Update to Firefly \(version)"))
+                }
                 Spacer()
                 Button { model.refresh(reset: true) } label: { Image(systemName: "arrow.clockwise") }
                     .disabled(model.busy).help(model.t("Yenile", "Refresh"))
@@ -91,7 +99,7 @@ struct FireflyView: View {
             if let snapshot = model.displayedRemote {
                 Label(model.t("iPhone’dan son bildirim", "Last report from iPhone"), systemImage: "icloud")
                 Text("\(snapshot.percent)%").font(.system(size: 52, weight: .light, design: .rounded)).monospacedDigit()
-                ProgressView(value: Double(snapshot.percent), total: 100).tint(snapshot.percent < 20 ? Color.red : .secondary)
+                BatteryLevelBar(percent: snapshot.percent, charging: nil, available: snapshot.recent(at: model.now))
                 Text(snapshot.date, format: .dateTime.year().month().day().hour().minute()).font(.callout)
                 Text(model.t("iCloud üzerinden · Kestirme çalıştığında güncellenir.", "Via iCloud · Updates when the shortcut runs.")).font(.caption).foregroundStyle(.secondary)
             } else if let value = model.observation {
@@ -103,10 +111,11 @@ struct FireflyView: View {
                         Label(charging ? model.t("Şarj oluyor", "Charging") : model.t("Pilde", "On battery"), systemImage: charging ? "bolt.fill" : "battery.75percent").font(.caption)
                     }
                 }
-                ProgressView(value: model.live ? Double(value.percent) : 0, total: 100)
-                    .tint(Color(nsColor: model.batteryTint ?? .secondaryLabelColor))
-                    .animation(reduceMotion ? nil : .easeInOut(duration: 0.24), value: model.batteryTint)
-                    .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: value.percent)
+                BatteryLevelBar(percent: value.percent, charging: value.charging, available: model.live)
+                if model.freshness == .fresh, value.charging == true, value.percent < 100 {
+                    Label(chargingEstimate(for: value), systemImage: "clock")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
                 if !model.live { Text(model.t("Son bilinen değer", "Last known reading") + ": \(value.percent)%").foregroundStyle(.secondary) }
                 Label(value.transport.rawValue, systemImage: value.transport == .usb ? "cable.connector" : "wifi")
                 Text(model.t("Son başarılı ölçüm", "Last successful reading")).font(.caption).foregroundStyle(.secondary)
@@ -126,6 +135,15 @@ struct FireflyView: View {
             if model.storageFailed { Text(model.t("Yerel geçmiş kaydedilemedi. Disk alanını ve izinleri kontrol edin.", "Local history could not be saved. Check disk space and permissions.")).font(.caption).foregroundStyle(.orange) }
         }
     }
+    private func chargingEstimate(for value: Observation) -> String {
+        if let estimate = InsightsEngine.completionEstimate(model.history.values, current: value, now: model.now) {
+            if estimate.fromHistory {
+                return model.t("Önceki şarjlara göre tam doluma yaklaşık \(estimate.minutes) dk.", "About \(estimate.minutes) min until full, based on previous charging.")
+            }
+            return model.t("Bu şarj hızında tam doluma yaklaşık \(estimate.minutes) dk.", "About \(estimate.minutes) min until full at the current rate.")
+        }
+        return model.t("Şarj hızı ölçülüyor…", "Measuring charging speed…")
+    }
     private var freshnessText: String {
         switch model.freshness {
         case .fresh: return model.t("Güncel ölçüm", "Fresh reading")
@@ -143,17 +161,12 @@ struct FireflyView: View {
             Picker(model.t("Dönem", "Period"), selection: $model.sevenDays) { Text(model.t("24 saat", "24 hours")).tag(false); Text(model.t("7 gün", "7 days")).tag(true) }.pickerStyle(.segmented)
             if filtered.isEmpty { Text(model.t("Henüz kaydedilmiş ölçüm yok.", "No readings recorded yet.")).foregroundStyle(.secondary) }
             else {
-                Chart(filtered) { value in
-                    PointMark(x: .value("Time", value.timestamp), y: .value("%", value.percent))
-                        .foregroundStyle(value.charging == true ? Color.orange : Color.green).symbolSize(12)
-                }.chartYScale(domain: 0...100).frame(height: 190)
-                    .accessibilityLabel(model.t("Kaydedilen pil ölçümleri", "Recorded battery readings"))
-                Text(model.t("Noktalar gerçek ölçümlerdir. Veri boşlukları birleştirilmez. Turuncu: şarj sırasında ölçüldü.", "Dots are actual readings. Gaps are not interpolated. Orange: measured while charging.")).font(.caption).foregroundStyle(.secondary)
+                HistoryPlot(values: filtered, sevenDays: model.sevenDays, now: model.now, turkish: model.preferences.language == "tr")
                 if let id = model.preferences.selectedID {
                     let sessions = InsightsEngine.sessions(filtered, deviceID: id)
                     Text(model.t("Gözlenen şarj aralıkları: \(sessions.count)", "Observed charging intervals: \(sessions.count)")).font(.caption)
-                    if let estimate = InsightsEngine.minutesToFull(filtered, deviceID: id, now: model.now) {
-                        Text(model.t("Mevcut hıza göre yaklaşık \(estimate) dk. Şarj yavaşladığında süre uzayabilir.", "Roughly \(estimate) min at the current rate. Charging may slow down.")).font(.caption).foregroundStyle(.secondary)
+                    if model.freshness == .fresh, let value = model.observation, value.charging == true, value.percent < 100 {
+                        Text(chargingEstimate(for: value)).font(.caption).foregroundStyle(.secondary)
                     }
                 }
                 Button(model.t("CSV dışa aktar", "Export CSV")) { model.exportCSV() }
@@ -231,4 +244,112 @@ struct FireflyView: View {
     }
     private func dayLabel(_ day: Int) -> String { (model.preferences.language == "tr" ? ["Pz", "Pt", "Sa", "Ça", "Pe", "Cu", "Ct"] : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"])[day - 1] }
     private func dayFullLabel(_ day: Int) -> String { let formatter = DateFormatter(); formatter.locale = Locale(identifier: model.preferences.language); return formatter.weekdaySymbols[day - 1] }
+}
+
+private struct BatteryLevelBar: View {
+    let percent: Int
+    let charging: Bool?
+    let available: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var body: some View {
+        let tint: Color = !available ? .secondary : percent < 20 ? Color(nsColor: .systemRed)
+            : charging == true ? Color(nsColor: .systemGreen) : Color(nsColor: .secondaryLabelColor)
+        GeometryReader { area in
+            ZStack(alignment: .leading) {
+                Capsule().fill(.primary.opacity(0.10))
+                Capsule().fill(tint).frame(width: available ? area.size.width * CGFloat(percent) / 100 : 0)
+            }
+        }.frame(height: 7)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.24), value: tint)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.24), value: percent)
+        .accessibilityHidden(true)
+    }
+}
+
+private struct HistoryPlot: View {
+    let values: [Observation]
+    let sevenDays: Bool
+    let now: Date
+    let turkish: Bool
+
+    private struct Mark: Identifiable {
+        let observation: Observation
+        let segment: Int
+        let single: Bool
+        var id: Date { observation.timestamp }
+        var tint: Color {
+            if observation.percent < 20 { return .red }
+            return observation.charging == true ? .orange : .teal
+        }
+    }
+
+    private func marks() -> [Mark] {
+        let bucketWidth: TimeInterval = sevenDays ? 1800 : 360
+        var runs: [[Observation]] = []
+        for value in values {
+            if let prior = runs.last?.last, value.timestamp.timeIntervalSince(prior.timestamp) <= 300,
+               value.charging == prior.charging, (value.percent < 20) == (prior.percent < 20) {
+                runs[runs.count - 1].append(value)
+            } else { runs.append([value]) }
+        }
+        return runs.enumerated().flatMap { index, run -> [Mark] in
+            let groups = Dictionary(grouping: run) { Int($0.timestamp.timeIntervalSince1970 / bucketWidth) }
+            return groups.keys.sorted().flatMap { key -> [Mark] in
+                let samples = groups[key]!
+                let points = [samples.first!, samples.min { $0.percent < $1.percent }!,
+                              samples.max { $0.percent < $1.percent }!, samples.last!]
+                var seen = Set<Date>()
+                return points.sorted { $0.timestamp < $1.timestamp }.filter { seen.insert($0.timestamp).inserted }
+                    .map { Mark(observation: $0, segment: index, single: run.count == 1) }
+            }
+        }
+    }
+
+    var body: some View {
+        let points = marks()
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(turkish ? "Pil seviyesi" : "Battery level").font(.headline)
+                Spacer()
+                if let low = values.map(\.percent).min(), let high = values.map(\.percent).max() {
+                    Text("\(low)–\(high)%").font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                }
+            }
+            Chart {
+                RuleMark(y: .value("%", 20)).lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 4])).foregroundStyle(.red.opacity(0.45))
+                ForEach(points) { point in
+                    let v = point.observation
+                    if point.single {
+                        PointMark(x: .value("Time", v.timestamp), y: .value("%", v.percent))
+                            .symbolSize(16).foregroundStyle(point.tint)
+                    } else {
+                        AreaMark(x: .value("Time", v.timestamp), yStart: .value("%", 0), yEnd: .value("%", v.percent),
+                                 series: .value("Segment", point.segment))
+                            .foregroundStyle(LinearGradient(colors: [point.tint.opacity(0.20), point.tint.opacity(0.015)], startPoint: .top, endPoint: .bottom))
+                        LineMark(x: .value("Time", v.timestamp), y: .value("%", v.percent), series: .value("Segment", point.segment))
+                            .lineStyle(StrokeStyle(lineWidth: 2.4, lineCap: .round, lineJoin: .round)).foregroundStyle(point.tint)
+                    }
+                }
+            }.chartXScale(domain: now.addingTimeInterval(sevenDays ? -604800 : -86400)...now)
+                .chartYScale(domain: 0...100)
+                .chartYAxis {
+                    AxisMarks(position: .leading, values: [0, 50, 100]) { value in
+                        AxisGridLine().foregroundStyle(.secondary.opacity(0.15))
+                        AxisValueLabel { if let n = value.as(Int.self) { Text("\(n)%").font(.caption2) } }
+                    }
+                }.chartXAxis {
+                    AxisMarks(values: .automatic(desiredCount: 4)) { value in
+                        AxisValueLabel { if let d = value.as(Date.self) {
+                            Text(d, format: sevenDays ? .dateTime.day().month(.abbreviated) : .dateTime.hour().minute()).font(.caption2)
+                        } }
+                    }
+                }.frame(height: 156)
+                .accessibilityLabel(turkish ? "Zamana göre pil seviyesi" : "Battery level over time")
+            HStack(spacing: 12) {
+                Label(turkish ? "Şarj" : "Charging", systemImage: "bolt.fill").foregroundStyle(.orange)
+                Label(turkish ? "Pil" : "Battery", systemImage: "minus").foregroundStyle(.teal)
+                Text(turkish ? "%20 altı" : "Below 20%").foregroundStyle(.red)
+            }.font(.caption2)
+        }.padding(12).background(.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 14))
+    }
 }

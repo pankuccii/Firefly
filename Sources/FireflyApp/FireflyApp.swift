@@ -9,6 +9,7 @@ import SwiftUI
     private var statusItem: NSStatusItem!
     private let popover = NSPopover()
     private var model: AppModel!
+    private let updates = FireflyUpdates()
     private var imageKey = ""
     private var fade: Timer?
     private var displayedColor: NSColor?
@@ -20,7 +21,12 @@ import SwiftUI
         statusItem.button?.target = self; statusItem.button?.action = #selector(toggle)
         popover.delegate = self; popover.behavior = .transient; popover.contentViewController = NSHostingController(rootView: FireflyView(model: model))
         model.changed = { [weak self] in self?.update() }
-        update(); model.start()
+        updates.onChange = { [weak self] version in self?.model.updateVersion = version }
+        model.installUpdate = { [weak self] in
+            self?.popover.performClose(nil)
+            self?.updates.install()
+        }
+        update(); model.start(); updates.start()
     }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !popover.isShown { toggle() }; return true
@@ -30,7 +36,7 @@ import SwiftUI
         if popover.isShown { popover.performClose(nil) }
         else if let button = statusItem.button { popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY); NSApp.activate(ignoringOtherApps: true) }
     }
-    func popoverWillShow(_ notification: Notification) { model.setPanelVisible(true) }
+    func popoverWillShow(_ notification: Notification) { model.setPanelVisible(true); updates.probe(force: true) }
     func popoverDidClose(_ notification: Notification) { model.setPanelVisible(false) }
     private func update() {
         guard let button = statusItem.button else { return }
@@ -97,4 +103,37 @@ import SwiftUI
         fade = transition; RunLoop.main.add(transition, forMode: .common)
     }
 
+}
+
+import Sparkle
+
+// Silent probes populate the footer. Download/installation is always user initiated.
+@MainActor final class FireflyUpdates: NSObject, SPUUpdaterDelegate {
+    var onChange: ((String?) -> Void)?
+    private var controller: SPUStandardUpdaterController?
+    private var lastCheck = Date.distantPast
+    private var probeTimer: Timer?
+    func start() {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "SUPublicEDKey") as? String,
+              Data(base64Encoded: key)?.count == 32 else { return }
+        controller = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: self, userDriverDelegate: nil)
+        controller?.startUpdater()
+        probe()
+        probeTimer = Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.probe() }
+        }
+        probeTimer?.tolerance = 180
+    }
+    func probe(force: Bool = false) {
+        guard let updater = controller?.updater, updater.canCheckForUpdates,
+              force || Date().timeIntervalSince(lastCheck) >= 3600 else { return }
+        lastCheck = Date()
+        updater.checkForUpdateInformation()
+    }
+    func install() {
+        guard controller?.updater.canCheckForUpdates == true else { return }
+        controller?.checkForUpdates(nil)
+    }
+    func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) { onChange?(item.displayVersionString) }
+    func updaterDidNotFindUpdate(_ updater: SPUUpdater, error: Error) { onChange?(nil) }
 }

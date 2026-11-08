@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>Firefly Updates</title>
+    <link>https://pankuccii.github.io/Firefly/</link>
+    <description>Signed stable releases for macOS.</description>
+    <item>
+      <title>Firefly 0.2.0</title>
+      <pubDate>Sun, 08 Nov 2026 19:44:34 GMT</pubDate>
+      <sparkle:version>12</sparkle:version>
+      <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/pankuccii/Firefly/releases/download/v0.2.0/Firefly-0.2.0-macOS-arm64.zip" length="12532382" type="application/zip" sparkle:edSignature="gk4Pw97kkbhEWVB2BE+wYDmZHivl4SoujPgUnEjneQ3QnN8edq6LKM23NzZGN/59Aeko+DGW9dskwcyX5MIlBg==" />
+    </item>
+  </channel>
+</rss>

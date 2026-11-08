@@ -32,6 +32,8 @@ struct Preferences: Codable {
     @Published var storageFailed = false
     @Published var scheduleMessage = ""
     @Published var sevenDays = false
+    @Published var updateVersion: String?
+    var installUpdate: (() -> Void)?
     @Published var page = 0
     var changed: (() -> Void)?
     private var service = BatteryService()
