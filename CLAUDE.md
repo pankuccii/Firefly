@@ -28,6 +28,11 @@ Repository: https://github.com/pankuccii/Firefly (`main`).
   together (same for `CFBundleShortVersionString`).
 - **Appcast**: never hand-edit `docs/updates/appcast.xml`.
   `Scripts/prepare-update.sh` generates it.
+- **Entitlements**: the menu bar app must be signed with
+  `Resources/Firefly.entitlements` (`disable-library-validation`). Ad-hoc
+  signatures have no Team ID, so without it the hardened runtime refuses to
+  load `Sparkle.framework` and the app aborts at launch. Keep it for as long as
+  builds are ad-hoc signed.
 - **Bundled binaries**: do not touch the binaries under
   `Resources/DeviceTools/bin` and `Resources/DeviceTools/lib`, or anything in
   `ThirdParty/` and `Vendor/`, without asking first.
@@ -123,7 +128,8 @@ xcodebuild -project Firefly.xcodeproj -scheme Firefly -configuration Debug build
 1. Bump `CFBundleShortVersionString` and `CFBundleVersion` in all three plists.
 2. `Scripts/build-update.sh <out-dir>` first checks that the Keychain signing
    key matches the committed `SUPublicEDKey` in both plists and stops without
-   changing anything if it does not. It then builds Release, ad-hoc signs, zips to
+   changing anything if it does not. It then builds Release, ad-hoc signs with
+   `Resources/Firefly.entitlements`, zips to
    `Firefly-VERSION-macOS-arm64.zip`, then calls `prepare-update.sh`, which
    verifies the signature and key and appends the item to
    `docs/updates/appcast.xml`.
