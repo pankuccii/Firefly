@@ -8,7 +8,8 @@ import FireflyCore
 #endif
 
 struct Preferences: Codable {
-    var language = "tr"
+    // Only used when nothing is stored yet; a saved choice always wins on decode.
+    var language = AppLanguage.initial()
     var appearance = 1
     var alerts = false
     var low20 = true

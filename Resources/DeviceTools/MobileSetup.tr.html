@@ -1,0 +1,16 @@
+<!doctype html><html lang="tr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firefly · Mobil veri</title>
+<style>:root{color-scheme:light dark}body{font:17px/1.65 system-ui;max-width:660px;margin:6vh auto;padding:0 22px}li{margin:.6em 0}code{font-size:.93em}</style>
+<p><a href="MobileSetup.html" lang="en">English</a></p>
+<h1>Mobil veride iPhone pilini gör</h1>
+<p>iPhone ve Mac aynı ağa bağlı değilken Firefly, seçtiğin iCloud Drive dosyasından son pil bildirimini okuyabilir. İki cihazda aynı iCloud Drive’a erişim olmalı. iPhone ayarlarında iCloud Drive’ın hücresel veri kullanmasına izin ver.</p>
+<h2>iPhone’da bir kez kur</h2><ol>
+<li>Kestirmeler uygulamasında yeni bir kestirme oluştur. Adını <b>Firefly pil bildirimi</b> yap.</li>
+<li><b>Pil Düzeyini Al</b> eylemini ekle (İngilizce arayüzde <i>Get Battery Level</i> veya <i>Get Battery Status → Battery Level</i>). Sonucun 0–100 arası sayı olmasını seç.</li>
+<li><b>Geçerli Tarih</b> ve ardından <b>Tarihi Biçimlendir</b> eylemlerini ekle. ISO 8601 biçimini, saat ve saat dilimi dahil olacak şekilde seç. Gerekirse özel biçim olarak <code>yyyy-MM-dd'T'HH:mm:ssXXX</code> kullan.</li>
+<li><b>Metin</b> eylemine iki satır ekle. İlk satıra değişken seçicisinden pil düzeyini, ikinci satıra biçimlendirilmiş tarihi yerleştir. Yüzde işareti, açıklama veya tırnak ekleme.</li>
+<li><b>Adı Ayarla</b> eylemiyle metne <code>Firefly.txt</code> adını ver. <b>Dosyayı Kaydet</b> eyleminde iCloud Drive’daki <b>Shortcuts</b> klasörünü seç. Her seferinde konum sormayı kapat ve mevcut dosyanın üzerine yazmayı aç. Kestirmeyi bir kez çalıştır.</li>
+</ol>
+<h2>Mac’te eşleştir</h2><p>Firefly → Ayarlar → Mobil veriden pil bildirimi → <b>Bildirim dosyasını seç</b> yoluyla aynı <code>Firefly.txt</code> dosyasını seç. Yerel ölçüm varken öncelik USB veya Wi-Fi’dadır. Yerel bağlantı kesildiğinde daha yeni olan iCloud bildirimi panelde ölçüm saatiyle görünür. Beş dakikayı geçen bildirim menü çubuğunda güncel yüzde olarak gösterilmez.</p>
+<h2>Otomatik güncelle</h2><p>Kestirmeler → Otomasyon’da şarj aletinin takılması/çıkarılması, bir pil eşiğinin geçilmesi veya günün belirli bir saati için <b>Kestirmeyi Çalıştır → Firefly pil bildirimi</b> ekle. Uygunsa “Hemen Çalıştır”ı seç. Yeni veri, kestirme çalışıp dosya eşitlenince gelir. Şarj durumu dosyadan tahmin edilmez. Bağlantıyı Firefly ayarlarından kaldırabilirsin.</p>
+<p><a href="https://support.apple.com/guide/shortcuts/technical-standards-apdfd459e13d/ios">Apple’ın Kestirmeler tarih biçimleri kılavuzu</a></p>
+</html>

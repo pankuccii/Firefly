@@ -189,7 +189,8 @@ struct FireflyView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(model.t("iPhone’daki kestirme pil yüzdesini ve ölçüm saatini iCloud Drive’a yazar. Yerel bağlantı yokken en son bildirimi görürsün.", "Your iPhone shortcut saves its battery level and measurement time to iCloud Drive. The last report appears when the local connection is unavailable.")).font(.caption)
                     Button(model.t("Kurulum kılavuzu", "Setup guide")) {
-                        if let url = Bundle.main.url(forResource: "MobileSetup", withExtension: "html", subdirectory: "DeviceTools") { NSWorkspace.shared.open(url) }
+                        let page = model.preferences.language == "tr" ? "MobileSetup.tr" : "MobileSetup"
+                        if let url = Bundle.main.url(forResource: page, withExtension: "html", subdirectory: "DeviceTools") { NSWorkspace.shared.open(url) }
                     }
                     Button(model.t("Bildirim dosyasını seç…", "Select report file…")) { model.chooseRemoteFile() }
                     if let path = model.preferences.remoteFile {
