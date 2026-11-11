@@ -6,6 +6,7 @@ Notes for 0.1.2 to 0.1.6 were moved here from the original setup guide. The entr
 
 - Signed in-app updates through Sparkle. Firefly checks the update feed at launch and at most once an hour, and shows an Update available button when a newer version exists. Installation always starts from that button.
 - Refined battery visuals.
+- Fixed a crash at launch in hardened runtime builds: the ad-hoc signed app now carries the library validation entitlement it needs to load the bundled Sparkle framework.
 
 ## 0.1.7 (build 8)
 
