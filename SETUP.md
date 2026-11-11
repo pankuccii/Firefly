@@ -1,7 +1,5 @@
 # Using Firefly
 
-[Türkçe](docs/tr/SETUP.md)
-
 Firefly is built for Apple Silicon and macOS 27. The tools that read the iPhone are bundled inside the app. You do not need Homebrew, and nothing has to be installed on the iPhone.
 
 1. If Firefly is already running, quit it with the power button at the top right of the panel. Unzip `Firefly-macOS.zip`, or use the `Firefly.app` you were given.
@@ -15,7 +13,7 @@ The Battery tab shows the time and source of the last successful reading. If no 
 
 You can scroll the tab strip horizontally, or swipe left and right inside the panel to change tabs.
 
-In Settings you can choose Turkish or English, the menu bar appearance and notifications. On first launch Firefly follows the Mac's language: Turkish if the system language is Turkish, English otherwise. macOS may ask for permission when you enable notifications. Low battery alerts are based on crossing a threshold. The first reading alone does not count as a crossing. For a scheduled check to run, the Mac must be awake, Firefly must be open and the iPhone must be reachable during the selected minute. Firefly does not wake the Mac. Turn notifications on as well if you want to be notified.
+In Settings you can choose the menu bar appearance and notifications. macOS may ask for permission when you enable notifications. Low battery alerts are based on crossing a threshold. The first reading alone does not count as a crossing. For a scheduled check to run, the Mac must be awake, Firefly must be open and the iPhone must be reachable during the selected minute. Firefly does not wake the Mac. Turn notifications on as well if you want to be notified.
 
 ### Menu bar icon
 

@@ -15,8 +15,6 @@ struct BatteryWidgetView: View {
     let entry: BatteryEntry
     @Environment(\.widgetFamily) var family
     var body: some View {
-        // Without a snapshot there is no app choice to follow, so use the system language.
-        let tr = (entry.value?.language ?? AppLanguage.initial()) != "en"
         let live = entry.value?.live(at: entry.date) == true
         VStack(alignment: .leading, spacing: 5) {
             HStack {
@@ -27,16 +25,16 @@ struct BatteryWidgetView: View {
             Text(live ? "\(entry.value!.percent)%" : "—").font(.title.bold()).monospacedDigit()
             if live, let value = entry.value { ProgressView(value: Double(value.percent), total: 100) }
             if let value = entry.value {
-                if !live { Text(tr ? "Son ölçüm: %\(value.percent)" : "Last reading: \(value.percent)%").font(.caption2) }
+                if !live { Text("Last reading: \(value.percent)%").font(.caption2) }
                 Text(value.timestamp, format: .dateTime.day().month().hour().minute()).font(.caption2).foregroundStyle(.secondary)
-                if family == .systemMedium { Text(live ? (tr ? "Yakın zamanda ölçüldü" : "Recently measured") : (tr ? "Güncel ölçüm yok" : "No current reading")).font(.caption) }
-            } else { Text(tr ? "Firefly’ı açın" : "Open Firefly").font(.caption) }
+                if family == .systemMedium { Text(live ? "Recently measured" : "No current reading").font(.caption) }
+            } else { Text("Open Firefly").font(.caption) }
         }.frame(maxWidth: .infinity, alignment: .leading).containerBackground(.fill.tertiary, for: .widget)
     }
 }
 @main struct FireflyWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "FireflyBattery", provider: Provider()) { BatteryWidgetView(entry: $0) }
-            .configurationDisplayName("Firefly").description("iPhone · Battery / Pil").supportedFamilies([.systemSmall, .systemMedium])
+            .configurationDisplayName("Firefly").description("iPhone · Battery").supportedFamilies([.systemSmall, .systemMedium])
     }
 }

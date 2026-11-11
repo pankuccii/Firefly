@@ -14,7 +14,6 @@
 	<string>com.firefly.battery</string>
 	<key>CFBundleLocalizations</key>
 	<array>
-		<string>tr</string>
 		<string>en</string>
 	</array>
 	<key>CFBundleName</key>

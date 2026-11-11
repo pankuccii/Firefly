@@ -8,8 +8,6 @@ import FireflyCore
 #endif
 
 struct Preferences: Codable {
-    // Only used when nothing is stored yet; a saved choice always wins on decode.
-    var language = AppLanguage.initial()
     var appearance = 1
     var alerts = false
     var low20 = true
@@ -74,7 +72,6 @@ struct Preferences: Codable {
             }
         } catch { storageFailed = true }
     }
-    func t(_ tr: String, _ en: String) -> String { preferences.language == "tr" ? tr : en }
     var freshness: Freshness { observation?.freshness(now: now, connected: state.connected) ?? .unavailable }
     var live: Bool { freshness == .fresh || freshness == .recent }
     @Published private(set) var busy = false
@@ -96,7 +93,7 @@ struct Preferences: Codable {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
-        panel.message = t("iPhone kestirmenizin yazdığı Firefly.txt dosyasını seçin.", "Select the Firefly.txt file written by your iPhone shortcut.")
+        panel.message = "Select the Firefly.txt file written by your iPhone shortcut."
         guard panel.runModal() == .OK, let url = panel.url else { return }
         clearRemote()
         preferences.remoteFile = url.path
@@ -124,15 +121,15 @@ struct Preferences: Codable {
         }
     }
     var status: String {
-        if displayedRemote != nil { return t("Son iCloud bildirimi", "Last iCloud report") }
+        if displayedRemote != nil { return "Last iCloud report" }
         switch state {
-        case .idle: return t("Bağlantı bekleniyor", "Waiting for connection")
-        case .discovering: return t("iPhone aranıyor…", "Looking for iPhone…")
-        case .connected: return freshness == .stale ? t("Ölçüm güncel değil", "Reading is stale") : t("Bağlı", "Connected")
-        case .retrying(let count, _): return t("Yeniden deneniyor", "Retrying") + " (\(count)/6)"
-        case .paused: return t("Uyku sırasında duraklatıldı", "Paused during sleep")
-        case .waiting: return t("iPhone yeniden erişilebilir olduğunda bağlanacak", "Waiting for iPhone to become reachable")
-        case .failed: return t("Bağlantı için yardım gerekiyor", "Connection needs attention")
+        case .idle: return "Waiting for connection"
+        case .discovering: return "Looking for iPhone…"
+        case .connected: return freshness == .stale ? "Reading is stale" : "Connected"
+        case .retrying(let count, _): return "Retrying" + " (\(count)/6)"
+        case .paused: return "Paused during sleep"
+        case .waiting: return "Waiting for iPhone to become reachable"
+        case .failed: return "Connection needs attention"
         }
     }
     var issue: AcquisitionError? {
@@ -141,17 +138,17 @@ struct Preferences: Codable {
     var guidance: String {
         switch issue {
         case .dependencyMissing:
-            return t("iPhone okuma araçları bulunamadı. Kurulum kılavuzundaki libimobiledevice adımını tamamlayıp Yeniden Dene’ye basın.", "The iPhone tools are missing. Complete the libimobiledevice step in the setup guide, then try again.")
+            return "The iPhone tools are missing. Complete the libimobiledevice step in the setup guide, then try again."
         case .unsupportedTool:
-            return t("Kurulu araç gerekli seçenekleri desteklemiyor. libimobiledevice sürümünü güncelleyin.", "The installed tools lack required options. Update libimobiledevice.")
+            return "The installed tools lack required options. Update libimobiledevice."
         case .noDevice:
-            return t("Seçili iPhone bulunamadı. USB ile bağlayın, kilidini açın ve varsa Güven istemini onaylayın. Wi-Fi için Finder’da “Wi-Fi ağına bağlıyken bu iPhone’u göster” seçeneğini açın. Kablosuz pil okuması henüz doğrulanmış olmayabilir.", "The selected iPhone was not found. Connect via USB, unlock it and accept Trust if prompted. For Wi-Fi, enable “Show this iPhone when on Wi-Fi” in Finder. Wireless battery access may still be unverified.")
+            return "The selected iPhone was not found. Connect via USB, unlock it and accept Trust if prompted. For Wi-Fi, enable “Show this iPhone when on Wi-Fi” in Finder. Wireless battery access may still be unverified."
         case .timeout:
-            return t("Sorgu zamanında tamamlanmadı. iPhone’un kilidini açın ve USB bağlantısını deneyin.", "The request timed out. Unlock your iPhone and try USB.")
+            return "The request timed out. Unlock your iPhone and try USB."
         case .invalidPayload:
-            return t("Cihaz geçerli bir pil ölçümü döndürmedi. Bu iOS sürümünde erişim olmayabilir; USB ile yeniden deneyin.", "The device returned no valid battery reading. Access may be unavailable on this iOS version; retry via USB.")
+            return "The device returned no valid battery reading. Access may be unavailable on this iOS version; retry via USB."
         default:
-            return t("Pil verisine erişilemedi. Güven eşleşmesi veya bağlantı etkilenmiş olabilir; kesin neden belirlenemedi. USB ile bağlayıp Finder’da cihazı kontrol edin.", "Battery data could not be read. Pairing or connectivity may be affected; the exact cause is unknown. Connect via USB and check the device in Finder.")
+            return "Battery data could not be read. Pairing or connectivity may be affected; the exact cause is unknown. Connect via USB and check the device in Finder."
         }
     }
     func start() {
@@ -225,7 +222,7 @@ struct Preferences: Codable {
         if preferences.alerts, preferences.unavailableAlert, !unavailableNotified,
            let since = unavailableSince, now.timeIntervalSince(since) >= Double(preferences.unavailableMinutes * 60) {
             unavailableNotified = true
-            notify(t("iPhone’a ulaşılamıyor", "iPhone is unavailable"), body: t("Son ölçüm güncel değil. Bağlantıyı kontrol edin.", "The last reading is outdated. Check the connection."))
+            notify("iPhone is unavailable", body: "The last reading is outdated. Check the connection.")
         }
     }
     private func probeWaitingDevice() {
@@ -268,10 +265,10 @@ struct Preferences: Codable {
                 let lows: [Int] = (preferences.low20 ? [20] : []) + (preferences.low10 ? [10] : []) + (preferences.customEnabled ? [preferences.customLow] : [])
                 let events = alerts.evaluate(value, lows: lows, chargeTarget: preferences.chargeAlert ? 80 : nil)
                 if prior?.percent != value.percent || !events.isEmpty, let data = try? JSONEncoder().encode(alerts) { UserDefaults.standard.set(data, forKey: "alertState") }
-                if preferences.alerts { for event in events { notify(event.hasPrefix("charge") ? t("Şarj hedefi", "Charging target") : t("Düşük pil", "Low battery"), body: "\(value.name): %\(value.percent)") } }
+                if preferences.alerts { for event in events { notify(event.hasPrefix("charge") ? "Charging target" : "Low battery", body: "\(value.name): %\(value.percent)") } }
                 if pendingSchedule {
-                    scheduleMessage = t("Planlanan kontrol tamamlandı", "Scheduled check completed")
-                    if value.percent < preferences.schedule.threshold && preferences.alerts { notify(t("Güne hazır mısın?", "Ready for your day?"), body: "\(value.name): %\(value.percent)") }
+                    scheduleMessage = "Scheduled check completed"
+                    if value.percent < preferences.schedule.threshold && preferences.alerts { notify("Ready for your day?", body: "\(value.name): %\(value.percent)") }
                 }
                 scheduleSample()
             } catch {
@@ -294,7 +291,7 @@ struct Preferences: Codable {
                     }
                     RunLoop.main.add(retry, forMode: .common); sampleTimer = retry
                 }
-                if pendingSchedule { scheduleMessage = t("Planlanan kontrol yapılamadı: cihaz erişilemiyor.", "Scheduled check could not run: device unavailable.") }
+                if pendingSchedule { scheduleMessage = "Scheduled check could not run: device unavailable." }
             }
             pendingSchedule = false; task = nil; busy = false
             let arrived = discoveryWhileBusy
@@ -312,8 +309,8 @@ struct Preferences: Codable {
             do {
                 let allowed = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
                 preferences.alerts = allowed
-                permissionMessage = allowed ? t("Bildirim izni verildi", "Notifications allowed") : t("Sistem Ayarları → Bildirimler’den Firefly’a izin verin.", "Allow Firefly in System Settings → Notifications.")
-            } catch { permissionMessage = t("Bildirim izni alınamadı", "Notification permission failed") }
+                permissionMessage = allowed ? "Notifications allowed" : "Allow Firefly in System Settings → Notifications."
+            } catch { permissionMessage = "Notification permission failed" }
         }
     }
     private func notify(_ title: String, body: String) {
@@ -334,7 +331,7 @@ struct Preferences: Codable {
     }
     private func publishWidget(connected: Bool) {
         guard let value = observation, let url = WidgetSnapshot.location() else { return }
-        let snapshot = WidgetSnapshot(name: value.name, percent: value.percent, timestamp: value.timestamp, connected: connected, language: preferences.language)
+        let snapshot = WidgetSnapshot(name: value.name, percent: value.percent, timestamp: value.timestamp, connected: connected)
         guard let data = try? JSONEncoder().encode(snapshot), (try? data.write(to: url, options: .atomic)) != nil else { return }
         if widgetConnected != connected || Date().timeIntervalSince(lastWidgetReload) >= 900 {
             WidgetCenter.shared.reloadTimelines(ofKind: "FireflyBattery"); lastWidgetReload = Date(); widgetConnected = connected

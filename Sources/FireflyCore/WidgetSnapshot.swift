@@ -5,9 +5,8 @@ public struct WidgetSnapshot: Codable, Equatable, Sendable {
     public let percent: Int
     public let timestamp: Date
     public let connected: Bool
-    public let language: String
-    public init(name: String, percent: Int, timestamp: Date, connected: Bool, language: String) {
-        self.name = name; self.percent = percent; self.timestamp = timestamp; self.connected = connected; self.language = language
+    public init(name: String, percent: Int, timestamp: Date, connected: Bool) {
+        self.name = name; self.percent = percent; self.timestamp = timestamp; self.connected = connected
     }
     public func live(at date: Date) -> Bool {
         let age = date.timeIntervalSince(timestamp)

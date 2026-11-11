@@ -273,7 +273,6 @@
 				<string>000000000000000000000029</string>
 				<string>0E6FC5317B9F4B50849F46A1</string>
 				<string>F459D4C7CB834F9B83A4B490</string>
-				<string>F459D4C7CB834F9B83A4B493</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -293,7 +292,6 @@
 				<string>00000000000000000000000A</string>
 				<string>00000000000000000000000C</string>
 				<string>00000000000000000000000E</string>
-				<string>F459D4C7CB834F9B83A4B494</string>
 			</array>
 			<key>isa</key>
 			<string>PBXSourcesBuildPhase</string>
@@ -537,7 +535,6 @@
 			<key>knownRegions</key>
 			<array>
 				<string>en</string>
-				<string>tr</string>
 				<string>Base</string>
 			</array>
 			<key>mainGroup</key>
@@ -692,7 +689,6 @@
 			<array>
 				<string>00000000000000000000002D</string>
 				<string>00000000000000000000002E</string>
-				<string>F459D4C7CB834F9B83A4B496</string>
 			</array>
 			<key>isa</key>
 			<string>PBXSourcesBuildPhase</string>
@@ -872,7 +868,6 @@
 				<string>00000000000000000000003C</string>
 				<string>00000000000000000000003D</string>
 				<string>00000000000000000000003E</string>
-				<string>F459D4C7CB834F9B83A4B495</string>
 			</array>
 			<key>isa</key>
 			<string>PBXSourcesBuildPhase</string>
@@ -1194,19 +1189,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>F459D4C7CB834F9B83A4B48F</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.plist.strings</string>
-			<key>name</key>
-			<string>tr</string>
-			<key>path</key>
-			<string>Resources/tr.lproj/InfoPlist.strings</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>F459D4C7CB834F9B83A4B490</key>
 		<dict>
 			<key>isa</key>
@@ -1214,7 +1196,6 @@
 			<key>children</key>
 			<array>
 				<string>F459D4C7CB834F9B83A4B48E</string>
-				<string>F459D4C7CB834F9B83A4B48F</string>
 			</array>
 			<key>name</key>
 			<string>InfoPlist.strings</string>
@@ -1234,38 +1215,6 @@
 			<string>PBXBuildFile</string>
 			<key>fileRef</key>
 			<string>F459D4C7CB834F9B83A4B490</string>
-		</dict>
-		<key>F459D4C7CB834F9B83A4B493</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>Sources/FireflyCore/Language.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F459D4C7CB834F9B83A4B494</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>F459D4C7CB834F9B83A4B493</string>
-		</dict>
-		<key>F459D4C7CB834F9B83A4B495</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>F459D4C7CB834F9B83A4B493</string>
-		</dict>
-		<key>F459D4C7CB834F9B83A4B496</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>F459D4C7CB834F9B83A4B493</string>
 		</dict>
 	</dict>
 	<key>rootObject</key>
