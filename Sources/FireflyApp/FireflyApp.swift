@@ -58,11 +58,11 @@ import SwiftUI
         }
         button.imagePosition = .imageLeading
         button.title = model.preferences.appearance == 0 ? "" : (model.live ? " \(model.observation!.percent)%" : " —")
-        button.toolTip = "Firefly · " + (charging ? model.t("Şarj oluyor", "Charging") : model.status)
+        button.toolTip = "Firefly · " + (charging ? "Charging" : model.status)
         if let report = model.displayedRemote {
             let recent = report.recent(at: Date())
             if model.preferences.appearance != 0 { button.title = recent ? " ☁︎ \(report.percent)%" : " —" }
-            button.toolTip = model.t("iCloud son bildirimi", "Last iCloud report") + " · \(report.percent)% · " + report.date.formatted()
+            button.toolTip = "Last iCloud report" + " · \(report.percent)% · " + report.date.formatted()
         }
         button.setAccessibilityLabel((button.toolTip ?? "Firefly") + button.title)
     }

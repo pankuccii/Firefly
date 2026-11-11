@@ -37,7 +37,7 @@ Designed to be simple, elegant, and unobtrusive, Firefly helps you keep track of
 6. Trust your Mac when prompted on your iPhone.
 7. Enable Wi-Fi synchronization in Finder if wireless monitoring is desired.
 
-For detailed setup, pairing, notifications, and troubleshooting instructions, see [SETUP.md](SETUP.md) ([Türkçe](docs/tr/SETUP.md)). Release notes are in [CHANGELOG.md](CHANGELOG.md).
+For detailed setup, pairing, notifications, and troubleshooting instructions, see [SETUP.md](SETUP.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Development
 

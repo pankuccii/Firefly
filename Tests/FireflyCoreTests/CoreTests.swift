@@ -68,12 +68,15 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(InsightsEngine.sessions([gap] + values, deviceID: "12345678").count, 1)
     }
     func testWidgetSnapshotPrivacyFreshnessAndDisconnection() throws {
-        let now = Date(), value = WidgetSnapshot(name: "Phone", percent: 41, timestamp: Date(), connected: true, language: "tr")
+        let now = Date(), value = WidgetSnapshot(name: "Phone", percent: 41, timestamp: Date(), connected: true)
         let data = try JSONEncoder().encode(value)
         XCTAssertFalse(String(decoding: data, as: UTF8.self).contains("deviceID"))
         XCTAssertEqual(try JSONDecoder().decode(WidgetSnapshot.self, from: data), value)
         XCTAssertTrue(value.live(at: now)); XCTAssertFalse(value.live(at: now.addingTimeInterval(301)))
-        XCTAssertFalse(WidgetSnapshot(name: "Phone", percent: 41, timestamp: now, connected: false, language: "en").live(at: now))
+        XCTAssertFalse(WidgetSnapshot(name: "Phone", percent: 41, timestamp: now, connected: false).live(at: now))
+        // Snapshots written by older builds carry a "language" key; they must still decode.
+        let old = Data(#"{"name":"Phone","percent":41,"timestamp":0,"connected":true,"language":"tr"}"#.utf8)
+        XCTAssertEqual(try JSONDecoder().decode(WidgetSnapshot.self, from: old).percent, 41)
     }
     func testMissingDependencies() async {
         do { _ = try await BatteryService(paths: nil).read(preferredID: nil); XCTFail() }
@@ -232,18 +235,5 @@ extension CoreTests {
         XCTAssertEqual(estimate?.fromHistory, true)
         XCTAssertNil(InsightsEngine.completionEstimate([], current: current, now: now))
         XCTAssertNil(InsightsEngine.completionEstimate(history, current: try observation(28, date: now, charging: false), now: now))
-    }
-}
-
-extension CoreTests {
-    func testInitialLanguageFollowsFirstPreferredSystemLanguage() {
-        XCTAssertEqual(AppLanguage.initial(preferred: ["tr-TR", "en-US"]), "tr")
-        XCTAssertEqual(AppLanguage.initial(preferred: ["tr"]), "tr")
-        XCTAssertEqual(AppLanguage.initial(preferred: ["TR_tr"]), "tr")
-        XCTAssertEqual(AppLanguage.initial(preferred: ["en-US", "tr-TR"]), "en")
-        XCTAssertEqual(AppLanguage.initial(preferred: ["de-DE"]), "en")
-        // Other languages whose code merely starts with the same letters are not Turkish.
-        XCTAssertEqual(AppLanguage.initial(preferred: ["trv-TW"]), "en")
-        XCTAssertEqual(AppLanguage.initial(preferred: []), "en")
     }
 }
