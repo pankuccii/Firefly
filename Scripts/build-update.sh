@@ -8,9 +8,16 @@ out=$(cd "$out" && pwd)
 tools="$project/Vendor/Sparkle/bin"
 account=com.firefly.battery.updates
 pub=$("$tools/generate_keys" --account "$account" -p)
-[[ -n "$pub" ]] || { echo 'Create the update signing key in Keychain first.'; exit 1; }
+[[ -n "$pub" ]] || { echo 'Create the update signing key in Keychain first.' >&2; exit 1; }
+# Existing installs only accept updates signed by the key they shipped with, so the
+# committed SUPublicEDKey is never rewritten here. A different Keychain key stops the build.
 for file in "$project/Resources/Info.plist" "$project/Widget/HostInfo.plist"; do
-    plutil -replace SUPublicEDKey -string "$pub" "$file"
+    committed=$(/usr/libexec/PlistBuddy -c 'Print SUPublicEDKey' "$file" 2>/dev/null || true)
+    if [[ "$committed" != "$pub" ]]; then
+        echo "SUPublicEDKey in ${file#"$project"/} does not match the Keychain signing key ($account)." >&2
+        echo 'Nothing was changed. Build on the Mac that holds the original key; do not edit SUPublicEDKey.' >&2
+        exit 1
+    fi
 done
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/firefly-release.XXXXXX")
 trap 'rm -rf "$tmp"' EXIT
