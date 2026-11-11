@@ -28,8 +28,13 @@ fw="$app/Contents/Frameworks/Sparkle.framework"
 for component in "$fw"/Versions/B/XPCServices/*.xpc "$fw/Versions/B/Autoupdate" "$fw/Versions/B/Updater.app" "$fw"; do
     codesign --force --sign - --preserve-metadata=entitlements,identifier --options runtime "$component"
 done
-codesign --force --sign - --options runtime "$app"
+# Ad-hoc code has no Team ID, so without this entitlement the hardened runtime
+# refuses to load Sparkle.framework and the app aborts at launch.
+entitlements="$project/Resources/Firefly.entitlements"
+codesign --force --sign - --options runtime --entitlements "$entitlements" "$app"
 codesign --verify --deep --strict "$app"
+codesign -d --entitlements - --xml "$app" 2>/dev/null | grep -q 'com.apple.security.cs.disable-library-validation' \
+    || { echo 'The signed app is missing the library validation entitlement and would not launch.' >&2; exit 1; }
 v=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$app/Contents/Info.plist")
 zip="$out/Firefly-$v-macOS-arm64.zip"
 ditto -c -k --norsrc --keepParent "$app" "$tmp/release.zip"
