@@ -234,3 +234,16 @@ extension CoreTests {
         XCTAssertNil(InsightsEngine.completionEstimate(history, current: try observation(28, date: now, charging: false), now: now))
     }
 }
+
+extension CoreTests {
+    func testInitialLanguageFollowsFirstPreferredSystemLanguage() {
+        XCTAssertEqual(AppLanguage.initial(preferred: ["tr-TR", "en-US"]), "tr")
+        XCTAssertEqual(AppLanguage.initial(preferred: ["tr"]), "tr")
+        XCTAssertEqual(AppLanguage.initial(preferred: ["TR_tr"]), "tr")
+        XCTAssertEqual(AppLanguage.initial(preferred: ["en-US", "tr-TR"]), "en")
+        XCTAssertEqual(AppLanguage.initial(preferred: ["de-DE"]), "en")
+        // Other languages whose code merely starts with the same letters are not Turkish.
+        XCTAssertEqual(AppLanguage.initial(preferred: ["trv-TW"]), "en")
+        XCTAssertEqual(AppLanguage.initial(preferred: []), "en")
+    }
+}

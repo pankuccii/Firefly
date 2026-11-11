@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>Firefly</string>
 	<key>CFBundleExecutable</key>
@@ -34,7 +36,7 @@
 		<string>_apple-mobdev2._tcp</string>
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Firefly, eşleştirilmiş iPhone’unuzun pilini yerel ağ üzerinden okumak için bağlantı kurar.</string>
+	<string>Firefly connects over your local network to read the battery of your paired iPhone.</string>
 	<key>SUAutomaticallyUpdate</key>
 	<false/>
 	<key>SUEnableAutomaticChecks</key>

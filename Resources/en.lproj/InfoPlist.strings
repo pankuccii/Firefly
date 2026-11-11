@@ -1,0 +1,2 @@
+/* Shown by macOS when Firefly first asks for local network access. */
+"NSLocalNetworkUsageDescription" = "Firefly connects over your local network to read the battery of your paired iPhone.";

@@ -1,0 +1,2 @@
+/* Shown by macOS when Firefly first asks for local network access. */
+"NSLocalNetworkUsageDescription" = "Firefly, eşleştirilmiş iPhone’unuzun pilini yerel ağ üzerinden okumak için bağlantı kurar.";

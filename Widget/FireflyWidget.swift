@@ -15,7 +15,8 @@ struct BatteryWidgetView: View {
     let entry: BatteryEntry
     @Environment(\.widgetFamily) var family
     var body: some View {
-        let tr = entry.value?.language != "en"
+        // Without a snapshot there is no app choice to follow, so use the system language.
+        let tr = (entry.value?.language ?? AppLanguage.initial()) != "en"
         let live = entry.value?.live(at: entry.date) == true
         VStack(alignment: .leading, spacing: 5) {
             HStack {

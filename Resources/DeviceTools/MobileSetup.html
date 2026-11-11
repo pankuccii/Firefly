@@ -1,15 +1,16 @@
-<!doctype html><html lang="tr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firefly · Mobil veri</title>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firefly · Cellular data</title>
 <style>:root{color-scheme:light dark}body{font:17px/1.65 system-ui;max-width:660px;margin:6vh auto;padding:0 22px}li{margin:.6em 0}code{font-size:.93em}</style>
-<h1>Mobil veride iPhone pilini gör</h1>
-<p>iPhone ve Mac aynı ağa bağlı değilken Firefly, seçtiğin iCloud Drive dosyasından son pil bildirimini okuyabilir. İki cihazda aynı iCloud Drive’a erişim olmalı. iPhone ayarlarında iCloud Drive’ın hücresel veri kullanmasına izin ver.</p>
-<h2>iPhone’da bir kez kur</h2><ol>
-<li>Kestirmeler uygulamasında yeni bir kestirme oluştur. Adını <b>Firefly pil bildirimi</b> yap.</li>
-<li><b>Pil Düzeyini Al</b> eylemini ekle (İngilizce arayüzde <i>Get Battery Level</i> veya <i>Get Battery Status → Battery Level</i>). Sonucun 0–100 arası sayı olmasını seç.</li>
-<li><b>Geçerli Tarih</b> ve ardından <b>Tarihi Biçimlendir</b> eylemlerini ekle. ISO 8601 biçimini, saat ve saat dilimi dahil olacak şekilde seç. Gerekirse özel biçim olarak <code>yyyy-MM-dd'T'HH:mm:ssXXX</code> kullan.</li>
-<li><b>Metin</b> eylemine iki satır ekle. İlk satıra değişken seçicisinden pil düzeyini, ikinci satıra biçimlendirilmiş tarihi yerleştir. Yüzde işareti, açıklama veya tırnak ekleme.</li>
-<li><b>Adı Ayarla</b> eylemiyle metne <code>Firefly.txt</code> adını ver. <b>Dosyayı Kaydet</b> eyleminde iCloud Drive’daki <b>Shortcuts</b> klasörünü seç. Her seferinde konum sormayı kapat ve mevcut dosyanın üzerine yazmayı aç. Kestirmeyi bir kez çalıştır.</li>
+<p><a href="MobileSetup.tr.html" lang="tr">Türkçe</a></p>
+<h1>See your iPhone battery over cellular data</h1>
+<p>When the iPhone and the Mac are not on the same network, Firefly can read the last battery report from an iCloud Drive file you choose. Both devices need access to the same iCloud Drive. In the iPhone settings, allow iCloud Drive to use cellular data.</p>
+<h2>Set up once on the iPhone</h2><ol>
+<li>Create a new shortcut in the Shortcuts app. Name it <b>Firefly battery report</b>.</li>
+<li>Add the <b>Get Battery Level</b> action (on some versions <i>Get Battery Status → Battery Level</i>). Choose a result that is a number from 0 to 100.</li>
+<li>Add <b>Current Date</b> and then <b>Format Date</b>. Choose the ISO 8601 format, including the time and the time zone. If needed, use the custom format <code>yyyy-MM-dd'T'HH:mm:ssXXX</code>.</li>
+<li>Add two lines to a <b>Text</b> action. Put the battery level on the first line with the variable picker, and the formatted date on the second line. Do not add a percent sign, a label or quotation marks.</li>
+<li>Use <b>Set Name</b> to name the text <code>Firefly.txt</code>. In <b>Save File</b>, choose the <b>Shortcuts</b> folder in iCloud Drive. Turn off Ask Where to Save and turn on overwriting the existing file. Run the shortcut once.</li>
 </ol>
-<h2>Mac’te eşleştir</h2><p>Firefly → Ayarlar → Mobil veriden pil bildirimi → <b>Bildirim dosyasını seç</b> yoluyla aynı <code>Firefly.txt</code> dosyasını seç. Yerel ölçüm varken öncelik USB veya Wi-Fi’dadır. Yerel bağlantı kesildiğinde daha yeni olan iCloud bildirimi panelde ölçüm saatiyle görünür. Beş dakikayı geçen bildirim menü çubuğunda güncel yüzde olarak gösterilmez.</p>
-<h2>Otomatik güncelle</h2><p>Kestirmeler → Otomasyon’da şarj aletinin takılması/çıkarılması, bir pil eşiğinin geçilmesi veya günün belirli bir saati için <b>Kestirmeyi Çalıştır → Firefly pil bildirimi</b> ekle. Uygunsa “Hemen Çalıştır”ı seç. Yeni veri, kestirme çalışıp dosya eşitlenince gelir. Şarj durumu dosyadan tahmin edilmez. Bağlantıyı Firefly ayarlarından kaldırabilirsin.</p>
-<p><a href="https://support.apple.com/guide/shortcuts/technical-standards-apdfd459e13d/ios">Apple’ın Kestirmeler tarih biçimleri kılavuzu</a></p>
-<hr><h2 lang="en">English setup</h2><p lang="en">On iPhone, create a shortcut with Get Battery Level, Current Date and Format Date (ISO 8601 including time and time zone). Put the integer percentage and the formatted date on separate lines in a Text action. Set Name to Firefly.txt, then Save File to iCloud Drive/Shortcuts with overwrite enabled and Ask Where to Save turned off. Run it once. Allow cellular data for iCloud Drive. In Firefly Settings → Battery reports over cellular, select that file. Use a personal automation to run the shortcut on charger, battery level or time triggers. Remote readings are timestamped snapshots, updated after iCloud sync.</p></html>
+<h2>Link it on the Mac</h2><p>Go to Firefly → Settings → Battery reports over cellular → <b>Select report file</b> and choose the same <code>Firefly.txt</code> file. While a local reading is available, USB or Wi-Fi takes priority. When the local connection drops, a newer iCloud report appears in the panel with its measurement time. A report older than five minutes is not shown as a current percentage in the menu bar.</p>
+<h2>Update automatically</h2><p>In Shortcuts → Automation, add <b>Run Shortcut → Firefly battery report</b> for the charger being connected or disconnected, a battery level being crossed, or a time of day. Choose “Run Immediately” where available. New data arrives once the shortcut has run and the file has synced. The charging state is not inferred from the file. You can remove the link in Firefly's settings.</p>
+<p><a href="https://support.apple.com/guide/shortcuts/technical-standards-apdfd459e13d/ios">Apple's guide to date formats in Shortcuts</a></p>
+</html>
