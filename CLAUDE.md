@@ -121,7 +121,9 @@ xcodebuild -project Firefly.xcodeproj -scheme Firefly -configuration Debug build
 ## Release flow
 
 1. Bump `CFBundleShortVersionString` and `CFBundleVersion` in all three plists.
-2. `Scripts/build-update.sh <out-dir>` builds Release, ad-hoc signs, zips to
+2. `Scripts/build-update.sh <out-dir>` first checks that the Keychain signing
+   key matches the committed `SUPublicEDKey` in both plists and stops without
+   changing anything if it does not. It then builds Release, ad-hoc signs, zips to
    `Firefly-VERSION-macOS-arm64.zip`, then calls `prepare-update.sh`, which
    verifies the signature and key and appends the item to
    `docs/updates/appcast.xml`.
@@ -131,10 +133,6 @@ xcodebuild -project Firefly.xcodeproj -scheme Firefly -configuration Debug build
 
 ## Known risks and gaps
 
-- `Scripts/build-update.sh` **writes** `SUPublicEDKey` into both plists from
-  whatever key the local Keychain holds. On a Mac with a different key this
-  silently replaces the public key and existing installs would reject the
-  update. It should verify instead of write.
 - The published appcast advertises 0.2.0, but as of 2026-11-11 there is no
   `v0.2.0` tag or public release, so the enclosure URL returns 404.
 - `Preferences`, `ScheduleRule`, `AlertEngine` and `History` use synthesized
