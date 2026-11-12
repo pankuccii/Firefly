@@ -273,6 +273,7 @@
 				<string>000000000000000000000029</string>
 				<string>0E6FC5317B9F4B50849F46A1</string>
 				<string>F459D4C7CB834F9B83A4B490</string>
+				<string>F459D4C7CB834F9B83A4B4A0</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -292,6 +293,7 @@
 				<string>00000000000000000000000A</string>
 				<string>00000000000000000000000C</string>
 				<string>00000000000000000000000E</string>
+				<string>F459D4C7CB834F9B83A4B4A1</string>
 			</array>
 			<key>isa</key>
 			<string>PBXSourcesBuildPhase</string>
@@ -868,6 +870,7 @@
 				<string>00000000000000000000003C</string>
 				<string>00000000000000000000003D</string>
 				<string>00000000000000000000003E</string>
+				<string>F459D4C7CB834F9B83A4B4A2</string>
 			</array>
 			<key>isa</key>
 			<string>PBXSourcesBuildPhase</string>
@@ -1215,6 +1218,31 @@
 			<string>PBXBuildFile</string>
 			<key>fileRef</key>
 			<string>F459D4C7CB834F9B83A4B490</string>
+		</dict>
+		<key>F459D4C7CB834F9B83A4B4A0</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>path</key>
+			<string>Sources/FireflyCore/MuxBridge.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F459D4C7CB834F9B83A4B4A1</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>F459D4C7CB834F9B83A4B4A0</string>
+		</dict>
+		<key>F459D4C7CB834F9B83A4B4A2</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>F459D4C7CB834F9B83A4B4A0</string>
 		</dict>
 	</dict>
 	<key>rootObject</key>

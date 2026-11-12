@@ -237,3 +237,128 @@ extension CoreTests {
         XCTAssertNil(InsightsEngine.completionEstimate(history, current: try observation(28, date: now, charging: false), now: now))
     }
 }
+
+// A stand-in for the system usbmuxd socket.
+private final class FakeMux {
+    let path: String
+    private let listener: Int32
+    init?(path: String, devices: Data, wifiAddress: String) {
+        guard let listener = MuxSocket.listen(path) else { return nil }
+        self.path = path; self.listener = listener
+        Thread.detachNewThread {
+            while true {
+                let client = accept(listener, nil, nil)
+                if client < 0 { return }
+                Thread.detachNewThread {
+                    defer { close(client) }
+                    while let request = MuxSocket.readPacket(client) {
+                        let message = MuxPacket.decode(request.body)?["MessageType"] as? String ?? ""
+                        var reply: [String: Any] = ["MessageType": "Result", "Number": 0, "Echo": message]
+                        if message == "ListDevices" { reply = MuxPacket.decode(devices) ?? [:] }
+                        if message == "ReadPairRecord", let record = try? PropertyListSerialization.data(
+                            fromPropertyList: ["WiFiMACAddress": wifiAddress, "HostID": "not-for-the-app"], format: .xml, options: 0) {
+                            reply = ["PairRecordData": record]
+                        }
+                        guard let packet = MuxPacket.encode(reply, tag: request.tag), MuxSocket.write(client, packet) else { return }
+                    }
+                }
+            }
+        }
+    }
+    func stop() { close(listener); unlink(path) }
+}
+
+extension CoreTests {
+    private func device(_ serial: String, _ connection: String) -> [String: Any] {
+        ["DeviceID": 3, "MessageType": "Attached", "Properties": ["ConnectionType": connection, "DeviceID": 3, "SerialNumber": serial] as [String: Any]]
+    }
+    private func ask(_ path: String, _ message: String) throws -> [String: Any] {
+        let descriptor = try XCTUnwrap(MuxSocket.connect(path))
+        defer { close(descriptor) }
+        XCTAssertTrue(MuxSocket.write(descriptor, try XCTUnwrap(MuxPacket.encode(["MessageType": message], tag: 7))))
+        let reply = try XCTUnwrap(MuxSocket.readPacket(descriptor))
+        XCTAssertEqual(reply.tag, 7)
+        return try XCTUnwrap(MuxPacket.decode(reply.body))
+    }
+    private func listed(_ reply: [String: Any]) -> [String] {
+        (reply["DeviceList"] as? [[String: Any]] ?? []).compactMap {
+            guard let properties = $0["Properties"] as? [String: Any] else { return nil }
+            return "\(properties["SerialNumber"] as? String ?? "?") \(properties["ConnectionType"] as? String ?? "?")"
+        }
+    }
+    private func sockets(_ name: String) -> (upstream: String, front: String) {
+        let directory = FileManager.default.temporaryDirectory
+        return (directory.appendingPathComponent("ff-\(name)-u\(getpid()).sock").path, directory.appendingPathComponent("ff-\(name)-f\(getpid()).sock").path)
+    }
+    func testMuxPeerAndServiceNameParsing() throws {
+        XCTAssertEqual(MuxRecords.wifiAddress(fromService: "B8:45:EB:51:2A:96@fe80::ba45:ebff:fe51:2a96-supportsRP-26"), "b8:45:eb:51:2a:96")
+        XCTAssertNil(MuxRecords.wifiAddress(fromService: "Living Room"))
+        XCTAssertNil(MuxRecords.normalized("aa:bb:cc:dd:ee"))
+        XCTAssertNil(MuxRecords.normalized("aa:bb:cc:dd:ee:zz"))
+        XCTAssertEqual(MuxRecords.normalized("A:b:0C:dd:EE:f"), "0a:0b:0c:dd:ee:0f")
+        // The layouts usbmuxd itself reports: sockaddr_in and sockaddr_in6 with the lockdown port.
+        XCTAssertEqual(try XCTUnwrap(NetworkPeer(ipv4: Data([10, 0, 0, 5]), interfaceIndex: 4)).address,
+                       Data([16, 2, 0xF2, 0x7E, 10, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0]))
+        let scoped = try XCTUnwrap(NetworkPeer(ipv6: Data(repeating: 0xFE, count: 16), interfaceIndex: 12)).address
+        XCTAssertEqual(scoped.count, 28)
+        XCTAssertEqual(Array(scoped.prefix(4)), [28, 30, 0xF2, 0x7E])
+        XCTAssertEqual(Array(scoped.suffix(4)), [12, 0, 0, 0])
+        XCTAssertNil(NetworkPeer(ipv4: Data([1, 2, 3]), interfaceIndex: 0))
+        XCTAssertNil(NetworkPeer(ipv6: Data(count: 4), interfaceIndex: 0))
+    }
+    func testMuxPacketFraming() throws {
+        let packet = try XCTUnwrap(MuxPacket.encode(["MessageType": "ListDevices"], tag: 9))
+        let header = try XCTUnwrap(MuxPacket.parseHeader(packet.prefix(16)))
+        XCTAssertEqual(header.length, packet.count); XCTAssertEqual(header.kind, 8); XCTAssertEqual(header.tag, 9)
+        XCTAssertEqual(MuxPacket.decode(packet.dropFirst(16))?["MessageType"] as? String, "ListDevices")
+        XCTAssertNil(MuxPacket.parseHeader(Data(count: 16)))                       // Shorter than its own header.
+        XCTAssertNil(MuxPacket.parseHeader(Data([0, 0, 0, 0x7F] + [UInt8](repeating: 0, count: 12)))) // Oversized.
+        XCTAssertNil(MuxPacket.parseHeader(Data(count: 8)))
+    }
+    func testMuxBridgeAddsOnlyTheSelectedReachablePhoneAndRelaysTheRest() throws {
+        let paths = sockets("a")
+        let devices = try XCTUnwrap(MuxPacket.encode(["DeviceList": [device("OTHER", "USB")]], tag: 0)).dropFirst(16)
+        let fake = try XCTUnwrap(FakeMux(path: paths.upstream, devices: Data(devices), wifiAddress: "AA:BB:CC:DD:EE:0F"))
+        defer { fake.stop() }
+        let bridge = try XCTUnwrap(MuxBridge(path: paths.front, upstream: paths.upstream))
+        defer { bridge.stop() }
+        let peer = try XCTUnwrap(NetworkPeer(ipv4: Data([192, 168, 1, 20]), interfaceIndex: 12))
+        bridge.setPeers(["aa:bb:cc:dd:ee:0f": peer])
+        XCTAssertEqual(listed(try ask(paths.front, "ListDevices")), ["OTHER USB"])   // No device selected.
+        bridge.select("PHONE")
+        XCTAssertEqual(bridge.wifiAddress(for: "PHONE"), "aa:bb:cc:dd:ee:0f")
+        bridge.setPeers(["11:22:33:44:55:66": peer])
+        XCTAssertEqual(listed(try ask(paths.front, "ListDevices")), ["OTHER USB"])   // Another phone is nearby, not ours.
+        bridge.setPeers(["aa:bb:cc:dd:ee:0f": peer])
+        let reply = try ask(paths.front, "ListDevices")
+        XCTAssertEqual(listed(reply), ["OTHER USB", "PHONE Network"])
+        let added = (reply["DeviceList"] as? [[String: Any]])?.last?["Properties"] as? [String: Any]
+        XCTAssertEqual(added?["NetworkAddress"] as? Data, peer.address)
+        XCTAssertEqual(added?["InterfaceIndex"] as? Int, 12)
+        XCTAssertEqual(try ask(paths.front, "ReadBUID")["Echo"] as? String, "ReadBUID") // Relayed untouched.
+        bridge.setPeers([:])
+        XCTAssertEqual(listed(try ask(paths.front, "ListDevices")), ["OTHER USB"])   // The phone left the network.
+    }
+    func testMuxBridgeLeavesAListThatAlreadyHasThePhone() throws {
+        let paths = sockets("b")
+        let devices = try XCTUnwrap(MuxPacket.encode(["DeviceList": [device("PHONE", "Network")]], tag: 0)).dropFirst(16)
+        let fake = try XCTUnwrap(FakeMux(path: paths.upstream, devices: Data(devices), wifiAddress: "aa:bb:cc:dd:ee:0f"))
+        defer { fake.stop() }
+        let bridge = try XCTUnwrap(MuxBridge(path: paths.front, upstream: paths.upstream))
+        defer { bridge.stop() }
+        bridge.select("PHONE")
+        bridge.setPeers(["aa:bb:cc:dd:ee:0f": try XCTUnwrap(NetworkPeer(ipv4: Data([192, 168, 1, 20]), interfaceIndex: 12))])
+        XCTAssertEqual(listed(try ask(paths.front, "ListDevices")), ["PHONE Network"])
+    }
+    func testMuxBridgeWithoutUsbmuxdFailsClosed() throws {
+        let paths = sockets("c")
+        let bridge = try XCTUnwrap(MuxBridge(path: paths.front, upstream: paths.upstream)) // Nothing listens upstream.
+        defer { bridge.stop() }
+        bridge.select("PHONE")
+        XCTAssertNil(bridge.wifiAddress(for: "PHONE"))
+        let descriptor = try XCTUnwrap(MuxSocket.connect(paths.front))
+        defer { close(descriptor) }
+        XCTAssertTrue(MuxSocket.write(descriptor, try XCTUnwrap(MuxPacket.encode(["MessageType": "ListDevices"], tag: 1))))
+        XCTAssertNil(MuxSocket.readPacket(descriptor))                             // The connection is closed, not answered with an invented list.
+    }
+}
