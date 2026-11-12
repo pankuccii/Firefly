@@ -239,6 +239,9 @@ struct FireflyView: View {
             Divider()
             Button("Find another iPhone") { model.forgetDevice() }
             Text("History stays on this Mac. Optional cellular reports are read from the iCloud file you select.").font(.caption).foregroundStyle(.secondary)
+            Divider()
+            Text(verbatim: "Firefly \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?") (build \(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?"))")
+                .font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
         }
     }
     private func dayLabel(_ day: Int) -> String { ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][day - 1] }

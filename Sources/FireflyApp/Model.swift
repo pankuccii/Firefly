@@ -21,6 +21,16 @@ struct Preferences: Codable {
     var selectedID: String?
     var remoteFile: String?
 }
+// The address a ready connection ended up at, in the form the device tools expect.
+private func networkPeer(at endpoint: NWEndpoint?) -> NetworkPeer? {
+    guard case let .hostPort(host, _)? = endpoint else { return nil }
+    switch host {
+    case .ipv4(let address): return NetworkPeer(ipv4: address.rawValue, interfaceIndex: address.interface?.index ?? 0)
+    case .ipv6(let address): return NetworkPeer(ipv6: address.rawValue, interfaceIndex: address.interface?.index ?? 0)
+    default: return nil
+    }
+}
+
 @MainActor final class AppModel: ObservableObject {
     @Published var preferences: Preferences { didSet { savePreferences(); changed?() } }
     @Published var observation: Observation?
@@ -46,6 +56,10 @@ struct Preferences: Codable {
     private var asleep = false
     private var sampleTimer: Timer?
     private var browser: NWBrowser?
+    private var bridge: MuxBridge?
+    private var nearbyServices: [String: NWEndpoint] = [:]
+    private var peerLookup = 0
+    private var peerConnection: NWConnection?
     private var discoveryWhileBusy = false
     private var nextPoll = Date.distantPast
     private var alerts = AlertEngine()
@@ -153,6 +167,14 @@ struct Preferences: Codable {
     }
     func start() {
         loadRemote()
+        // Device tools started from here on reach usbmuxd through the bridge.
+        let sockets = FileManager.default.temporaryDirectory
+        MuxBridge.removeStaleSockets(in: sockets, prefix: "firefly-mux-")
+        let socket = sockets.appendingPathComponent("firefly-mux-\(getpid()).sock").path
+        if let created = MuxBridge(path: socket) {
+            bridge = created; created.select(preferences.selectedID)
+            setenv("USBMUXD_SOCKET_ADDRESS", "UNIX:" + socket, 1)
+        }
         let center = NSWorkspace.shared.notificationCenter
         observers.append(center.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in Task { @MainActor in self?.sleep() } })
         observers.append(center.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in Task { @MainActor in self?.wake() } })
@@ -160,14 +182,20 @@ struct Preferences: Codable {
             Task { @MainActor in
                 guard let self else { return }
                 defer { self.priorNetwork = path.status }
-                if self.priorNetwork != nil && self.priorNetwork != path.status && path.status == .satisfied { self.refresh(reset: true) }
+                if self.priorNetwork != nil && self.priorNetwork != path.status && path.status == .satisfied { self.locatePeer(); self.refresh(reset: true) }
             }
         }
         let nearby = NWBrowser(for: .bonjour(type: "_apple-mobdev2._tcp", domain: "local."), using: .tcp)
-        nearby.browseResultsChangedHandler = { [weak self] _, changes in
-            guard changes.contains(where: { if case .added = $0 { return true }; return false }) else { return }
+        nearby.browseResultsChangedHandler = { [weak self] results, changes in
+            let added = changes.contains(where: { if case .added = $0 { return true }; return false })
+            let services = results.reduce(into: [String: NWEndpoint]()) { found, result in
+                if case let .service(name, _, _, _) = result.endpoint, let address = MuxRecords.wifiAddress(fromService: name) { found[address] = result.endpoint }
+            }
             Task { @MainActor in
-                guard let self, !self.asleep, !self.state.connected else { return }
+                guard let self else { return }
+                self.nearbyServices = services
+                self.locatePeer()
+                guard added, !self.asleep, !self.state.connected else { return }
                 if self.task != nil { self.discoveryWhileBusy = true } else { self.refresh(reset: true) }
             }
         }
@@ -177,9 +205,46 @@ struct Preferences: Codable {
         timer?.tolerance = 3
         refresh(reset: true)
     }
-    func stop() { browser?.cancel(); let old = service; Task { await old.close() }; sampleTimer?.invalidate(); timer?.invalidate(); timer = nil; task?.cancel(); network.cancel(); observers.forEach(NSWorkspace.shared.notificationCenter.removeObserver) }
+    func stop() { bridge?.stop(); peerConnection?.cancel(); browser?.cancel(); let old = service; Task { await old.close() }; sampleTimer?.invalidate(); timer?.invalidate(); timer = nil; task?.cancel(); network.cancel(); observers.forEach(NSWorkspace.shared.notificationCenter.removeObserver) }
     func sleep() { let old = service; service = BatteryService(); Task { await old.close() }; sampleTimer?.invalidate(); asleep = true; generation += 1; task?.cancel(); task = nil; busy = false; state = .paused; publishWidget(connected: false) }
-    func wake() { asleep = false; refresh(reset: true) }
+    func wake() { asleep = false; locatePeer(); refresh(reset: true) }
+    // Find where the selected phone answers on the network, so the device tools can reach it
+    // before macOS lists it again. Only the phone whose pairing record names the announced
+    // Wi-Fi address is looked up, and only an address that accepted a connection is used.
+    private func locatePeer() {
+        guard let bridge, let id = preferences.selectedID else { return }
+        bridge.select(id)
+        let services = nearbyServices
+        peerLookup += 1; let token = peerLookup
+        peerConnection?.cancel(); peerConnection = nil
+        Task {
+            let address = await Task.detached(priority: .utility) { bridge.wifiAddress(for: id) }.value
+            guard token == peerLookup else { return }
+            guard let address, let endpoint = services[address] else { bridge.setPeers([:]); return }
+            let connection = NWConnection(to: endpoint, using: .tcp)
+            peerConnection = connection
+            connection.stateUpdateHandler = { [weak self] state in
+                var peer: NetworkPeer?
+                switch state {
+                case .ready: peer = networkPeer(at: connection.currentPath?.remoteEndpoint)
+                case .failed, .waiting: break
+                default: return
+                }
+                connection.cancel()
+                Task { @MainActor in self?.located(peer, address: address, token: token) }
+            }
+            connection.start(queue: DispatchQueue(label: "Firefly.peer"))
+            try? await Task.sleep(nanoseconds: 5_000_000_000)
+            if token == peerLookup, peerConnection === connection { connection.cancel(); located(nil, address: address, token: token) }
+        }
+    }
+    private func located(_ peer: NetworkPeer?, address: String, token: Int) {
+        guard token == peerLookup, let bridge else { return }
+        peerConnection = nil
+        bridge.setPeers(peer.map { [address: $0] } ?? [:])
+        guard peer != nil, !asleep, !state.connected else { return }
+        if task != nil { discoveryWhileBusy = true } else { refresh(reset: true) }
+    }
     func setPanelVisible(_ visible: Bool) {
         panelVisible = visible
         if visible { loadRemote(); refresh() }
@@ -228,6 +293,7 @@ struct Preferences: Codable {
     private func probeWaitingDevice() {
         guard let id = preferences.selectedID, !asleep, task == nil else { return }
         nextPoll = Date().addingTimeInterval(60)
+        locatePeer()
         let token = generation
         task = Task {
             let listed = (try? await service.isListed(id)) == true
@@ -246,6 +312,7 @@ struct Preferences: Codable {
         busy = true
         if !state.connected { state = .discovering }
         let selected = preferences.selectedID
+        bridge?.select(selected)
         task = Task { [weak self] in
             guard let self else { return }
             do {

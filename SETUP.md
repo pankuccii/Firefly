@@ -65,6 +65,6 @@ For a new GitHub release, first attach `Firefly-VERSION-macOS-arm64.zip`, which 
 
 ## Updating from inside the app
 
-Copy the first version that includes the updater into Applications and open it from there. Firefly checks `appcast.xml` on GitHub Pages at first launch and then at most once an hour. If a newer, compatible version exists, a Güncelleme var / Update available button appears next to the connection status. The button opens Sparkle's download, verification and relaunch window. macOS may ask for confirmation if the app is in a location that is not writable.
+Copy the first version that includes the updater into Applications and open it from there. Firefly checks `appcast.xml` on GitHub Pages at first launch and then at most once an hour. If a newer, compatible version exists, an Update available button appears next to the connection status. The button opens Sparkle's download, verification and relaunch window. macOS may ask for confirmation if the app is in a location that is not writable.
 
 The person preparing a release builds and signs the app with a new `CFBundleVersion`. They attach `Firefly-VERSION-macOS-arm64.zip` to the `vVERSION` GitHub release. They point `SPARKLE_TOOLS` at the `bin` folder of the Sparkle distribution and pass the ZIP to `Scripts/prepare-update.sh`. The script does not change the feed until it has verified the correct public key and the signature. Publish the generated `docs/updates/appcast.xml` to Pages. Users only ever download the signed ZIP update. The DMG remains for first-time installation.

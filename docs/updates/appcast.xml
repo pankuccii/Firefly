@@ -12,5 +12,13 @@
       <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
       <enclosure url="https://github.com/pankuccii/Firefly/releases/download/v0.2.0/Firefly-0.2.0-macOS-arm64.zip" length="12532382" type="application/zip" sparkle:edSignature="gk4Pw97kkbhEWVB2BE+wYDmZHivl4SoujPgUnEjneQ3QnN8edq6LKM23NzZGN/59Aeko+DGW9dskwcyX5MIlBg==" />
     </item>
+    <item>
+      <title>Firefly 0.2.1</title>
+      <pubDate>Thu, 12 Nov 2026 04:41:44 GMT</pubDate>
+      <sparkle:version>13</sparkle:version>
+      <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/pankuccii/Firefly/releases/download/v0.2.1/Firefly-0.2.1-macOS-arm64.zip" length="12557705" type="application/zip" sparkle:edSignature="iuqv4Pe8se22yeAcoKxgym2YB3ywhL5CeAeUz4IBJmC2MnalINUC3zkd5JN/zkX9E/n15d4x3eJnxFB377nTDw==" />
+    </item>
   </channel>
 </rss>
