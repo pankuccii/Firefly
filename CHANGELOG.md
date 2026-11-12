@@ -2,12 +2,19 @@
 
 Notes for 0.1.2 to 0.1.6 were moved here from the original setup guide. The entries for 0.1.7 and 0.2.0 are summarized from the commit history. No notes were recorded for 0.1.4.
 
+## 0.2.1 (build 13)
+
+- Firefly reconnects over Wi-Fi within seconds after it restarts or updates. It now reaches the paired iPhone directly at the address the phone announces instead of waiting for macOS to list the phone again, which could take until the phone was next woken.
+- Settings shows the installed version and build number.
+- Firefly is now English-only. The Turkish interface, the language setting and the Turkish guides were removed.
+- Fixed a crash at launch in hardened runtime builds: the ad-hoc signed app now carries the library validation entitlement it needs to load the bundled Sparkle framework.
+
 ## 0.2.0 (build 12)
+
+This build was announced in the update feed but never published as a release.
 
 - Signed in-app updates through Sparkle. Firefly checks the update feed at launch and at most once an hour, and shows an Update available button when a newer version exists. Installation always starts from that button.
 - Refined battery visuals.
-- Firefly is now English-only. The Turkish interface, the language setting and the Turkish guides were removed.
-- Fixed a crash at launch in hardened runtime builds: the ad-hoc signed app now carries the library validation entitlement it needs to load the bundled Sparkle framework.
 
 ## 0.1.7 (build 8)
 
